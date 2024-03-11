@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/10 14:51:48 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/03/11 17:03:24 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@ typedef struct s_lexer
 	struct s_lexer	*prev;
 	struct s_lexer	*next;
 }	t_lexer;
+
+typedef struct s_utils
+{
+	char			**envp;
+	struct s_utils	*key;
+	struct s_utils	*value;
+}	t_utils;
 
 /*main.c*/
 int			ft_exit(char *str);

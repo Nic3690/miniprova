@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/11 15:25:22 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/03/11 16:45:59 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,53 @@ void	reading(void)
 	}
 }
 
+t_utils	*copy_envp(char **envp)
+{
+	t_utils	*utils;
+	int		count;
+	int		j;
+
+	j = 0;
+	count = 0;
+	while (envp[count])
+		count++;
+	utils = malloc(sizeof(t_utils));
+	if (!utils)
+		return (NULL);
+	utils->envp = malloc (sizeof(char *) * (count + 1));
+	if (!utils->envp)
+	{
+		free(utils);
+		return (NULL);
+	}
+	j = 0;
+	while (envp[j])
+	{
+		utils->envp[j] = ft_strdup(envp[j]);
+		if (!utils->envp[j])
+		{
+			while (j > 0)
+				free(utils->envp[--j]);
+			free(utils->envp);
+			free(utils);
+			return (NULL);
+		}
+		j++;
+	}
+	utils->envp[j] = NULL;
+	j = 0;
+	while (utils->envp[j])
+	{
+		printf ("%s\n", utils->envp[j]);
+		j++;
+	}
+	return (utils);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argv;
+	copy_envp(envp);
 	using_history();
 	if (argc != 1)
 		return (0);
