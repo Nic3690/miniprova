@@ -1,0 +1,186 @@
+Se  i token non hanno spazio prima di fare split fare una ffunzuone a propri che inserisca gli spazi prima e dopo i token
+tranne che se il token è in una stringa
+
+
+Liberare il malloc di split
+
+/*aggiungere sigint per ctrl + c*/
+
+
+
+
+Il lexer
+Il lexer prende la line scritta come imput.
+Legge dopodichè parola per parola usando gli spazi come delimitatori.
+Poi controlla se la parola è un token
+(| < << > >>) altrimenti assume sia una parola.
+Poi la aggiunge alla struct lexter.
+
+Ogni nodo conterrà una parola o un token.
+Verrà anche assegnato un indice ad ogni nodo
+di modo da poterlo cancellare.
+
+Il parser
+Il parser raggruppa i diversi nodi insieme
+basandosi sui token.
+Ogni gruppo diventa poi un comando.
+
+Il parser per prima cosa crea un loop del lexter
+finchè non trova un pipe.
+Prende poi tutti i nodi prima del pipe come un comando,
+e crea un nodo nella struttura.
+Se non trova un pipe prende tutti i rimanenti comandi
+come uno solo.
+
+Quindi il parser prende una lista dal lexter|
+e la trasforma in un comando.
+
+Per ogni comando controlla prima gli indirizzamenti
+i quali sono salvati nella lista *redirections, nella quale
+sono contenuti sia il nome che il nome del file
+e nel caso ci fosse il delimitatore.
+Quando i nodi vengono aggiunti alla lista *redirections
+vengono cancellati dalla lista dei Lexter.
+Poi controlla se la prima parola è una "builtin" (un
+comando di quelli che non devo fare io o comunque un comando)
+in quel caso memorizza un puntatore di funzione
+alla funzione corrispondente.
+Quando le redirections sono state rimosse dalla lexter list,
+il parser può facilmente combinare tutte le rimanenti parole
+in un array (argomento eseguibile richiesto).
+Rende inoltre più semplice gestire situazioni in cui
+le parole sono separate da un redirections, ad esempio
+"cat > file -e"
+Se > e file sono già stati cancellati dalla lista del lexter 
+quando vengono aggiunti alla redirections list,
+tutto ciò che rimane è cat e -e che possono facilmente essere messi
+in un array.
+Tutto il processo è ripetuto fino alla fine della lista del lexer.
+
+
+The first thing the parser does is loop through the lexer list until it encounters a pipe. It then takes all the nodes before the pipe as one command, and creates a node in the t_simple_cmds struct. If it doesn't find a pipe it takes all the (remaining) nodes as one command.
+
+
+Bultins
+(comandi)
+I comandi vengono gestiti salvando un puntatore in 't_simple_commands'.
+La prima parola del comando viene mandata alla funzione
+'builtin_array' il quale looppa un array statico delle diverse
+funzioni di builtin.
+Se viene trovata una funzione corrispondente la ritorna al parser,
+altrimenti ritorna NULL.
+->impara puntatori alle funzioni
+Determinando il builtin al passaggio al parser, sarà semplificato
+l'executor, il quale avrà solo bisogno di:
+if (cmd->builtin != NULL)
+	cmd->builtin(tools, cmd);
+nota -> guardare i comandi
+
+The executor
+Quando il parsen ritorna la lista di t_simple_cmds al loop di minishell
+viene eseguito un semplice check per determinare quanti comandi ci sono
+e come sono gestiti dalle diverse funzioni.
+Ad eccezione di qualche builtin (comando) i comandi sono eseguiti
+dalla stessa funzione, handle_cmd, la quale trova e, successivamente,
+esegue il comando.
+
+Expander
+Prima che un nodo da t_simple_cmds venga gestito, esso viene espanso.
+L'espansore prende le variabili, identificate dal simbolo $,
+e le sostituisce con il loro valore preso dalle variabili d'ambiente.
+Così, $USER diventa mgraaf, e $? viene sostituito con l'exit code.
+
+Heredoc
+Prima di creare un processo figlio, il processo padre esegue i heredocs.
+(In Bash and other shells like Zsh, a Here document (Heredoc) is a
+type of redirection that allows you to pass multiple lines of input to a
+command.)
+Gli Heredocs sono gestiti creando un file temporaneo sul quale scrivere
+l'input.
+Il file è salvato nel relativo nodo di t_simple_cmds di modo che possa
+essere usato per rimpiazzare STDIN.
+Se ci sono più heredocs in un singolo nodo di t_simple_cmds,
+il nome del file memorizzato sarà quello dell'ultimo heredoc.
+(L'uso di un file comporta limitazioni e problemi di sicurezza, tuttavia,
+abbiamo ritenuto che fosse il modo più semplice per gestirlo e
+si avvicina a come bash lo fa.)
+
+Single Command
+Come in bash, i comandi di builtin (cd, exit, export e unset)
+non possono essere runnati in processi separati,
+poiché in questo caso le variabili d'ambiente non possono essere modificate
+correttamente.
+Se vi è un solo comando, ed è uno dei builtin sopra menzionati,
+verrà eseguito dal processo padre e la funzione tornerà al loop di minishell.
+Se invece il comando non è un bultin, a funzione del del single comand
+creerà un nuovo processo e lo manderà a 'handle_cmd'.
+
+Comandi multipli
+Se ci sono comandi multipli, l'executor farà un loop di tutti i nodi
+di t_simple_cmds e creerà un processo figlio usando fork(),
+e usando pipe() creerà un pipe in modo da mandare l'output di un comando
+come input del successivo.
+
+Essentially for each command the following happens:
+
+The command is expanded.
+A pipe is created with end[0] and end[1], except the last command.
+Using fork() a child process is created. In the child process:
+With the exception of the first command, dup2 replaces STDIN
+with the output of the previous command.
+With the exception of the last command, dup2 replaces STDOUT with end[1].
+In the case of redirections, the STDIN or STDOUT is replaced
+with their respective file descriptors.
+handle_cmd finds and executes the command.
+end[0] is stored for the next command.
+The parent process then waits for all the children to end,
+then returns back to the minishell_loop.
+
+Reset
+Il programma esegue quindi un reset completo,
+liberando tutti i nodi che non sono stati ancora liberati o eliminati,
+e reimposta varie variabili in modo che il programma possa
+ricominciare visualizzando un nuovo prompt.
+
+getcwd = La funzione getcwd() acquisisce il pathname assoluto della directory
+corrente di lavoro. char *getcwd(char *buf, size_t size);
+Il nome viene copiato nel buffer puntato da buf e di dimensione size.
+
+chdir = La funzione chdir() cambia la directory corrente in quella specificata
+nella pathname. int chdir(const char *path);
+
+stat = int stat(const char *restrict path, struct stat *restrict buf);
+The stat() function shall obtain information about the named file and write it
+to the area pointed to by the buf argument. The path argument points to
+a pathname naming a file.
+
+lstat
+int lstat(const char *restrict path, struct stat *restrict buf);
+The lstat() function shall be equivalent to stat(),
+except when path refers to a symbolic link.
+
+fstat
+int fstat(int fildes, struct stat *buf);
+The fstat() function shall obtain information about an open file
+associated with the file descriptor fildes, and shall write it
+to the area pointed to by buf.
+
+unlink
+int unlink(const char *pathname);
+unlink() deletes a name from the filesystem.
+
+execve
+int execve(const char *pathname, char *const _Nullable argv[],
+                  char *const _Nullable envp[]);
+https://man7.org/linux/man-pages/man2/execve.2.html
+
+dup
+The dup() system call creates a copy of a file descriptor.
+https://www.geeksforgeeks.org/dup-dup2-linux-system-call/
+
+char **envp
+ambiente di esecuzione del programma
+(array di stringhe, ogi stringa coppia chiave-valore (separata da =))
+
+gcc -lreadline main.c
+*/
