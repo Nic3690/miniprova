@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/11 16:45:59 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/03/13 19:19:36 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_exit(char *str)
 	return (0);
 }
 
-void	reading(void)
+void	reading(t_env **env)
 {
 	char	*input;
 	char	*str;
@@ -36,7 +36,7 @@ void	reading(void)
 		{
 			add_history(input);
 			str = ft_strdup(input);
-			parser(str);
+			parser(str, env);
 			ft_exit(str);
 		}
 		else
@@ -44,56 +44,15 @@ void	reading(void)
 	}
 }
 
-t_utils	*copy_envp(char **envp)
-{
-	t_utils	*utils;
-	int		count;
-	int		j;
-
-	j = 0;
-	count = 0;
-	while (envp[count])
-		count++;
-	utils = malloc(sizeof(t_utils));
-	if (!utils)
-		return (NULL);
-	utils->envp = malloc (sizeof(char *) * (count + 1));
-	if (!utils->envp)
-	{
-		free(utils);
-		return (NULL);
-	}
-	j = 0;
-	while (envp[j])
-	{
-		utils->envp[j] = ft_strdup(envp[j]);
-		if (!utils->envp[j])
-		{
-			while (j > 0)
-				free(utils->envp[--j]);
-			free(utils->envp);
-			free(utils);
-			return (NULL);
-		}
-		j++;
-	}
-	utils->envp[j] = NULL;
-	j = 0;
-	while (utils->envp[j])
-	{
-		printf ("%s\n", utils->envp[j]);
-		j++;
-	}
-	return (utils);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
+	t_env	*env;
+	
 	(void)argv;
-	copy_envp(envp);
+	env = split_envp(envp);
 	using_history();
 	if (argc != 1)
 		return (0);
-	reading();
+	reading(&env);
 	return (0);
 }

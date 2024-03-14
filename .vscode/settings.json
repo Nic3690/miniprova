@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"*.gradle": "gradle",
+		"minishell.h": "c"
+	}
+}

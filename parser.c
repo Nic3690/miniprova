@@ -6,13 +6,13 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/11 12:53:31 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/03/14 12:36:11 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	parser(char *str)
+void	parser(char *str, t_env **env)
 {
 	char	**temp;
 	t_lexer	*lexer;
@@ -22,7 +22,6 @@ void	parser(char *str)
 	lexer = NULL;
 	temp = ft_split(str, ' ');
 	find_quotes(temp);
-	/*a questo punto ho temp modificato*/
 	while (temp[i] != 0)
 		i++;
 	lexer = ft_list(i, temp);
@@ -30,6 +29,7 @@ void	parser(char *str)
 	init_prev(&lexer);
 	manage_token(&lexer);
 	lexer_index(&lexer);
+	parser_env(&lexer, env);
 	print_lexer(&lexer);
 }
 
@@ -96,6 +96,9 @@ void	lexer_index(t_lexer **lexer)
 
 void	print_lexer(t_lexer **lexer)
 {
+	t_lexer	*head;
+
+	head = *lexer;
 	while (*lexer)
 	{
 		if (ft_strlen((*lexer)->str) >= 1)
@@ -104,4 +107,5 @@ void	print_lexer(t_lexer **lexer)
 			printf("%d - %s\n", (*lexer)->index, (*lexer)->token);
 		*lexer = (*lexer)->next;
 	}
+	*lexer = head;
 }

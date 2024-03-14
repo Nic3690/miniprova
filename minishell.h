@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/11 17:03:24 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:26:40 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,19 @@ typedef struct s_lexer
 	struct s_lexer	*next;
 }	t_lexer;
 
-typedef struct s_utils
+typedef struct s_env
 {
-	char			**envp;
-	struct s_utils	*key;
-	struct s_utils	*value;
-}	t_utils;
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
 
 /*main.c*/
 int			ft_exit(char *str);
-void		reading(void);
+void		reading(t_env **env);
 
 /*parser*/
-void		parser(char *str);
+void		parser(char *str, t_env **env);
 void		manage_string(t_lexer **lexer);
 void		join_string(t_lexer *lexer);
 void		lexer_index(t_lexer **lexer);
@@ -68,6 +68,23 @@ int			count_tokens(char *str);
 char		*next_token(char **str);
 char		**ft_token_split(char *str);
 
+/*lst_env.c*/
+t_env		*split_envp(char **envp);
+t_env		*ft_list_env(char *key, char *value);
+void		ft_lstadd_back_env(t_env **lst, t_env *new);
+t_env		*ft_lstlast_env(t_env *lst);
+
+/*lst_lexer.c*/
+t_lexer		*ft_list(int argc, char **argv);
+int			ft_check_token(char *str);
+t_lexer		*ft_lstnew(char *str, char *token);
+void		ft_lstadd_back(t_lexer **lst, t_lexer *new);
+t_lexer		*ft_lstlast(t_lexer *lst);
+
+/*parser_env*/
+void		parser_env(t_lexer **lexer, t_env **env);
+int			search_map(t_env **env, char *str);
+
 /*utils.c*/
 char		*ft_strdup(char *str);
 int			ft_strcmp(char *s1, char *s2);
@@ -80,13 +97,6 @@ char		*ft_superlen(int len, int len2);
 char		*ft_substr(char *s, unsigned int start, size_t len);
 int			get_word(char *s, char c);
 char		**ft_split(char *s, char c);
-
-/*utils3.c*/
-t_lexer		*ft_list(int argc, char **argv);
-int			ft_check_token(char *str);
-t_lexer		*ft_lstnew(char *str, char *token);
-void		ft_lstadd_back(t_lexer **lst, t_lexer *new);
-t_lexer		*ft_lstlast(t_lexer *lst);
 
 /*utils4.c*/
 void		*ft_calloc(size_t count, size_t size);
