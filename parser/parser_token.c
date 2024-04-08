@@ -6,11 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/09 10:18:56 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/11 14:19:47 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/03/15 21:39:50 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	init_prev(t_lexer **lexer)
 {

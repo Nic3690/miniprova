@@ -6,24 +6,24 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 12:16:00 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/14 16:24:05 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:19:37 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	parser_env(t_lexer **lexer, t_env **env)
 {
 	int		i;
-	t_lexer	*head;
-	t_env	*testa;
+	t_lexer	*head_lexer;
+	t_env	*head_env;
 
 	i = 0;
-	head = *lexer;
-	testa = *env;
-	if (count_quotes((*lexer)->str, '\'') != 2)
+	head_lexer = *lexer;
+	head_env = *env;
+	while ((*lexer))
 	{
-		while ((*lexer))
+		if (count_quotes((*lexer)->str, '\'') != 2)
 		{
 			i = 0;
 			while ((*lexer)->str[i])
@@ -42,11 +42,11 @@ void	parser_env(t_lexer **lexer, t_env **env)
 				}
 				i++;
 			}
-			(*lexer) = (*lexer)->next;
 		}
+		(*lexer) = (*lexer)->next;
 	}
-	*lexer = head;
-	*env = testa;
+	*lexer = head_lexer;
+	*env = head_env;
 }
 
 int	search_map(t_env **env, char *str)

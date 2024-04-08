@@ -6,11 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/14 12:36:11 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/08 14:33:39 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	parser(char *str, t_env **env)
 {
@@ -30,7 +30,13 @@ void	parser(char *str, t_env **env)
 	manage_token(&lexer);
 	lexer_index(&lexer);
 	parser_env(&lexer, env);
-	print_lexer(&lexer);
+	manage_heredoc(&lexer); // spostare dopo e modificare
+	remove_all_quotes(&lexer);
+	builtin_cd(&lexer);
+	builtin_pwd(&lexer);
+	builtin_echo(&lexer);
+	// split_command(&lexer);
+	// print_lexer(&lexer);
 }
 
 void	manage_string(t_lexer **lexer)
@@ -103,7 +109,7 @@ void	print_lexer(t_lexer **lexer)
 	{
 		if (ft_strlen((*lexer)->str) >= 1)
 			printf("%d - %s\n", (*lexer)->index, (*lexer)->str);
-		else
+		if (ft_strlen((*lexer)->token) >= 1)
 			printf("%d - %s\n", (*lexer)->index, (*lexer)->token);
 		*lexer = (*lexer)->next;
 	}

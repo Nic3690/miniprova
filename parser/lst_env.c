@@ -6,11 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 17:48:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/13 19:17:15 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/03/15 13:38:48 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_env	*split_envp(char **envp)
 {

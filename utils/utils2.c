@@ -6,11 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:04:24 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/02/28 15:56:50 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/03/15 13:30:52 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	ft_strlen(char *str)
 {

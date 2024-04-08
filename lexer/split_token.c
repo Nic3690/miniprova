@@ -6,11 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/09 17:07:56 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/11 12:58:16 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/03/15 16:58:09 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 char	*ft_strncpy(char *dest, char *src, unsigned int n)
 {

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/13 18:26:40 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/08 14:26:30 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }	t_env;
+
+typedef struct s_built
+{
+	char			*command;
+	char			**flag;
+	char			*params;
+	struct s_built	*next;
+}	t_built;
 
 /*main.c*/
 int			ft_exit(char *str);
@@ -85,6 +93,20 @@ t_lexer		*ft_lstlast(t_lexer *lst);
 void		parser_env(t_lexer **lexer, t_env **env);
 int			search_map(t_env **env, char *str);
 
+/*builtin.c*/
+t_built		*split_command(t_lexer **lexer);
+t_built		*ft_list_built(char *command, char *flag, char *params);
+void		ft_lstadd_back_built(t_built **lst, t_built *new);
+t_built		*ft_lstlast_built(t_built *lst);
+
+/*commands*/
+int			builtin_cd(t_lexer **lexer);
+int			builtin_pwd(t_lexer **lexer);
+int			builtin_echo(t_lexer **lexer);
+
+/*heredoc.c*/
+void		manage_heredoc(t_lexer **lexer);
+
 /*utils.c*/
 char		*ft_strdup(char *str);
 int			ft_strcmp(char *s1, char *s2);
@@ -101,5 +123,7 @@ char		**ft_split(char *s, char c);
 /*utils4.c*/
 void		*ft_calloc(size_t count, size_t size);
 void		ft_bzero(void *s, size_t n);
+char		*ft_strjoin_heredoc(char *s1, char *s2);
+void		remove_all_quotes(t_lexer **lexer);
 
 #endif

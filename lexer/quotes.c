@@ -6,11 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 15:44:21 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/11 12:53:44 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/03/15 13:29:58 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	find_quotes(char **temp)
 {

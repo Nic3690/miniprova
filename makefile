@@ -6,7 +6,7 @@
 #    By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/26 15:17:34 by nfurlani          #+#    #+#              #
-#    Updated: 2024/03/12 12:15:49 by nfurlani         ###   ########.fr        #
+#    Updated: 2024/04/05 17:31:21 by nfurlani         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,11 @@ CC			=	gcc
 
 CFLAGS		=	-Werror -Wall -Wextra -g
 
-SRCS		=	main.c parser.c quotes.c parser_token.c split_token.c lst_lexer.c parser_env.c lst_env.c utils.c utils2.c utils4.c
+SRCS		=	main.c \
+				lexer/quotes.c lexer/split_token.c \
+				parser/parser.c parser/lst_lexer.c parser/parser_token.c parser/parser_env.c parser/lst_env.c \
+				builtin/builtin.c builtin/heredoc.c builtin/commands.c \
+				utils/utils.c utils/utils2.c utils/utils4.c \
 
 OBJS		=	$(SRCS:.c=.o)
 

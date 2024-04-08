@@ -6,11 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:19:57 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/12 11:07:53 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/03/15 13:30:30 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_lexer	*ft_list(int argc, char **argv)
 {
