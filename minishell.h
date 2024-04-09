@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/08 14:26:30 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/08 18:24:51 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,10 @@ t_built		*ft_lstlast_built(t_built *lst);
 
 /*commands*/
 int			builtin_cd(t_lexer **lexer);
-int			builtin_pwd(t_lexer **lexer);
-int			builtin_echo(t_lexer **lexer);
+void		builtin_pwd(t_lexer **lexer);
+void		builtin_echo(t_lexer **lexer);
+void		bultin_env(t_lexer **lexer, t_env **env);
+void		bultin_temp_env(t_lexer **lexer, t_env **env);
 
 /*heredoc.c*/
 void		manage_heredoc(t_lexer **lexer);

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/08 14:33:39 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/08 18:22:10 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	parser(char *str, t_env **env)
 	builtin_cd(&lexer);
 	builtin_pwd(&lexer);
 	builtin_echo(&lexer);
+	bultin_env(&lexer, env);
 	// split_command(&lexer);
 	// print_lexer(&lexer);
 }
