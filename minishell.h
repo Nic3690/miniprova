@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/08 18:24:51 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/10 18:32:13 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,19 +92,22 @@ t_lexer		*ft_lstlast(t_lexer *lst);
 /*parser_env*/
 void		parser_env(t_lexer **lexer, t_env **env);
 int			search_map(t_env **env, char *str);
+char		*search_value(t_lexer **lexer, t_env *env);
 
 /*builtin.c*/
-t_built		*split_command(t_lexer **lexer);
-t_built		*ft_list_built(char *command, char *flag, char *params);
-void		ft_lstadd_back_built(t_built **lst, t_built *new);
-t_built		*ft_lstlast_built(t_built *lst);
+// t_built		*split_command(t_lexer **lexer);
+// t_built		*ft_list_built(char *command, char *flag, char *params);
+// void		ft_lstadd_back_built(t_built **lst, t_built *new);
+// t_built		*ft_lstlast_built(t_built *lst);
 
 /*commands*/
 int			builtin_cd(t_lexer **lexer);
 void		builtin_pwd(t_lexer **lexer);
 void		builtin_echo(t_lexer **lexer);
 void		bultin_env(t_lexer **lexer, t_env **env);
-void		bultin_temp_env(t_lexer **lexer, t_env **env);
+void		print_env(t_lexer **lexer, t_env **env);
+// void		bultin_temp_env(t_lexer **lexer, t_env **env);
+// int			find_value(t_env *env, char *temp_key, char *temp_value);
 
 /*heredoc.c*/
 void		manage_heredoc(t_lexer **lexer);

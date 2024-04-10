@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 12:16:00 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/09 19:01:32 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/10 19:05:13 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,7 @@ void	parser_env(t_lexer **lexer, t_env **env)
 			while ((*lexer)->str[i])
 			{
 				if ((*lexer)->str[i] == '$')
-				{
-					i++;
-					int index = search_map(env, ((*lexer)->str + i));
-					if (index != -1)
-					{
-						free((*lexer)->str);
-						(*lexer)->str = ft_strdup((*env)->value + index - 1);
-					}
-					else
-						(*lexer)->str = "";
-				}
+					(*lexer)->str = search_value(lexer, *env);
 				i++;
 			}
 		}
@@ -69,4 +59,19 @@ int	search_map(t_env **env, char *str)
 	*env = head;
 	return (-1);
 }
-/*cerca il nome della variabile d'ambiente dentro l'env*/
+
+char	*search_value(t_lexer **lexer, t_env *env)
+{
+	t_env	*current;
+
+	current = env;
+	(*lexer)->str++;
+	while (current)
+	{
+		if (ft_strcmp(current->key, (*lexer)->str) == 0)
+			return (current->value);
+		current = current->next;
+	}
+	return (ft_strdup(""));
+}
+
