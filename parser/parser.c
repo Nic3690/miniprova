@@ -6,17 +6,17 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/10 18:06:32 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/11 18:08:13 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	parser(char *str, t_env **env)
+void	parser(char *str, t_env **env, t_export **export)
 {
-	char	**temp;
-	t_lexer	*lexer;
-	int		i;
+	char		**temp;
+	t_lexer		*lexer;
+	int			i;
 
 	i = 0;
 	lexer = NULL;
@@ -29,13 +29,14 @@ void	parser(char *str, t_env **env)
 	init_prev(&lexer);
 	manage_token(&lexer);
 	lexer_index(&lexer);
-	parser_env(&lexer, env);
+	parser_env(&lexer, env, export);
 	manage_heredoc(&lexer); // spostare dopo e modificare
 	remove_all_quotes(&lexer);
 	builtin_cd(&lexer);
 	builtin_pwd(&lexer);
 	builtin_echo(&lexer);
-	bultin_env(&lexer, env);
+	builtin_env(&lexer, env);
+	builtin_export(&lexer, export);
 	// split_command(&lexer);
 	// print_lexer(&lexer);
 }

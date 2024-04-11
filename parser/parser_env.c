@@ -6,13 +6,13 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 12:16:00 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/10 19:05:13 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/11 18:03:50 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	parser_env(t_lexer **lexer, t_env **env)
+void	parser_env(t_lexer **lexer, t_env **env, t_export **export)
 {
 	int		i;
 	t_lexer	*head_lexer;
@@ -29,7 +29,7 @@ void	parser_env(t_lexer **lexer, t_env **env)
 			while ((*lexer)->str[i])
 			{
 				if ((*lexer)->str[i] == '$')
-					(*lexer)->str = search_value(lexer, *env);
+					(*lexer)->str = search_value(lexer, *env, *export);
 				i++;
 			}
 		}
@@ -60,18 +60,49 @@ int	search_map(t_env **env, char *str)
 	return (-1);
 }
 
-char	*search_value(t_lexer **lexer, t_env *env)
+int	search_map_export(t_export **export, char *str)
 {
-	t_env	*current;
+	int			index;
+	t_export	*head;
+
+	index = 0;
+	head = *export;
+	while (*export)
+	{
+		if (ft_strcmp((*export)->key, str) == 0)
+		{
+			*export = head;
+			return (index);
+		}
+		index++;
+		(*export) = (*export)->next;
+	}
+	*export = head;
+	return (-1);
+}
+
+char	*search_value(t_lexer **lexer, t_env *env, t_export *export)
+{
+	t_env		*current;
+	t_export	*current_export;
 
 	current = env;
+	current_export = export;
 	(*lexer)->str++;
 	while (current)
 	{
 		if (ft_strcmp(current->key, (*lexer)->str) == 0)
 			return (current->value);
+		else
+		{
+			while (current_export)
+			{
+				if (ft_strcmp(current_export->key, (*lexer)->str) == 0)
+					return (current_export->value);
+				current_export = current_export->next;
+			}
+		}
 		current = current->next;
 	}
 	return (ft_strdup(""));
 }
-

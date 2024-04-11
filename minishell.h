@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/10 18:32:13 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/11 19:01:17 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_export
+{
+	char			*key;
+	char			*value;
+	struct s_export	*next;
+}	t_export;
+
 typedef struct s_built
 {
 	char			*command;
@@ -45,10 +52,10 @@ typedef struct s_built
 
 /*main.c*/
 int			ft_exit(char *str);
-void		reading(t_env **env);
+void		reading(t_env **env, t_export **export);
 
 /*parser*/
-void		parser(char *str, t_env **env);
+void		parser(char *str, t_env **env, t_export **export);
 void		manage_string(t_lexer **lexer);
 void		join_string(t_lexer *lexer);
 void		lexer_index(t_lexer **lexer);
@@ -82,6 +89,11 @@ t_env		*ft_list_env(char *key, char *value);
 void		ft_lstadd_back_env(t_env **lst, t_env *new);
 t_env		*ft_lstlast_env(t_env *lst);
 
+/*lst_export.c*/
+t_export	*ft_list_export(char *key, char *value);
+void		ft_lstadd_back_export(t_export **lst, t_export *new);
+t_export	*ft_lstlast_export(t_export *lst);
+
 /*lst_lexer.c*/
 t_lexer		*ft_list(int argc, char **argv);
 int			ft_check_token(char *str);
@@ -90,9 +102,10 @@ void		ft_lstadd_back(t_lexer **lst, t_lexer *new);
 t_lexer		*ft_lstlast(t_lexer *lst);
 
 /*parser_env*/
-void		parser_env(t_lexer **lexer, t_env **env);
+void		parser_env(t_lexer **lexer, t_env **env, t_export **export);
 int			search_map(t_env **env, char *str);
-char		*search_value(t_lexer **lexer, t_env *env);
+int			search_map_export(t_export **export, char *str);
+char		*search_value(t_lexer **lexer, t_env *env, t_export *export);
 
 /*builtin.c*/
 // t_built		*split_command(t_lexer **lexer);
@@ -104,10 +117,18 @@ char		*search_value(t_lexer **lexer, t_env *env);
 int			builtin_cd(t_lexer **lexer);
 void		builtin_pwd(t_lexer **lexer);
 void		builtin_echo(t_lexer **lexer);
-void		bultin_env(t_lexer **lexer, t_env **env);
+
+/*builtin_env*/
+void		builtin_env(t_lexer **lexer, t_env **env);
 void		print_env(t_lexer **lexer, t_env **env);
-// void		bultin_temp_env(t_lexer **lexer, t_env **env);
-// int			find_value(t_env *env, char *temp_key, char *temp_value);
+
+/*bultin_export*/
+t_export	*ft_lstcopy_env(t_env *lst);
+void		builtin_export(t_lexer **lexer, t_export **export);
+void		builtin_temp_export(t_lexer **lexer, t_export **export);
+void		find_value_export(t_export **export, char *temp_key, char *temp_value);
+void		new_export(t_export **export, char *temp_key, char *temp_value);
+void		bubble_sort_export(t_export **export);
 
 /*heredoc.c*/
 void		manage_heredoc(t_lexer **lexer);

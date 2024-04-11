@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/08 18:21:30 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/11 18:38:26 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_exit(char *str)
 	return (0);
 }
 
-void	reading(t_env **env)
+void	reading(t_env **env, t_export **export)
 {
 	char	*input;
 	char	*str;
@@ -36,7 +36,7 @@ void	reading(t_env **env)
 		{
 			add_history(input);
 			str = ft_strdup(input);
-			parser(str, env);
+			parser(str, env, export);
 			ft_exit(str);
 		}
 		else
@@ -46,13 +46,16 @@ void	reading(t_env **env)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env	*env;
+	t_env		*env;
+	t_export	*export;
 	
 	(void)argv;
 	env = split_envp(envp);
 	using_history();
 	if (argc != 1)
 		return (0);
-	reading(&env);
+	export = ft_lstcopy_env(env);
+	bubble_sort_export(&export);
+	reading(&env, &export);
 	return (0);
 }
