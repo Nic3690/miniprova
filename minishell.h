@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/11 19:01:17 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/12 17:45:57 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ typedef struct s_built
 
 /*main.c*/
 int			ft_exit(char *str);
-void		reading(t_env **env, t_export **export);
+void		reading(t_env **env, t_export **export, char **envp);
 
 /*parser*/
-void		parser(char *str, t_env **env, t_export **export);
+void		parser(char *str, t_env **env, t_export **export, char **envp);
 void		manage_string(t_lexer **lexer);
 void		join_string(t_lexer *lexer);
 void		lexer_index(t_lexer **lexer);
@@ -117,18 +117,25 @@ char		*search_value(t_lexer **lexer, t_env *env, t_export *export);
 int			builtin_cd(t_lexer **lexer);
 void		builtin_pwd(t_lexer **lexer);
 void		builtin_echo(t_lexer **lexer);
+void		bultin_unset(t_lexer **lexer, t_export **export);
+int			del_first(t_lexer **lexer, t_export **export);
 
 /*builtin_env*/
 void		builtin_env(t_lexer **lexer, t_env **env);
 void		print_env(t_lexer **lexer, t_env **env);
+t_export	*ft_lstcopy_env(t_env *lst);
 
 /*bultin_export*/
-t_export	*ft_lstcopy_env(t_env *lst);
 void		builtin_export(t_lexer **lexer, t_export **export);
 void		builtin_temp_export(t_lexer **lexer, t_export **export);
 void		find_value_export(t_export **export, char *temp_key, char *temp_value);
 void		new_export(t_export **export, char *temp_key, char *temp_value);
 void		bubble_sort_export(t_export **export);
+
+/*execve.c*/
+void		command_execve(t_lexer **lexer, t_env **env, t_export **export, char **temp, char **envp);
+int			find_path(char *command, char *path);
+int			manage_bultin(t_lexer **lexer, t_env **env, t_export **export);
 
 /*heredoc.c*/
 void		manage_heredoc(t_lexer **lexer);
@@ -138,6 +145,7 @@ char		*ft_strdup(char *str);
 int			ft_strcmp(char *s1, char *s2);
 char		*ft_strjoin(char *s1, char *s2);
 char		*ft_strchr(const char *s, int c);
+char		*ft_strcat(char *dest, char *src);
 
 /*utils2.c*/
 int			ft_strlen(char *str);
@@ -146,10 +154,11 @@ char		*ft_substr(char *s, unsigned int start, size_t len);
 int			get_word(char *s, char c);
 char		**ft_split(char *s, char c);
 
-/*utils4.c*/
+/*utils3.c*/
 void		*ft_calloc(size_t count, size_t size);
 void		ft_bzero(void *s, size_t n);
 char		*ft_strjoin_heredoc(char *s1, char *s2);
 void		remove_all_quotes(t_lexer **lexer);
+char		*ft_strcpy(char *dest, char *src);
 
 #endif

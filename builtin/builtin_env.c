@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:09:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/11 14:09:42 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/12 10:26:01 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,39 @@ void	print_env(t_lexer **lexer, t_env **env)
 	}
 	if (i == 0)
 		printf ("%s=%s\n", temp_key, temp_value); 
+}
+
+t_export   *ft_lstcopy_env(t_env *env)
+{
+    t_export	*new_list;
+    t_env		*current;
+	t_export	*new_node;
+	char		*key_copy;
+	char		*value_copy;
+
+	new_list = NULL;
+	current = env;
+    while (current != NULL)
+    {
+        key_copy = ft_strdup(current->key);
+        value_copy = ft_strdup(current->value);
+        if (key_copy == NULL || value_copy == NULL)
+        {
+            free(key_copy);
+            free(value_copy);
+            // Qui dovresti anche liberare tutta la memoria allocata per new_list fino a questo punto
+            return NULL;
+        }
+		new_node = ft_list_export(key_copy, value_copy);
+        if (new_node == NULL)
+		{
+            free(key_copy);
+            free(value_copy);
+            // Anche qui, liberare la memoria allocata fino a questo punto per new_list
+            return NULL;
+        }
+        ft_lstadd_back_export(&new_list, new_node);
+        current = current->next;
+    }
+    return (new_list);
 }

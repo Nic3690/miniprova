@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 10:54:18 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/15 13:30:48 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/12 13:08:05 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,25 @@ char	*ft_strchr(const char *s, int c)
 	if (c == '\0')
 		return ((char *)(s + i));
 	return (0);
+}
+
+char	*ft_strcat(char *dest, char *src)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (dest[i] != '\0')
+	{
+		i++;
+	}
+	j = 0;
+	while (src[j] != '\0')
+	{
+		dest[i] = src [j];
+		i++;
+		j++;
+	}
+	dest[i] = '\0';
+	return (dest);
 }

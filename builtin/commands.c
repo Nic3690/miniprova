@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 13:53:40 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/11 17:46:58 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/12 17:45:50 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,47 @@ void	builtin_echo(t_lexer **lexer)
 		if (flag)
 			printf ("\n");
 	}
+}
+
+void	bultin_unset(t_lexer **lexer, t_export **export)
+{
+	t_export	*prev_export;
+	t_export	*head;
+
+	prev_export = NULL;
+	head = *export;
+	if (del_first(lexer, export))
+		return ;
+	if (ft_strcmp((*lexer)->str, "unset") == 0)
+	{
+		while (*export != NULL && ft_strcmp((*export)->key, (*lexer)->next->str) != 0)
+		{
+        	prev_export = *export;
+        	*export = (*export)->next;
+    	}
+		if (*export == NULL)
+			return ;
+		prev_export->next = (*export)->next;
+		free((*export)->key);
+		free((*export)->value);
+		free(*export);
+	}
+	*export = head;
+}
+
+int	del_first(t_lexer **lexer, t_export **export)
+{
+	t_export	*temp;
+
+	temp = *export;
+	if (temp != NULL && ft_strcmp(temp->key, (*lexer)->next->str) == 0)
+	{
+    	temp = (*export)->next;
+        free((*export)->key);
+        free((*export)->value);
+        free(*export);
+		(*export) = temp;
+		return (1);
+    }
+	return (0);
 }
