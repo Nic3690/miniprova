@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 13:53:40 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/12 17:45:50 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/12 17:52:37 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,24 @@ int	builtin_cd(t_lexer **lexer)
 	return (0);
 }
 
-void	builtin_pwd(t_lexer **lexer)
+int	builtin_pwd(t_lexer **lexer)
 {
 	char	cwd[1024];
 
 	if (ft_strcmp((*lexer)->str, "pwd") == 0)
 	{
 		if (getcwd(cwd, sizeof(cwd)))
+		{
 			printf ("%s\n", cwd);
+			return (1);
+		}
 		else
 			perror((*lexer)->str);
 	}
+	return (0);
 }
 
-void	builtin_echo(t_lexer **lexer)
+int	builtin_echo(t_lexer **lexer)
 {
 	int	flag;
 
@@ -57,7 +61,7 @@ void	builtin_echo(t_lexer **lexer)
 		if (ft_strcmp((*lexer)->str, "") == 0)
 		{
 			printf ("\n");
-			return ;
+			return (1);
 		}
 		if (*lexer && ft_strcmp((*lexer)->str, "-n") == 0)
 		{
@@ -74,9 +78,10 @@ void	builtin_echo(t_lexer **lexer)
 		if (flag)
 			printf ("\n");
 	}
+	return (1);
 }
 
-void	bultin_unset(t_lexer **lexer, t_export **export)
+int	bultin_unset(t_lexer **lexer, t_export **export)
 {
 	t_export	*prev_export;
 	t_export	*head;
@@ -84,7 +89,7 @@ void	bultin_unset(t_lexer **lexer, t_export **export)
 	prev_export = NULL;
 	head = *export;
 	if (del_first(lexer, export))
-		return ;
+		return (1);
 	if (ft_strcmp((*lexer)->str, "unset") == 0)
 	{
 		while (*export != NULL && ft_strcmp((*export)->key, (*lexer)->next->str) != 0)
@@ -93,13 +98,14 @@ void	bultin_unset(t_lexer **lexer, t_export **export)
         	*export = (*export)->next;
     	}
 		if (*export == NULL)
-			return ;
+			return (0);
 		prev_export->next = (*export)->next;
 		free((*export)->key);
 		free((*export)->value);
 		free(*export);
 	}
 	*export = head;
+	return (1);
 }
 
 int	del_first(t_lexer **lexer, t_export **export)

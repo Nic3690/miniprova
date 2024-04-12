@@ -6,13 +6,13 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:10:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/12 10:25:54 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/12 17:53:14 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	builtin_export(t_lexer **lexer, t_export **export)
+int	builtin_export(t_lexer **lexer, t_export **export)
 {
 	t_export	*head;
 
@@ -34,6 +34,7 @@ void	builtin_export(t_lexer **lexer, t_export **export)
 		if (ft_strcmp((*lexer)->str, "export") == 0)
 			builtin_temp_export(lexer, export);
 	}
+	return (1);
 }
 
 void	builtin_temp_export(t_lexer **lexer, t_export **export)

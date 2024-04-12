@@ -6,13 +6,13 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:09:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/12 10:26:01 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/12 17:52:59 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	builtin_env(t_lexer **lexer, t_env **env)
+int	builtin_env(t_lexer **lexer, t_env **env)
 {
 	t_env	*temp;
 
@@ -34,6 +34,7 @@ void	builtin_env(t_lexer **lexer, t_env **env)
 		if (ft_strcmp((*lexer)->str, "env") == 0)
 			print_env(lexer, env);
 	}
+	return (1);
 }
 
 void	print_env(t_lexer **lexer, t_env **env)

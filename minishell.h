@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/12 17:45:57 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/12 18:23:58 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,26 +115,27 @@ char		*search_value(t_lexer **lexer, t_env *env, t_export *export);
 
 /*commands*/
 int			builtin_cd(t_lexer **lexer);
-void		builtin_pwd(t_lexer **lexer);
-void		builtin_echo(t_lexer **lexer);
-void		bultin_unset(t_lexer **lexer, t_export **export);
+int			builtin_pwd(t_lexer **lexer);
+int			builtin_echo(t_lexer **lexer);
+int			bultin_unset(t_lexer **lexer, t_export **export);
 int			del_first(t_lexer **lexer, t_export **export);
 
 /*builtin_env*/
-void		builtin_env(t_lexer **lexer, t_env **env);
+int			builtin_env(t_lexer **lexer, t_env **env);
 void		print_env(t_lexer **lexer, t_env **env);
 t_export	*ft_lstcopy_env(t_env *lst);
 
 /*bultin_export*/
-void		builtin_export(t_lexer **lexer, t_export **export);
+int			builtin_export(t_lexer **lexer, t_export **export);
 void		builtin_temp_export(t_lexer **lexer, t_export **export);
 void		find_value_export(t_export **export, char *temp_key, char *temp_value);
 void		new_export(t_export **export, char *temp_key, char *temp_value);
 void		bubble_sort_export(t_export **export);
 
 /*execve.c*/
-void		command_execve(t_lexer **lexer, t_env **env, t_export **export, char **temp, char **envp);
-int			find_path(char *command, char *path);
+void		command_execve(char **temp, char **envp);
+int			execute_command(char *path_env, char *command, char *path, int len);
+int			find_command(char *command, char *path);
 int			manage_bultin(t_lexer **lexer, t_env **env, t_export **export);
 
 /*heredoc.c*/
