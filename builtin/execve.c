@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/12 18:27:15 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/21 13:49:15 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	find_command(char *command, char *path)
     return (-1);
 }
 
-int	manage_bultin(t_lexer **lexer, t_env **env, t_export **export)
+int	manage_builtin(t_lexer **lexer, t_env **env, t_export **export)
 {
 	if (ft_strcmp((*lexer)->str, "cd") == 0)
 		return (builtin_cd(lexer));
@@ -93,7 +93,7 @@ int	manage_bultin(t_lexer **lexer, t_env **env, t_export **export)
 	else if (ft_strcmp((*lexer)->str, "export") == 0)
 		return (builtin_export(lexer, export));
 	else if (ft_strcmp((*lexer)->str, "unset") == 0)
-		return (bultin_unset(lexer, export));
+		return (builtin_unset(lexer, export));
 	else if (ft_strcmp((*lexer)->str, "exit") == 0)
 		return (ft_exit((*lexer)->str));
 	return (0);

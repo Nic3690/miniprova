@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 13:53:40 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/12 17:52:37 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/21 12:50:15 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,7 @@ int	builtin_echo(t_lexer **lexer)
 	{
 		*lexer = (*lexer)->next;
 		if (ft_strcmp((*lexer)->str, "") == 0)
-		{
-			printf ("\n");
-			return (1);
-		}
+			return (printf ("\n"));
 		if (*lexer && ft_strcmp((*lexer)->str, "-n") == 0)
 		{
 			flag = 0;
@@ -81,7 +78,7 @@ int	builtin_echo(t_lexer **lexer)
 	return (1);
 }
 
-int	bultin_unset(t_lexer **lexer, t_export **export)
+int	builtin_unset(t_lexer **lexer, t_export **export)
 {
 	t_export	*prev_export;
 	t_export	*head;

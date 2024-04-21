@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 20:54:19 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/12 13:12:22 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:15:20 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,13 @@ void remove_all_quotes(t_lexer **lexer)
 	head = *lexer;
     while (*lexer)
 	{
-        s_read = (*lexer)->str;
-        s_write = (*lexer)->str;
-
+		if (ft_strlen((*lexer)->str) >= 1)
+		{
+			s_read = (*lexer)->str;
+			s_write = (*lexer)->str;
+		}
+		else if (ft_strlen((*lexer)->token) >= 1)
+			*lexer = (*lexer)->next;
         while (*s_read)
 		{
             if (*s_read != '\'' && *s_read != '\"')

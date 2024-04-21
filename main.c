@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/12 17:18:52 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/21 17:16:02 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,20 @@ void	reading(t_env **env, t_export **export, char **envp)
 {
 	char	*input;
 	char	*str;
+	int		copy;
 
+	copy = dup(STDIN_FILENO);
 	while (1)
 	{
-		input = readline("minishell> ");
+		dup2(copy, STDIN_FILENO);
+		input = readline("\e[0;35mminishell> \e[0m");
+		// write(1, input, ft_strlen(input));
 		if (*input)
 		{
 			add_history(input);
 			str = ft_strdup(input);
 			parser(str, env, export, envp);
+			free(input);
 			ft_exit(str);
 		}
 		else
