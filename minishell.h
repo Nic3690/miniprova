@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/21 16:32:17 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:38:46 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,24 @@ typedef struct s_export
 	struct s_export	*next;
 }	t_export;
 
+typedef struct s_envp_struct
+{
+    t_export        **export;
+    t_env           **env;
+}   t_envp_struct;
+
+typedef struct s_fd
+{
+    pid_t           pid;
+    int             fd[2];
+}   t_fd;
+
 /*main.c*/
 int			ft_exit(char *str);
-void		reading(t_env **env, t_export **export, char **envp);
+void	    reading(t_envp_struct *envp_struct, char **envp);
 
 /*parser*/
-void		parser(char *str, t_env **env, t_export **export, char **envp);
+void	    parser(char *str, t_envp_struct *envp_struct, char **envp);
 void		manage_string(t_lexer **lexer);
 void		join_string(t_lexer *lexer);
 void		lexer_index(t_lexer **lexer);
@@ -94,18 +106,19 @@ void		ft_lstadd_back(t_lexer **lst, t_lexer *new);
 t_lexer		*ft_lstlast(t_lexer *lst);
 
 /*parser_env*/
-void		parser_env(t_lexer **lexer, t_env **env, t_export **export);
+void	    parser_env(t_lexer **lexer, t_envp_struct *envp_struct);
 int			search_map(t_env **env, char *str);
 int			search_map_export(t_export **export, char *str);
-char		*search_value(t_lexer **lexer, t_env *env, t_export *export);
+char	    *search_value(t_lexer **lexer, t_envp_struct *envp_struct);
 
 /*builtin.c*/
 t_lexer     *new_start(t_lexer **lexer);
 char	    **new_temp(t_lexer *start);
 char	    **new_full_temp(t_lexer **lexer);
 int	        check_pipe(t_lexer **lexer);
-void	    split_command(t_lexer **lexer, t_env *env, t_export *export, char **envp);
-void	    set_pipe(t_lexer **lexer, t_env *env, t_export *export, char **envp);
+void	    split_command(t_lexer **lexer, t_envp_struct *envp_struct, char **envp);
+void	    set_fork(t_lexer **lexer, t_envp_struct *envp_struct, char **envp);
+void	    set_pipe(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd);
 
 /*commands*/
 int			builtin_cd(t_lexer **lexer);
@@ -120,17 +133,17 @@ void		print_env(t_lexer **lexer, t_env **env);
 t_export	*ft_lstcopy_env(t_env *lst);
 
 /*bultin_export*/
-int			builtin_export(t_lexer **lexer, t_export **export);
-void		builtin_temp_export(t_lexer **lexer, t_export **export);
+int	        builtin_export(t_lexer **lexer, t_envp_struct *envp_struct);
+void    	builtin_temp_export(t_lexer **lexer, t_envp_struct *envp_struct);
 void		find_value_export(t_export **export, char *temp_key, char *temp_value);
 void		new_export(t_export **export, char *temp_key, char *temp_value);
-void		bubble_sort_export(t_export **export);
+void	    bubble_sort_export(t_envp_struct *envp_struct);
 
 /*execve.c*/
 void		command_execve(char **temp, char **envp);
 int			execute_command(char *path_env, char *command, char *path, int len);
 int			find_command(char *command, char *path);
-int			manage_builtin(t_lexer **lexer, t_env **env, t_export **export);
+int	        manage_builtin(t_lexer **lexer, t_envp_struct *envp_struct);
 
 /*heredoc.c*/
 void		manage_heredoc(t_lexer **lexer);

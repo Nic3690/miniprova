@@ -6,13 +6,13 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/21 16:34:43 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:48:29 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	parser(char *str, t_env **env, t_export **export, char **envp)
+void	parser(char *str, t_envp_struct *envp_struct, char **envp)
 {
 	char		**temp;
 	t_lexer		*lexer;
@@ -29,10 +29,10 @@ void	parser(char *str, t_env **env, t_export **export, char **envp)
 	init_prev(&lexer);
 	manage_token(&lexer);
 	lexer_index(&lexer);
-	parser_env(&lexer, env, export);
+	parser_env(&lexer, envp_struct);
 	manage_heredoc(&lexer); // spostare dopo e modificare
 	remove_all_quotes(&lexer);
-	split_command(&lexer, *env, *export, envp);
+	split_command(&lexer, envp_struct, envp);
 	// print_lexer(&lexer);
 }
 

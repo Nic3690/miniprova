@@ -6,13 +6,13 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 12:16:00 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/11 18:03:50 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:37:19 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	parser_env(t_lexer **lexer, t_env **env, t_export **export)
+void	parser_env(t_lexer **lexer, t_envp_struct *envp_struct)
 {
 	int		i;
 	t_lexer	*head_lexer;
@@ -20,7 +20,7 @@ void	parser_env(t_lexer **lexer, t_env **env, t_export **export)
 
 	i = 0;
 	head_lexer = *lexer;
-	head_env = *env;
+	head_env = *(envp_struct->env);
 	while ((*lexer))
 	{
 		if (count_quotes((*lexer)->str, '\'') != 2)
@@ -29,14 +29,14 @@ void	parser_env(t_lexer **lexer, t_env **env, t_export **export)
 			while ((*lexer)->str[i])
 			{
 				if ((*lexer)->str[i] == '$')
-					(*lexer)->str = search_value(lexer, *env, *export);
+					(*lexer)->str = search_value(lexer, envp_struct);
 				i++;
 			}
 		}
 		(*lexer) = (*lexer)->next;
 	}
 	*lexer = head_lexer;
-	*env = head_env;
+	*(envp_struct->env) = head_env;
 }
 
 int	search_map(t_env **env, char *str)
@@ -81,13 +81,13 @@ int	search_map_export(t_export **export, char *str)
 	return (-1);
 }
 
-char	*search_value(t_lexer **lexer, t_env *env, t_export *export)
+char	*search_value(t_lexer **lexer, t_envp_struct *envp_struct)
 {
 	t_env		*current;
 	t_export	*current_export;
 
-	current = env;
-	current_export = export;
+	current = *(envp_struct->env);
+	current_export = *(envp_struct->export);
 	(*lexer)->str++;
 	while (current)
 	{

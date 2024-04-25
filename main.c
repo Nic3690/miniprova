@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/21 17:16:02 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:36:40 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_exit(char *str)
 	return (0);
 }
 
-void	reading(t_env **env, t_export **export, char **envp)
+void	reading(t_envp_struct *envp_struct, char **envp)
 {
 	char	*input;
 	char	*str;
@@ -36,12 +36,11 @@ void	reading(t_env **env, t_export **export, char **envp)
 	{
 		dup2(copy, STDIN_FILENO);
 		input = readline("\e[0;35mminishell> \e[0m");
-		// write(1, input, ft_strlen(input));
 		if (*input)
 		{
 			add_history(input);
 			str = ft_strdup(input);
-			parser(str, env, export, envp);
+			parser(str, envp_struct, envp);
 			free(input);
 			ft_exit(str);
 		}
@@ -52,16 +51,18 @@ void	reading(t_env **env, t_export **export, char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env		*env;
-	t_export	*export;
+	t_envp_struct *envp_struct;
 
+	envp_struct = malloc(sizeof(t_envp_struct));
+	envp_struct->env = malloc(sizeof(t_env *));
+	envp_struct->export = malloc(sizeof(t_export *));
 	(void)argv;
-	env = split_envp(envp);
+	*(envp_struct->env) = split_envp(envp);
 	using_history();
 	if (argc != 1)
 		return (0);
-	export = ft_lstcopy_env(env);
-	bubble_sort_export(&export);
-	reading(&env, &export, envp);
+	*(envp_struct->export) = ft_lstcopy_env(*(envp_struct->env));
+	bubble_sort_export(envp_struct);
+	reading(envp_struct, envp);
 	return (0);
 }

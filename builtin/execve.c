@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/21 13:49:15 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:27:57 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	find_command(char *command, char *path)
     return (-1);
 }
 
-int	manage_builtin(t_lexer **lexer, t_env **env, t_export **export)
+int	manage_builtin(t_lexer **lexer, t_envp_struct *envp_struct)
 {
 	if (ft_strcmp((*lexer)->str, "cd") == 0)
 		return (builtin_cd(lexer));
@@ -89,11 +89,11 @@ int	manage_builtin(t_lexer **lexer, t_env **env, t_export **export)
 	else if (ft_strcmp((*lexer)->str, "echo") == 0)
 		return (builtin_echo(lexer));
 	else if (ft_strcmp((*lexer)->str, "env") == 0)
-		return (builtin_env(lexer, env));
+		return (builtin_env(lexer, envp_struct->env));
 	else if (ft_strcmp((*lexer)->str, "export") == 0)
-		return (builtin_export(lexer, export));
+		return (builtin_export(lexer, envp_struct));
 	else if (ft_strcmp((*lexer)->str, "unset") == 0)
-		return (builtin_unset(lexer, export));
+		return (builtin_unset(lexer, envp_struct->export));
 	else if (ft_strcmp((*lexer)->str, "exit") == 0)
 		return (ft_exit((*lexer)->str));
 	return (0);

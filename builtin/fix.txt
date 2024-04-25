@@ -1,0 +1,3 @@
+ls -la | sort non prende -la
+wc conta anche minishell
+virgolette in caso echo "'" $USER "'"
