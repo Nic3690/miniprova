@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/25 11:38:28 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:33:27 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,17 @@ t_lexer	*new_start(t_lexer **lexer)
 	t_lexer *start_head;
 
 	head = *lexer;
+	start = malloc(sizeof(t_lexer));
+	start_head = start;
 	while (*lexer && (*lexer)->next)
 	{	
-		start = malloc(sizeof(t_lexer));
-		start_head = start;
 		while (!ft_strchr((*lexer)->token, '|'))
 		{
 			start->str = ft_strdup((*lexer)->str);
 			start->index = 0;
 			start->token = "";
+			start->next = malloc(sizeof(t_lexer));
+			start = start->next;
 			*lexer = (*lexer)->next;
 		}
 		*lexer = (*lexer)->next;
@@ -39,9 +41,11 @@ t_lexer	*new_start(t_lexer **lexer)
 
 char	**new_temp(t_lexer *start)
 {
+	t_lexer	*head;
 	char	**temp;
 	int		i;
-	
+
+	head = start;
 	i = 0;
 	temp = malloc(sizeof(char *) * 1024 + 1);
 	while (start)
@@ -50,6 +54,7 @@ char	**new_temp(t_lexer *start)
 		start = start->next;
 	}
 	temp[i] = NULL;
+	start = head;
 	return (temp);
 }
 
@@ -133,41 +138,42 @@ void	set_fork(t_lexer **lexer, t_envp_struct *envp_struct, char **envp)
         perror("fork");
         exit(EXIT_FAILURE);
     }
-	set_pipe(lexer, envp_struct, envp, fd);
+	if (fd->pid == 0)
+		child(lexer, envp_struct, envp, fd);
+	father(lexer, envp_struct, envp, fd);
 }
 
-void	set_pipe(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd)
+void	child(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd)
 {
 	t_lexer	*start;
 	char	**temp;
-	char	**temp_full;
 
 	start = new_start(lexer);
 	temp = new_temp(start);
-	if (fd->pid == 0)
-	{
-    	close(fd->fd[0]);
-    	dup2(fd->fd[1], STDOUT_FILENO);
-    	close(fd->fd[1]);
-		if (manage_builtin(&start, envp_struct) != 1)
-			command_execve(temp, envp);
-		free(start);
-		free(temp);
-    	exit(EXIT_SUCCESS);
-	}
-	else
-	{
-		while (*lexer && !(ft_strchr((*lexer)->token, '|')))
-			*lexer = (*lexer)->next;
-		*lexer = (*lexer)->next;
-		temp_full = new_full_temp(lexer);
-		close(fd->fd[1]);
-		dup2(fd->fd[0], STDIN_FILENO);
-		close(fd->fd[0]);
-		if (manage_builtin(lexer, envp_struct) != 1)
-			command_execve(temp_full, envp);
-	}
+	printf("%s\n", *temp);
+	close(fd->fd[0]);
+	dup2(fd->fd[1], STDOUT_FILENO);
+	close(fd->fd[1]);
+	if (manage_builtin(&start, envp_struct) != 1)
+		command_execve(temp, envp);
+	free(start);
+	free(temp);
+	exit(EXIT_SUCCESS);
 }
 
+void	father(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd)
+{
+	char	**temp_full;
+
+	while (*lexer && !(ft_strchr((*lexer)->token, '|')))
+		*lexer = (*lexer)->next;
+	*lexer = (*lexer)->next;
+	temp_full = new_full_temp(lexer);
+	close(fd->fd[1]);
+	dup2(fd->fd[0], STDIN_FILENO);
+	close(fd->fd[0]);
+	if (manage_builtin(lexer, envp_struct) != 1)
+		command_execve(temp_full, envp);
+}
 
 	// write (1, (*lexer)->str, ft_strlen((*lexer)->str));

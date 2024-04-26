@@ -1,3 +1,4 @@
 ls -la | sort non prende -la
 wc conta anche minishell
 virgolette in caso echo "'" $USER "'"
+Handle $? (che deve stampare l'exit status anche con echo)

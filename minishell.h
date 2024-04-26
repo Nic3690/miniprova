@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/25 11:38:46 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:33:09 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,8 @@ char	    **new_full_temp(t_lexer **lexer);
 int	        check_pipe(t_lexer **lexer);
 void	    split_command(t_lexer **lexer, t_envp_struct *envp_struct, char **envp);
 void	    set_fork(t_lexer **lexer, t_envp_struct *envp_struct, char **envp);
-void	    set_pipe(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd);
+void	    child(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd);
+void	    father(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd);
 
 /*commands*/
 int			builtin_cd(t_lexer **lexer);
