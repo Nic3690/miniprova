@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/26 16:33:09 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/28 16:55:50 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -111,15 +112,26 @@ int			search_map(t_env **env, char *str);
 int			search_map_export(t_export **export, char *str);
 char	    *search_value(t_lexer **lexer, t_envp_struct *envp_struct);
 
-/*builtin.c*/
-t_lexer     *new_start(t_lexer **lexer);
-char	    **new_temp(t_lexer *start);
-char	    **new_full_temp(t_lexer **lexer);
-int	        check_pipe(t_lexer **lexer);
+/*pipe.c*/
 void	    split_command(t_lexer **lexer, t_envp_struct *envp_struct, char **envp);
 void	    set_fork(t_lexer **lexer, t_envp_struct *envp_struct, char **envp);
 void	    child(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd);
 void	    father(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd);
+
+/*builtin_utils*/
+t_lexer     *new_start(t_lexer **lexer);
+char	    **new_temp(t_lexer *start);
+char	    **new_full_temp(t_lexer **lexer);
+int	        check_pipe(t_lexer **lexer);
+int	        check_redirection(t_lexer **lexer);
+
+/*redirections.c*/
+t_lexer		*new_start_redirection(t_lexer **lexer);
+char		**new_temp_redirection(t_lexer *start);
+int			count_lexer(t_lexer **lexer);
+void		manage_redirections(t_lexer **lexer, t_envp_struct *envp_struct, char **envp);
+void		redirection_out(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd);
+void		redirection_in(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd);
 
 /*commands*/
 int			builtin_cd(t_lexer **lexer);
