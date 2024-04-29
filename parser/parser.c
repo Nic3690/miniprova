@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/28 13:50:34 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/29 21:26:32 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	parser(char *str, t_envp_struct *envp_struct, char **envp)
 	manage_heredoc(&lexer); // spostare dopo e modificare
 	remove_all_quotes(&lexer);
 	split_command(&lexer, envp_struct, envp);
+	/*la testa non è resettata qui*/
 	// print_lexer(&lexer);
 }
 
@@ -105,9 +106,9 @@ void	print_lexer(t_lexer **lexer)
 	while (*lexer)
 	{
 		if (ft_strlen((*lexer)->str) >= 1)
-			printf("%d - %s\n", (*lexer)->index, (*lexer)->str);
+			printf("%s\n", (*lexer)->str);
 		if (ft_strlen((*lexer)->token) >= 1)
-			printf("%d - %s\n", (*lexer)->index, (*lexer)->token);
+			printf("%s\n", (*lexer)->token);
 		*lexer = (*lexer)->next;
 	}
 	*lexer = head;

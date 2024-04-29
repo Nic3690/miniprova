@@ -6,37 +6,40 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 13:53:40 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/21 12:50:15 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/29 21:41:11 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	builtin_cd(t_lexer **lexer)
+int	builtin_cd(t_lexer **lexer, t_envp_struct *envp_struct)
 {
 	char	cwd[1024];
 
+	envp_struct->exit_status = 0;
 	if (ft_strcmp((*lexer)->str, "cd") == 0)
 	{
 		if (chdir((*lexer)->next->str) != 0)
 		{
 			perror((*lexer)->next->str);
-			return (0);
+			envp_struct->exit_status = 1;
+			return (1);
 		}
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 		{
 			perror((*lexer)->next->str);
-			return (0);
+			envp_struct->exit_status = 1;
+			return (1);
 		}
-		return (1);
 	}
 	return (0);
 }
 
-int	builtin_pwd(t_lexer **lexer)
+int	builtin_pwd(t_lexer **lexer, t_envp_struct *envp_struct)
 {
 	char	cwd[1024];
 
+	envp_struct->exit_status = 0;
 	if (ft_strcmp((*lexer)->str, "pwd") == 0)
 	{
 		if (getcwd(cwd, sizeof(cwd)))
@@ -45,7 +48,11 @@ int	builtin_pwd(t_lexer **lexer)
 			return (1);
 		}
 		else
+		{
 			perror((*lexer)->str);
+			envp_struct->exit_status = 1;
+			return (0);
+		}
 	}
 	return (0);
 }

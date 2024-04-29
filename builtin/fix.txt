@@ -1,6 +1,5 @@
-ls -la | sort non prende -la
-wc conta anche minishell
 virgolette in caso echo "'" $USER "'"
 Handle $? (che deve stampare l'exit status anche con echo)
-Gestire 3 comandi col pipe
 Gestire il fatto che wc conti anche minishell
+
+strerror stampa errori giusti

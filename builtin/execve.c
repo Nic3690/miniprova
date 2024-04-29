@@ -6,18 +6,18 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/28 16:22:41 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/29 21:34:16 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	command_execve(char **temp, char **envp)
+void	command_execve(char **temp, char **envp, t_envp_struct *envp_struct)
 {
 	pid_t	pid;
-	int		status;
 	char	path[1024];
 
+	envp_struct->exit_status = 0;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -31,7 +31,7 @@ void	command_execve(char **temp, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	else if (pid > 0)
-		waitpid(pid, &status, 0);
+		waitpid(pid, &envp_struct->exit_status, 0);
 	else
 	{
 		perror("fork");
@@ -83,9 +83,9 @@ int	find_command(char *command, char *path)
 int	manage_builtin(t_lexer **lexer, t_envp_struct *envp_struct)
 {
 	if (ft_strcmp((*lexer)->str, "cd") == 0)
-		return (builtin_cd(lexer));
+		return (builtin_cd(lexer, envp_struct));
 	else if (ft_strcmp((*lexer)->str, "pwd") == 0)
-		return (builtin_pwd(lexer));
+		return (builtin_pwd(lexer, envp_struct));
 	else if (ft_strcmp((*lexer)->str, "echo") == 0)
 		return (builtin_echo(lexer));
 	else if (ft_strcmp((*lexer)->str, "env") == 0)

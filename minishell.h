@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/28 16:55:50 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/29 21:33:42 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <errno.h>
+# include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -45,6 +47,7 @@ typedef struct s_export
 
 typedef struct s_envp_struct
 {
+	int				exit_status;
     t_export        **export;
     t_env           **env;
 }   t_envp_struct;
@@ -125,17 +128,20 @@ char	    **new_full_temp(t_lexer **lexer);
 int	        check_pipe(t_lexer **lexer);
 int	        check_redirection(t_lexer **lexer);
 
-/*redirections.c*/
+/*builtin_utils2*/
 t_lexer		*new_start_redirection(t_lexer **lexer);
 char		**new_temp_redirection(t_lexer *start);
 int			count_lexer(t_lexer **lexer);
+
+/*redirections.c*/
 void		manage_redirections(t_lexer **lexer, t_envp_struct *envp_struct, char **envp);
 void		redirection_out(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd);
 void		redirection_in(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd);
+void		redirection_append(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd);
 
 /*commands*/
-int			builtin_cd(t_lexer **lexer);
-int			builtin_pwd(t_lexer **lexer);
+int			builtin_cd(t_lexer **lexer, t_envp_struct *envp_struct);
+int			builtin_pwd(t_lexer **lexer, t_envp_struct *envp_struct);
 int			builtin_echo(t_lexer **lexer);
 int			builtin_unset(t_lexer **lexer, t_export **export);
 int			del_first(t_lexer **lexer, t_export **export);
@@ -153,7 +159,7 @@ void		new_export(t_export **export, char *temp_key, char *temp_value);
 void	    bubble_sort_export(t_envp_struct *envp_struct);
 
 /*execve.c*/
-void		command_execve(char **temp, char **envp);
+void		command_execve(char **temp, char **envp, t_envp_struct *envp_struct);
 int			execute_command(char *path_env, char *command, char *path, int len);
 int			find_command(char *command, char *path);
 int	        manage_builtin(t_lexer **lexer, t_envp_struct *envp_struct);
@@ -181,5 +187,8 @@ void		ft_bzero(void *s, size_t n);
 char		*ft_strjoin_heredoc(char *s1, char *s2);
 void		remove_all_quotes(t_lexer **lexer);
 char		*ft_strcpy(char *dest, char *src);
+
+/*utils4.c*/
+char		*ft_itoa(int n);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/25 11:36:40 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/29 21:26:18 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	main(int argc, char **argv, char **envp)
 	envp_struct = malloc(sizeof(t_envp_struct));
 	envp_struct->env = malloc(sizeof(t_env *));
 	envp_struct->export = malloc(sizeof(t_export *));
+	envp_struct->exit_status = 0;
 	(void)argv;
 	*(envp_struct->env) = split_envp(envp);
 	using_history();

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 12:16:00 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/25 11:37:19 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/29 21:26:52 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ void	parser_env(t_lexer **lexer, t_envp_struct *envp_struct)
 			i = 0;
 			while ((*lexer)->str[i])
 			{
-				if ((*lexer)->str[i] == '$')
+				if ((*lexer)->str[i] == '$' && (*lexer)->str[i + 1] == '?')
+					(*lexer)->str = ft_itoa(envp_struct->exit_status);
+				else if ((*lexer)->str[i] == '$')
 					(*lexer)->str = search_value(lexer, envp_struct);
 				i++;
 			}

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_utils.c                                    :+:      :+:    :+:   */
+/*   builtin_utils2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/27 11:42:26 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/29 18:33:10 by nfurlani         ###   ########.fr       */
+/*   Created: 2024/04/29 19:07:47 by nfurlani          #+#    #+#             */
+/*   Updated: 2024/04/29 19:08:38 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_lexer	*new_start(t_lexer **lexer)
+t_lexer	*new_start_redirection(t_lexer **lexer)
 {
 	t_lexer *start;
 	t_lexer	*head;
@@ -21,7 +21,7 @@ t_lexer	*new_start(t_lexer **lexer)
 	head = *lexer;
 	start = malloc(sizeof(t_lexer));
 	start_head = start;
-	while (!ft_strchr((*lexer)->token, '|') && *lexer && (*lexer)->next)
+	while (!ft_check_token((*lexer)->token) && *lexer && (*lexer)->next)
 	{
 		start->str = ft_strdup((*lexer)->str);
 		start->index = 0;
@@ -35,7 +35,7 @@ t_lexer	*new_start(t_lexer **lexer)
 	return (start);
 }
 
-char	**new_temp(t_lexer *start)
+char	**new_temp_redirection(t_lexer *start)
 {
 	t_lexer	*head;
 	char	**temp;
@@ -54,63 +54,18 @@ char	**new_temp(t_lexer *start)
 	return (temp);
 }
 
-char	**new_full_temp(t_lexer **lexer)
+int	count_lexer(t_lexer **lexer)
 {
-	char	**temp;
-	char	**head;
-	t_lexer	*head_lexer;
-	int		size;
-
-	size = 1024;
-	head_lexer = *lexer;
-	temp = malloc(sizeof(char *) * size + 1);
-	head = temp;
-	if (temp == NULL)
-		return (NULL);
-	while (*lexer)
-	{
-		*temp = (*lexer)->str;
-		*lexer = (*lexer)->next;
-		temp++;
-	}
-	*temp = NULL;
-	temp = head;
-	*lexer = head_lexer;
-	return (temp);
-}
-
-int	check_pipe(t_lexer **lexer)
-{
+	int		i;
 	t_lexer	*head;
 
+	i = 0;
 	head = *lexer;
-	while (*lexer)
+	while((*lexer) && !ft_check_token((*lexer)->token))
 	{
-		if (ft_strchr((*lexer)->token, '|'))
-		{
-			*lexer = head;
-			return (1);
-		}
 		*lexer = (*lexer)->next;
+		i++;
 	}
 	*lexer = head;
-	return (0);
-}
-
-int	check_redirection(t_lexer **lexer)
-{
-	t_lexer	*head;
-
-	head = *lexer;
-	while (*lexer)
-	{
-		if (ft_strchr((*lexer)->token, '>') || ft_strchr((*lexer)->token, '<'))
-		{
-			*lexer = head;
-			return (1);
-		}
-		*lexer = (*lexer)->next;
-	}
-	*lexer = head;
-	return (0);
+	return (i);
 }
