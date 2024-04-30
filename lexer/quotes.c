@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 15:44:21 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/15 13:29:58 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/30 11:03:05 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,43 +56,47 @@ int	count_quotes(char *str, char c)
 }
 /*conta quanti char c ci sono nella stringa*/
 
-void	remove_char(char *str, char c, int count)
+int	should_copy(char c, char target, int leave_one, int *found_one)
 {
-	char	*s_read;
-	char	*s_write;
-	int		leave_one;
-	int		found_one;
-	int		quote_count;
+    if (c != target)
+		return (1);
+    if (target == '\'' && leave_one == 2 && *found_one < 2)
+	{
+        (*found_one)++;
+        return (1);
+    }
+    if (leave_one && *found_one == 0)
+	{
+        (*found_one) = 1;
+        return (1);
+    }
+    return (0);
+}
+
+void remove_char(char *str, char c, int count)
+{
+    char *s_read;
+    char *s_write;
+    int leave_one;
+    int found_one;
+	int quote_count;
 
 	s_read = str;
 	s_write = str;
 	leave_one = (count % 2 != 0);
 	found_one = 0;
-	quote_count = count_quotes(str, '\'');
-	if (c == '\'' && quote_count % 4 != 0 && quote_count % 2 == 0)
+    quote_count = count_quotes(str, '\'');
+    if (c == '\'' && quote_count % 4 != 0 && quote_count % 2 == 0)
 		leave_one = 2;
-	while (*s_read)
+    while (*s_read)
 	{
-		if (*s_read != c)
-			*s_write++ = *s_read;
-		else
-		{
-			if (c == '\'' && (leave_one == 2) && found_one < 2)
-			{
-				*s_write++ = *s_read;
-				found_one++;
-			}
-			else if (leave_one && !found_one)
-			{
-				*s_write++ = *s_read;
-				found_one = 1;
-			}
-		}
-		s_read++;
-	}
-	*s_write = '\0';
+        if (should_copy(*s_read, c, leave_one, &found_one)) {
+            *s_write++ = *s_read;
+        }
+        s_read++;
+    }
+    *s_write = '\0';
 }
-/*accorcia sta cosa*/
 
 void	manage_quote(char **temp, char c)
 {

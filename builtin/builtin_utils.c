@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:42:26 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/29 18:33:10 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/30 10:49:21 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_lexer	*new_start(t_lexer **lexer)
 	while (!ft_strchr((*lexer)->token, '|') && *lexer && (*lexer)->next)
 	{
 		start->str = ft_strdup((*lexer)->str);
-		start->index = 0;
 		start->token = "";
 		start->next = malloc(sizeof(t_lexer));
 		start = start->next;

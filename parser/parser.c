@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/29 21:26:32 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/30 11:22:58 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	parser(char *str, t_envp_struct *envp_struct, char **envp)
 	manage_string(&lexer);
 	init_prev(&lexer);
 	manage_token(&lexer);
-	lexer_index(&lexer);
 	parser_env(&lexer, envp_struct);
 	manage_heredoc(&lexer); // spostare dopo e modificare
 	remove_all_quotes(&lexer);
@@ -44,6 +43,7 @@ void	manage_string(t_lexer **lexer)
 	head = *lexer;
 	while (*lexer && (*lexer)->next)
 	{
+		// printf("++++++ %s\n", (*lexer)->str);
 		if (count_quotes((*lexer)->str, '\'') == 1
 			|| ft_strchr((*lexer)->str, '"')
 			|| count_quotes((*lexer)->token, '\'') == 1
@@ -80,22 +80,6 @@ void	join_string(t_lexer *lexer)
 	temp = lexer->next->next;
 	free(lexer->next);
 	lexer->next = temp;
-}
-
-void	lexer_index(t_lexer **lexer)
-{
-	t_lexer	*head;
-	int		i;
-
-	head = *lexer;
-	i = 0;
-	while (*lexer)
-	{
-		(*lexer)->index = i;
-		i++;
-		(*lexer) = (*lexer)->next;
-	}
-	*lexer = head;
 }
 
 void	print_lexer(t_lexer **lexer)

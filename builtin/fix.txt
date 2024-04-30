@@ -1,5 +1,2 @@
-virgolette in caso echo "'" $USER "'"
-Handle $? (che deve stampare l'exit status anche con echo)
 Gestire il fatto che wc conti anche minishell
-
 strerror stampa errori giusti

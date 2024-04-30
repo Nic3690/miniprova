@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/29 21:33:42 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:40:58 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <string.h>
+# include <ctype.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
 typedef struct s_lexer
 {
 	char			*str;
-	int				index;
 	char			*token;
 	struct s_lexer	*prev;
 	struct s_lexer	*next;
@@ -73,6 +73,7 @@ void		print_lexer(t_lexer **lexer);
 /*quotes.c*/
 void		find_quotes(char **temp);
 int			count_quotes(char *str, char c);
+int			should_copy(char c, char target, int leave_one, int *found_one);
 void		remove_char(char *str, char c, int count);
 void		manage_quote(char **temp, char c);
 void		single_quote(char **temp);
@@ -109,11 +110,16 @@ t_lexer		*ft_lstnew(char *str, char *token);
 void		ft_lstadd_back(t_lexer **lst, t_lexer *new);
 t_lexer		*ft_lstlast(t_lexer *lst);
 
-/*parser_env*/
-void	    parser_env(t_lexer **lexer, t_envp_struct *envp_struct);
+/*env_map*/
 int			search_map(t_env **env, char *str);
 int			search_map_export(t_export **export, char *str);
-char	    *search_value(t_lexer **lexer, t_envp_struct *envp_struct);
+
+/*parser_env*/
+char		*get_env_var(char *var_name, t_envp_struct *envp_struct);
+char		*copy_var_value(char *write, char *var_value);
+char		*expand_env_vars(char *input, t_envp_struct* envp_struct);
+void		check_var_name(char	**point, char **write, t_envp_struct *envp_struct);
+void	    parser_env(t_lexer **lexer, t_envp_struct *envp_struct);
 
 /*pipe.c*/
 void	    split_command(t_lexer **lexer, t_envp_struct *envp_struct, char **envp);
@@ -190,5 +196,6 @@ char		*ft_strcpy(char *dest, char *src);
 
 /*utils4.c*/
 char		*ft_itoa(int n);
+int			ft_isalnum(int c);
 
 #endif
