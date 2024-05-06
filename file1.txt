@@ -1,0 +1,10 @@
+builtin
+file1.txt
+lexer
+main.c
+main.o
+makefile
+minishell
+minishell.h
+parser
+utils

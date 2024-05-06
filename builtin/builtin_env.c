@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:09:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/12 17:52:59 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/04 19:12:39 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ void	print_env(t_lexer **lexer, t_env **env)
 	while (current)
 	{
 		if (ft_strcmp(current->key, temp_key) == 0)
-			i = printf ("%s=%s\n", current->key, temp_value);
+			i = printf("%s=%s\n", current->key, temp_value);
 		else
-			printf ("%s=%s\n", current->key, current->value);
+			printf("%s=%s\n", current->key, current->value);
 		current = current->next;
 	}
 	if (i == 0)
-		printf ("%s=%s\n", temp_key, temp_value); 
+		printf ("%s=%s\n", temp_key, temp_value);
 }
 
 t_export   *ft_lstcopy_env(t_env *env)

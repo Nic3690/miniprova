@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/29 21:34:16 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/06 17:02:55 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	command_execve(char **temp, char **envp, t_envp_struct *envp_struct)
 
 	envp_struct->exit_status = 0;
 	pid = fork();
+	signal(SIGINT, handle_child);
+	signal(SIGQUIT, handle_child);
 	if (pid == 0)
 	{
 		if (find_command(*temp, path) != 0)
@@ -57,9 +59,9 @@ int	execute_command(char *path_env, char *command, char *path, int len)
 
 int	find_command(char *command, char *path)
 {
-    char *path_env;
-    char *end;
-    int len;
+    char	*path_env;
+    char	*end;
+    int		len;
 
 	path_env = getenv("PATH");
     if (!path_env)
@@ -95,6 +97,6 @@ int	manage_builtin(t_lexer **lexer, t_envp_struct *envp_struct)
 	else if (ft_strcmp((*lexer)->str, "unset") == 0)
 		return (builtin_unset(lexer, envp_struct->export));
 	else if (ft_strcmp((*lexer)->str, "exit") == 0)
-		return (ft_exit((*lexer)->str));
+		return (ft_exit(*lexer, envp_struct));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:10:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/25 11:26:31 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:19:23 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void find_value_export(t_export **export, char *temp_key, char *temp_value)
 		{
 			free(temp->value);
             temp->value = ft_strdup(temp_value);
+			free(temp_value);
 		}
     }
 	else
@@ -88,6 +89,7 @@ void	new_export(t_export **export, char *temp_key, char *temp_value)
 	{
 		new->next = *export;
 		*export = new;
+		free(new);
 	}
 	else
 	{

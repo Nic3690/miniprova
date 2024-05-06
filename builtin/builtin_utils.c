@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:42:26 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/30 10:49:21 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/04 18:49:21 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_lexer	*new_start(t_lexer **lexer)
 	while (!ft_strchr((*lexer)->token, '|') && *lexer && (*lexer)->next)
 	{
 		start->str = ft_strdup((*lexer)->str);
-		start->token = "";
+		start->token = ft_strdup("");
 		start->next = malloc(sizeof(t_lexer));
 		start = start->next;
 		*lexer = (*lexer)->next;
@@ -45,7 +45,8 @@ char	**new_temp(t_lexer *start)
 	temp = malloc(sizeof(char *) * 1024 + 1);
 	while (start)
 	{
-		temp[i++] = start->str;
+		if (start->str != NULL)
+			temp[i++] = ft_strdup(start->str);
 		start = start->next;
 	}
 	temp[i] = NULL;
@@ -68,7 +69,8 @@ char	**new_full_temp(t_lexer **lexer)
 		return (NULL);
 	while (*lexer)
 	{
-		*temp = (*lexer)->str;
+		if ((*lexer)->str != NULL)
+			*temp = ft_strdup((*lexer)->str);
 		*lexer = (*lexer)->next;
 		temp++;
 	}
@@ -103,7 +105,10 @@ int	check_redirection(t_lexer **lexer)
 	head = *lexer;
 	while (*lexer)
 	{
-		if (ft_strchr((*lexer)->token, '>') || ft_strchr((*lexer)->token, '<'))
+		if (ft_strcmp((*lexer)->token, ">") == 0
+			|| ft_strcmp((*lexer)->token, "<") == 0
+			|| ft_strcmp((*lexer)->token, ">>") == 0
+			|| ft_strcmp((*lexer)->token, "<<") == 0)
 		{
 			*lexer = head;
 			return (1);

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 12:16:00 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/30 18:39:22 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/05 11:21:51 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*expand_env_vars(char *input, t_envp_struct *envp_struct)
 		point++;
     }
     *write = '\0';
-    return result;
+    return (result);
 }
 
 void	check_var_name(char	**point, char **write, t_envp_struct *envp_struct)
@@ -93,24 +93,39 @@ void	check_var_name(char	**point, char **write, t_envp_struct *envp_struct)
 	(*point)--;
 }
 
-void	parser_env(t_lexer **lexer, t_envp_struct *envp_struct)
+void parser_env(t_lexer **lexer, t_envp_struct *envp_struct)
 {
     t_lexer *head_lexer;
-	char	*expanded_str;
+    char    *expanded_str;
+    char    *str;
+    int     flag;
+    int     i;
 
-	head_lexer = *lexer;
+    head_lexer = *lexer;
+    flag = 1;
+    i = 0;
     while (*lexer)
-	{
-        if (count_quotes((*lexer)->str, '\'') != 2)
-		{
-            expanded_str = expand_env_vars((*lexer)->str, envp_struct);
-            if (expanded_str)
-			{
-                free((*lexer)->str);
-                (*lexer)->str = expanded_str;
+    {
+        str = (*lexer)->str;
+        flag = 1;
+        i = 0;
+        while (str[i] != '\0')
+        {
+            if (str[i] == '\'')
+                flag = !flag;
+            else if (str[i] == '$' && flag)
+            {
+                expanded_str = expand_env_vars(str, envp_struct);
+                if (expanded_str)
+                {
+                    free((*lexer)->str);
+                    (*lexer)->str = expanded_str;
+                    break ;
+                }
             }
+            i++;
         }
-        (*lexer) = (*lexer)->next;
+        *lexer = (*lexer)->next;
     }
-    *lexer = head_lexer;
+    *lexer = head_lexer;  // Reset the lexer pointer back to the head after processing
 }

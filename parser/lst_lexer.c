@@ -6,13 +6,13 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:19:57 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/30 11:14:54 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/04 23:17:11 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_lexer	*ft_list(int argc, char **argv)
+t_lexer	*ft_list(char **argv)
 {
 	t_lexer	*lexer;
 	int		j;
@@ -21,18 +21,17 @@ t_lexer	*ft_list(int argc, char **argv)
 
 	j = -1;
 	lexer = NULL;
-	(void)argc;
 	while (argv[++j])
 	{
 		if (ft_check_token(argv[j]))
 		{
 			token = ft_strdup(argv[j]);
-			str = "";
+			str = ft_strdup("");
 		}
 		else
 		{
 			str = ft_strdup(argv[j]);
-			token = "";
+			token = ft_strdup("");
 		}
 		ft_lstadd_back(&lexer, ft_lstnew(str, token));
 	}

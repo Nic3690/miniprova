@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/30 18:40:58 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/06 16:09:24 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <errno.h>
 # include <string.h>
 # include <ctype.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -59,31 +60,32 @@ typedef struct s_fd
 }   t_fd;
 
 /*main.c*/
-int			ft_exit(char *str);
-void	    reading(t_envp_struct *envp_struct, char **envp);
+
+void		setup_signals();
+void		handle_sigint();
+void		handle_child();
+void		handle_sigign();
+void		reading(t_envp_struct *envp_struct, char **envp);
+
+/*free.c*/
+int			ft_exit(t_lexer *lexer, t_envp_struct *envp_struct);
+void		ft_free_env(t_env **env);
+void		ft_free_export(t_export **export);
+void		ft_free_lexer(t_lexer **lexer);
+void		ft_free(char **temp);
 
 /*parser*/
-void	    parser(char *str, t_envp_struct *envp_struct, char **envp);
+void		parser(char *str, t_envp_struct *envp_struct, char **envp);
 void		manage_string(t_lexer **lexer);
 void		join_string(t_lexer *lexer);
-void		lexer_index(t_lexer **lexer);
-void		manage_token(t_lexer **lexer);
 void		print_lexer(t_lexer **lexer);
 
 /*quotes.c*/
 void		find_quotes(char **temp);
 int			count_quotes(char *str, char c);
-int			should_copy(char c, char target, int leave_one, int *found_one);
 void		remove_char(char *str, char c, int count);
 void		manage_quote(char **temp, char c);
 void		single_quote(char **temp);
-
-/*parser_token.c*/
-void		init_prev(t_lexer **lexer);
-int			check_character(char c);
-void		manage_token(t_lexer **lexer);
-t_lexer		*new_token(char **array);
-t_lexer		*new_list(t_lexer *current, t_lexer **new);
 
 /*split_token.c*/
 char		*ft_strncpy(char *dest, char *src, unsigned int n);
@@ -104,14 +106,13 @@ void		ft_lstadd_back_export(t_export **lst, t_export *new);
 t_export	*ft_lstlast_export(t_export *lst);
 
 /*lst_lexer.c*/
-t_lexer		*ft_list(int argc, char **argv);
+t_lexer		*ft_list(char **argv);
 int			ft_check_token(char *str);
 t_lexer		*ft_lstnew(char *str, char *token);
 void		ft_lstadd_back(t_lexer **lst, t_lexer *new);
 t_lexer		*ft_lstlast(t_lexer *lst);
 
 /*env_map*/
-int			search_map(t_env **env, char *str);
 int			search_map_export(t_export **export, char *str);
 
 /*parser_env*/
@@ -172,6 +173,9 @@ int	        manage_builtin(t_lexer **lexer, t_envp_struct *envp_struct);
 
 /*heredoc.c*/
 void		manage_heredoc(t_lexer **lexer);
+void		readline_heredoc(char *str, t_lexer **lexer);
+void		redirection_heredoc(t_lexer **lexer, t_envp_struct *envp_struct, char **envp);
+void		manage_fd_heredoc(char *file_name, t_lexer **lexer);
 
 /*utils.c*/
 char		*ft_strdup(char *str);
@@ -191,11 +195,13 @@ char		**ft_split(char *s, char c);
 void		*ft_calloc(size_t count, size_t size);
 void		ft_bzero(void *s, size_t n);
 char		*ft_strjoin_heredoc(char *s1, char *s2);
-void		remove_all_quotes(t_lexer **lexer);
+void		remove_string_quotes(char *str);
 char		*ft_strcpy(char *dest, char *src);
+void		remove_all_quotes(t_lexer **lexer);
 
 /*utils4.c*/
 char		*ft_itoa(int n);
 int			ft_isalnum(int c);
+void		init_prev(t_lexer **lexer);
 
 #endif

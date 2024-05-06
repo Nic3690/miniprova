@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/29 21:42:10 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/04 19:01:28 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,28 @@
 void	split_command(t_lexer **lexer, t_envp_struct *envp_struct, char **envp)
 {
 	char	**full_temp;
+	t_lexer	**head;
 
+	head = lexer;
 	full_temp = new_full_temp(lexer);
-	while (*lexer)
+	if (!check_pipe(lexer) && !check_redirection(lexer))
 	{
-		if (!check_pipe(lexer) && !check_redirection(lexer))
-		{
-			if (manage_builtin(lexer, envp_struct) != 1)
-				command_execve(full_temp, envp, envp_struct);
-			return ;
-		}
-		else if (!check_pipe(lexer) && check_redirection(lexer))
-		{
-			manage_redirections(lexer, envp_struct, envp);
-			return ;
-		}
-		else
-		{
-			set_fork(lexer, envp_struct, envp);
-			return ;
-		}
-		*lexer = (*lexer)->next;
+		if (manage_builtin(lexer, envp_struct) != 1)
+			command_execve(full_temp, envp, envp_struct);
+		lexer = head;
+		return (ft_free(full_temp));
+	}
+	else if (!check_pipe(lexer) && check_redirection(lexer))
+	{
+		manage_redirections(lexer, envp_struct, envp);
+		lexer = head;
+		return (ft_free(full_temp));
+	}
+	else
+	{
+		set_fork(lexer, envp_struct, envp);
+		lexer = head;
+		return (ft_free(full_temp));
 	}
 }
 
@@ -60,6 +61,7 @@ void	set_fork(t_lexer **lexer, t_envp_struct *envp_struct, char **envp)
 	if (fd->pid == 0)
 		child(lexer, envp_struct, envp, fd);
 	father(lexer, envp_struct, envp, fd);
+	free(fd);
 }
 
 void	child(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd)
@@ -80,7 +82,7 @@ void	child(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd)
 			command_execve(temp, envp, envp_struct);
 	}
 	free(start);
-	free(temp);
+	ft_free(temp);
 	exit(EXIT_SUCCESS);
 }
 

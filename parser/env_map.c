@@ -6,32 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:39:04 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/30 18:40:22 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/05 10:45:23 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	search_map(t_env **env, char *str)
-{
-	int		index;
-	t_env	*head;
-
-	index = 0;
-	head = *env;
-	while (*env)
-	{
-		if (ft_strcmp((*env)->key, str) == 0)
-		{
-			*env = head;
-			return (index);
-		}
-		index++;
-		(*env) = (*env)->next;
-	}
-	*env = head;
-	return (-1);
-}
 
 int	search_map_export(t_export **export, char *str)
 {
@@ -53,4 +32,3 @@ int	search_map_export(t_export **export, char *str)
 	*export = head;
 	return (-1);
 }
-

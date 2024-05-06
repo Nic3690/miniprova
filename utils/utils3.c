@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 20:54:19 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/30 11:21:59 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/05 11:19:47 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,41 +58,59 @@ char	*ft_strjoin_heredoc(char *s1, char *s2)
 		str[i] = s1[i];
 		i++;
 	}
-	str[i] = '\n';
-	i++;
+	if (ft_strcmp(s1, ""))
+		str[i++] = '\n';
 	while (s2[n] != '\0')
 		str[i++] = s2[n++];
 	str[i] = '\0';
 	return (str);
 }
 
-void remove_all_quotes(t_lexer **lexer)
-{
-	t_lexer	*head;
-	char	*s_read;
-	char	*s_write;
+void remove_string_quotes(char *str) {
+char *s_read = str;
+    char *s_write = str;
+    int in_single_quotes = 0;
+    int in_double_quotes = 0;
 
-	head = *lexer;
-    while (*lexer)
-	{
-		if (ft_strlen((*lexer)->str) >= 1)
-		{
-			s_read = (*lexer)->str;
-			s_write = (*lexer)->str;
-		}
-		else if (ft_strlen((*lexer)->token) >= 1)
-			*lexer = (*lexer)->next;
-        while (*s_read)
-		{
-            if (*s_read != '\'' && *s_read != '\"')
-                *s_write++ = *s_read;
-            s_read++;
+    while (*s_read) {
+        if (*s_read == '\"') {
+            if (!in_single_quotes) {  // Check if not inside single quotes
+                in_double_quotes = !in_double_quotes;  // Toggle double quotes status
+                if (in_double_quotes || !in_double_quotes) {
+                    // If entering or leaving double quotes, do not write quote to output
+                    s_read++;
+                    continue;
+                }
+            }
+        } else if (*s_read == '\'') {
+            if (!in_double_quotes) {  // Check if not inside double quotes
+                in_single_quotes = !in_single_quotes;  // Toggle single quotes status
+                if (in_single_quotes || !in_single_quotes) {
+                    // If entering or leaving single quotes, do not write quote to output
+                    s_read++;
+                    continue;
+                }
+            }
         }
-        *s_write = '\0';
+        // Copy the character if it's not a skipped quote
+        *s_write++ = *s_read;
+        s_read++;
+    }
+    *s_write = '\0';  // Null-terminate the modified string.
+}
+
+void remove_all_quotes(t_lexer **lexer) {
+    t_lexer *head = *lexer;
+
+    while (*lexer) {
+        if ((*lexer)->str && strlen((*lexer)->str) > 0) {
+            remove_string_quotes((*lexer)->str);
+        }
         *lexer = (*lexer)->next;
     }
-	*lexer = head;
+    *lexer = head;
 }
+
 
 char	*ft_strcpy(char *dest, char *src)
 {

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 19:42:49 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/30 14:04:18 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/04 23:06:34 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,17 @@ int	ft_isalnum(int c)
 		return (1);
 	else
 		return (0);
+}
+
+void	init_prev(t_lexer **lexer)
+{
+	t_lexer	*head;
+
+	head = *lexer;
+	while (*lexer && (*lexer)->next)
+	{
+		(*lexer)->next->prev = *lexer;
+		*lexer = (*lexer)->next;
+	}
+	*lexer = head;
 }

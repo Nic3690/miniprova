@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 19:07:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/30 10:50:41 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/04 18:50:45 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_lexer	*new_start_redirection(t_lexer **lexer)
 	while (!ft_check_token((*lexer)->token) && *lexer && (*lexer)->next)
 	{
 		start->str = ft_strdup((*lexer)->str);
-		start->token = "";
+		start->token = ft_strdup("");
 		start->next = malloc(sizeof(t_lexer));
 		start = start->next;
 		*lexer = (*lexer)->next;
@@ -42,10 +42,11 @@ char	**new_temp_redirection(t_lexer *start)
 
 	head = start;
 	i = 0;
-	temp = malloc(sizeof(char *) * 1024 + 1);
+	temp = malloc(sizeof(char *) * 1024);
 	while (start)
 	{
-		temp[i++] = start->str;
+		if (start->str != NULL)
+			temp[i++] = ft_strdup(start->str);
 		start = start->next;
 	}
 	temp[i] = NULL;

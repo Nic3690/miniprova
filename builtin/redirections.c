@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:46:54 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/29 21:31:07 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/04 18:59:45 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	manage_redirections(t_lexer **lexer, t_envp_struct *envp_struct, char **env
 	*lexer = head;
 	redirection_append(lexer, envp_struct, envp, fd);
 	*lexer = head;
-
+	redirection_heredoc(lexer, envp_struct, envp);
+	*lexer = head;
 }
 
 void	redirection_out(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd)
@@ -66,6 +67,8 @@ void	redirection_out(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, i
 		}
 		*lexer = (*lexer)->next;
 	}
+	ft_free(temp);
+	ft_free_lexer(&start);
 }
 
 void	redirection_in(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd)
@@ -89,6 +92,8 @@ void	redirection_in(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, in
 		}
 		*lexer = (*lexer)->next;
 	}
+	ft_free(temp);
+	ft_free_lexer(&start);
 }
 
 void	redirection_append(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd)
@@ -116,4 +121,6 @@ void	redirection_append(t_lexer **lexer, t_envp_struct *envp_struct, char **envp
 		}
 		*lexer = (*lexer)->next;
 	}
+	ft_free(temp);
+	ft_free_lexer(&start);
 }

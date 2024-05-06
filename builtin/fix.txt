@@ -1,2 +1,8 @@
 Gestire il fatto che wc conti anche minishell
 strerror stampa errori giusti
+/*gestire cd senza argomenti*/
+
+nfurlani@MacBook-Air-di-Nicoletta miniprova % echo >>
+zsh: parse error near `\n'
+
+AGGIUSTARE VIRGOLETTE

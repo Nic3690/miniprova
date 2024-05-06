@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 13:53:40 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/04/29 21:41:11 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/05 13:17:33 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ int	builtin_cd(t_lexer **lexer, t_envp_struct *envp_struct)
 		{
 			perror((*lexer)->next->str);
 			envp_struct->exit_status = 1;
-			return (1);
+			return (0);
 		}
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 		{
 			perror((*lexer)->next->str);
 			envp_struct->exit_status = 1;
-			return (1);
+			return (0);
 		}
 	}
-	return (0);
+	return (1);
 }
 
 int	builtin_pwd(t_lexer **lexer, t_envp_struct *envp_struct)
@@ -64,9 +64,9 @@ int	builtin_echo(t_lexer **lexer)
 	flag = 1;
 	if (ft_strcmp((*lexer)->str, "echo") == 0)
 	{
-		*lexer = (*lexer)->next;
-		if (ft_strcmp((*lexer)->str, "") == 0)
+		if (!(*lexer)->next)
 			return (printf ("\n"));
+		*lexer = (*lexer)->next;
 		if (*lexer && ft_strcmp((*lexer)->str, "-n") == 0)
 		{
 			flag = 0;
