@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:46:54 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/08 13:00:56 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/08 15:36:18 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	redirection_out(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, i
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 			if (manage_builtin(&start, envp_struct) != 1)
-				command_execve(temp, envp, envp_struct);
+				command_execve(temp, envp);
 			dup2(copy, STDOUT_FILENO);
 			close(copy);
 		}
@@ -103,7 +103,7 @@ void	redirection_in(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, in
 			dup2(fd, STDIN_FILENO);
 			close(fd);
 			if (manage_builtin(&start, envp_struct) != 1)
-				command_execve(temp, envp, envp_struct);
+				command_execve(temp, envp);
 			dup2(copy, STDIN_FILENO);
 			close(copy);
 		}
@@ -132,7 +132,7 @@ void	redirection_append(t_lexer **lexer, t_envp_struct *envp_struct, char **envp
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 			if (manage_builtin(&start, envp_struct) != 1)
-				command_execve(temp, envp, envp_struct);
+				command_execve(temp, envp);
 			dup2(copy, STDOUT_FILENO);
 			close(copy);
 		}

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:10:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/03 15:19:23 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/08 17:49:36 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,41 +49,71 @@ void	builtin_temp_export(t_lexer **lexer, t_envp_struct *envp_struct)
 		i++;
 	temp_key = ft_substr((*lexer)->str, 0, i);
 	temp_value = ft_substr((*lexer)->str, i + 1, ft_strlen((*lexer)->str));
-	find_value_export(envp_struct->export, temp_key, temp_value);
+	find_value_export(envp_struct, temp_key, temp_value);
 }
 
-void find_value_export(t_export **export, char *temp_key, char *temp_value)
+void	find_value_export(t_envp_struct *envp_struct, char *temp_key, char *temp_value)
 {
-    int			i;
 	int			index;
-    t_export	*temp;
+    t_export	*temp_export;
+	t_env		*temp_env;
 
-	i = 0;
-	temp = *export;
-    index = search_map_export(export, temp_key);
+	temp_export = *(envp_struct->export);
+	temp_env = *(envp_struct->env);
+    index = search_map_export(envp_struct->export, temp_key);
     if (index != -1)
 	{
-        while (i < index && temp != NULL)
-		{
-            temp = temp->next;
-            i++;
-        }
-        if (temp != NULL)
-		{
-			free(temp->value);
-            temp->value = ft_strdup(temp_value);
-			free(temp_value);
-		}
+		new_node_export(index, temp_export, temp_value);
+		new_node_env(index, temp_env, temp_value);
     }
 	else
-		new_export(export, temp_key, temp_value);
+	{
+		new_export(envp_struct->export, temp_key, temp_value);
+		new_env(envp_struct->env, temp_key, temp_value);
+	}
+}
+
+void	new_node_export(int index, t_export *temp_export, char *temp_value)
+{
+	int	i;
+
+	i = 0;
+	while (i < index && temp_export != NULL)
+	{
+		temp_export = temp_export->next;
+		i++;
+	}
+	if (temp_export != NULL)
+	{
+		free(temp_export->value);
+		temp_export->value = ft_strdup(temp_value);
+		free(temp_value);
+	}
+}
+
+void	new_node_env(int index, t_env *temp_env, char *temp_value)
+{
+	int	i;
+
+	i = 0;
+	while (i < index && temp_env != NULL)
+	{
+		temp_env = temp_env->next;
+		i++;
+	}
+	if (temp_env != NULL)
+	{
+		free(temp_env->value);
+		temp_env->value = ft_strdup(temp_value);
+		free(temp_value);
+	}
 }
 
 void	new_export(t_export **export, char *temp_key, char *temp_value)
 {
 	t_export	*new;
 	t_export	*current;
-	
+
 	new = ft_list_export(temp_key, temp_value);
 	if (*export == NULL || ft_strcmp((*export)->key, new->key) > 0)
 	{
@@ -94,6 +124,28 @@ void	new_export(t_export **export, char *temp_key, char *temp_value)
 	else
 	{
 		current = *export;
+		while (current->next != NULL && ft_strcmp(current->next->key, new->key) < 0)
+            current = current->next;
+		new->next = current->next;
+		current->next = new;
+	}
+}
+
+void	new_env(t_env **env, char *temp_key, char *temp_value)
+{
+	t_env	*new;
+	t_env	*current;
+
+	new = ft_list_env(temp_key, temp_value);
+	if (*env == NULL || ft_strcmp((*env)->key, new->key) > 0)
+	{
+		new->next = *env;
+		*env = new;
+		free(new);
+	}
+	else
+	{
+		current = *env;
 		while (current->next != NULL && ft_strcmp(current->next->key, new->key) < 0)
             current = current->next;
 		new->next = current->next;

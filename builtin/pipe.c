@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/08 13:10:35 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/08 15:38:03 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	split_command(t_lexer **lexer, t_envp_struct *envp_struct, char **envp)
 	if (!check_pipe(lexer) && !check_redirection(lexer))
 	{
 		if (manage_builtin(lexer, envp_struct) != 1)
-			command_execve(full_temp, envp, envp_struct);
+			command_execve(full_temp, envp);
 		lexer = head;
 		return (ft_free(full_temp));
 	}
@@ -79,7 +79,7 @@ void	child(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd)
 	else
 	{
 		if (manage_builtin(&start, envp_struct) != 1)
-			command_execve(temp, envp, envp_struct);
+			command_execve(temp, envp);
 	}
 	free(start);
 	ft_free(temp);
@@ -103,8 +103,5 @@ void	father(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd)
 		manage_redirections(lexer, envp_struct, envp);
 	else
 		if (manage_builtin(lexer, envp_struct) != 1)
-			command_execve(temp_full, envp, envp_struct);
+			command_execve(temp_full, envp);
 }
-
-	// write (1, (*lexer)->str, ft_strlen((*lexer)->str));
-	/*ls | grep .txt > files.txt*/

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/08 14:26:32 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/08 17:39:28 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,11 +150,14 @@ void		redirection_in(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, i
 void		redirection_append(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd);
 
 /*commands*/
-int			builtin_cd(t_lexer **lexer, t_envp_struct *envp_struct);
-int			builtin_pwd(t_lexer **lexer, t_envp_struct *envp_struct);
+int			builtin_cd(t_lexer **lexer);
+int			builtin_pwd(t_lexer **lexer);
 int			builtin_echo(t_lexer **lexer);
-int			builtin_unset(t_lexer **lexer, t_export **export);
-int			del_first(t_lexer **lexer, t_export **export);
+int			builtin_unset(t_lexer **lexer, t_envp_struct *envp_struct);
+int			unset_export(t_lexer **lexer, t_export **export);
+int			unset_env(t_lexer **lexer, t_env **env);
+int			del_first_export(t_lexer **lexer, t_export **export);
+int			del_first_env(t_lexer **lexer, t_env **env);
 
 /*builtin_env*/
 int			builtin_env(t_lexer **lexer, t_env **env);
@@ -164,12 +167,15 @@ t_export	*ft_lstcopy_env(t_env *lst);
 /*bultin_export*/
 int	        builtin_export(t_lexer **lexer, t_envp_struct *envp_struct);
 void    	builtin_temp_export(t_lexer **lexer, t_envp_struct *envp_struct);
-void		find_value_export(t_export **export, char *temp_key, char *temp_value);
+void		find_value_export(t_envp_struct *envp_struct, char *temp_key, char *temp_value);
+void		new_node_export(int index, t_export *temp_export, char *temp_value);
+void		new_node_env(int index, t_env *temp_env, char *temp_value);
 void		new_export(t_export **export, char *temp_key, char *temp_value);
+void		new_env(t_env **env, char *temp_key, char *temp_value);
 void	    bubble_sort_export(t_envp_struct *envp_struct);
 
 /*execve.c*/
-void		command_execve(char **temp, char **envp, t_envp_struct *envp_struct);
+void		command_execve(char **temp, char **envp);
 int			execute_command(char *path_env, char *command, char *path, int len);
 int			find_command(char *command, char *path);
 int	        manage_builtin(t_lexer **lexer, t_envp_struct *envp_struct);

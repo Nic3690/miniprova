@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:09:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/04 19:12:39 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/08 17:47:47 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	builtin_env(t_lexer **lexer, t_env **env)
 	t_env	*temp;
 
 	temp = *env;
+	
 	if ((*lexer)->next == NULL)
 	{
 		if (ft_strcmp((*lexer)->str, "env") == 0)
@@ -82,7 +83,6 @@ t_export   *ft_lstcopy_env(t_env *env)
         {
             free(key_copy);
             free(value_copy);
-            // Qui dovresti anche liberare tutta la memoria allocata per new_list fino a questo punto
             return NULL;
         }
 		new_node = ft_list_export(key_copy, value_copy);
@@ -90,7 +90,6 @@ t_export   *ft_lstcopy_env(t_env *env)
 		{
             free(key_copy);
             free(value_copy);
-            // Anche qui, liberare la memoria allocata fino a questo punto per new_list
             return NULL;
         }
         ft_lstadd_back_export(&new_list, new_node);

@@ -6,13 +6,13 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/08 14:25:51 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/08 17:20:29 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	command_execve(char **temp, char **envp, t_envp_struct *envp_struct)
+void	command_execve(char **temp, char **envp)
 {
 	pid_t	pid;
 	char	path[1024];
@@ -97,9 +97,9 @@ int	find_command(char *command, char *path)
 int	manage_builtin(t_lexer **lexer, t_envp_struct *envp_struct)
 {
 	if (ft_strcmp((*lexer)->str, "cd") == 0)
-		return (builtin_cd(lexer, envp_struct));
+		return (builtin_cd(lexer));
 	else if (ft_strcmp((*lexer)->str, "pwd") == 0)
-		return (builtin_pwd(lexer, envp_struct));
+		return (builtin_pwd(lexer));
 	else if (ft_strcmp((*lexer)->str, "echo") == 0)
 		return (builtin_echo(lexer));
 	else if (ft_strcmp((*lexer)->str, "env") == 0)
@@ -107,7 +107,7 @@ int	manage_builtin(t_lexer **lexer, t_envp_struct *envp_struct)
 	else if (ft_strcmp((*lexer)->str, "export") == 0)
 		return (builtin_export(lexer, envp_struct));
 	else if (ft_strcmp((*lexer)->str, "unset") == 0)
-		return (builtin_unset(lexer, envp_struct->export));
+		return (builtin_unset(lexer, envp_struct));
 	else if (ft_strcmp((*lexer)->str, "exit") == 0)
 		return (ft_exit(*lexer, envp_struct));
 	return (0);

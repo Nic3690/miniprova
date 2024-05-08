@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:53:05 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/08 12:52:11 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/08 15:38:49 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	redirection_heredoc(t_lexer **lexer, t_envp_struct *envp_struct, char **env
 		{
 			manage_fd_heredoc(file_name, lexer);
 			if (manage_builtin(&start, envp_struct) != 1)
-				command_execve(temp, envp, envp_struct);
+				command_execve(temp, envp);
 			break ;
 		}
 		*lexer = (*lexer)->next;
