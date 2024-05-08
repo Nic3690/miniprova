@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 19:07:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/04 18:50:45 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/08 13:03:32 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int	count_lexer(t_lexer **lexer)
 
 	i = 0;
 	head = *lexer;
+	*lexer = (*lexer)->next;
 	while((*lexer) && !ft_check_token((*lexer)->token))
 	{
 		*lexer = (*lexer)->next;

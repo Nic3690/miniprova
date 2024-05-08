@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:53:05 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/04 19:00:19 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/08 12:52:11 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,10 @@ void	redirection_heredoc(t_lexer **lexer, t_envp_struct *envp_struct, char **env
 
 void	manage_fd_heredoc(char *file_name, t_lexer **lexer)
 {
-	int	fd;
+	int		fd;
+	int		copy;
 
+	copy = dup(STDIN_FILENO);
 	fd = open(file_name, O_CREAT | O_RDWR, 0664);
 	if (fd < 0)
 		return perror("minishell: redir_in: error while opening the file\n");
@@ -90,8 +92,8 @@ void	manage_fd_heredoc(char *file_name, t_lexer **lexer)
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0)
 		return perror("minishell: redir_in: error while opening the file\n");
-	dup2(fd, STDIN_FILENO);
-	close(fd);
+	dup2(copy, STDIN_FILENO);
+	close(copy);
 }
 
 // void	manage_heredoc(t_lexer **lexer)

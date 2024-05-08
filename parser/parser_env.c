@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 12:16:00 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/05 11:21:51 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/08 14:26:09 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*get_env_var(char *var_name, t_envp_struct *envp_struct)
 	t_export	*current_export;
 
     if (ft_strcmp(var_name, "?") == 0)
-		return (ft_itoa(envp_struct->exit_status));
+		return (ft_itoa(exit_code));
     current = *(envp_struct->env);
     while (current)
 	{

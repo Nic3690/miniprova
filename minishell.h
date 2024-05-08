@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/06 16:09:24 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/08 14:26:32 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
+int	exit_code;
 
 typedef struct s_lexer
 {
@@ -48,7 +50,6 @@ typedef struct s_export
 
 typedef struct s_envp_struct
 {
-	int				exit_status;
     t_export        **export;
     t_env           **env;
 }   t_envp_struct;
@@ -60,7 +61,6 @@ typedef struct s_fd
 }   t_fd;
 
 /*main.c*/
-
 void		setup_signals();
 void		handle_sigint();
 void		handle_child();
@@ -78,6 +78,8 @@ void		ft_free(char **temp);
 void		parser(char *str, t_envp_struct *envp_struct, char **envp);
 void		manage_string(t_lexer **lexer);
 void		join_string(t_lexer *lexer);
+t_lexer		*reset_head(t_lexer *lexer);
+int			check_spaces(char *str);
 void		print_lexer(t_lexer **lexer);
 
 /*quotes.c*/
@@ -142,6 +144,7 @@ int			count_lexer(t_lexer **lexer);
 
 /*redirections.c*/
 void		manage_redirections(t_lexer **lexer, t_envp_struct *envp_struct, char **envp);
+void		execute_redirection(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd);
 void		redirection_out(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd);
 void		redirection_in(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd);
 void		redirection_append(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd);

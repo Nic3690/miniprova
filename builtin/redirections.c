@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:46:54 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/04 18:59:45 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/08 13:00:56 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	manage_redirections(t_lexer **lexer, t_envp_struct *envp_struct, char **envp)
 {
-	t_lexer	*head;
 	int		fd;
+	t_lexer	*head;
 
-	head = *lexer;
 	fd = 0;
+	head = *lexer;
 	while (*lexer)
 	{
 		if (ft_check_token((*lexer)->token) && ft_strcmp((*lexer)->token, "|"))
@@ -28,10 +28,23 @@ void	manage_redirections(t_lexer **lexer, t_envp_struct *envp_struct, char **env
 				printf ("%s: %s: No such file or directory\n", head->str, (*lexer)->next->str);
 				return ;
 			}
+			if (count_lexer(lexer) == 0)
+			{
+				printf ("zsh: parse error near '\\n'\n");
+				return ;
+			}
 		}
 		*lexer = (*lexer)->next;
 	}
 	*lexer = head;
+	execute_redirection(lexer, envp_struct, envp, fd);
+}
+
+void	execute_redirection(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd)
+{
+	t_lexer	*head;
+
+	head = *lexer;
 	redirection_out(lexer, envp_struct, envp, fd);
 	*lexer = head;
 	redirection_in(lexer, envp_struct, envp, fd);
@@ -75,7 +88,9 @@ void	redirection_in(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, in
 {
 	t_lexer	*start;
 	char	**temp;
+	int		copy;
 
+	copy = dup(STDIN_FILENO);
 	start = new_start_redirection(lexer);
 	temp = new_temp_redirection(start);
 	while (*lexer)
@@ -89,6 +104,8 @@ void	redirection_in(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, in
 			close(fd);
 			if (manage_builtin(&start, envp_struct) != 1)
 				command_execve(temp, envp, envp_struct);
+			dup2(copy, STDIN_FILENO);
+			close(copy);
 		}
 		*lexer = (*lexer)->next;
 	}

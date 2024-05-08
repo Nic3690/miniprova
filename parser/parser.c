@@ -6,25 +6,21 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/05 11:42:06 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/07 18:49:57 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_lexer	*reset_head(t_lexer *lexer)
-{
-	while (lexer->prev)
-		lexer = lexer->prev;
-	return (lexer);
-}
 
 void	parser(char *str, t_envp_struct *envp_struct, char **envp)
 {
 	char		**temp;
 	t_lexer		*lexer;
-
+	
 	lexer = NULL;
+	if (check_spaces(str) == 0)
+		return ;
 	temp = ft_split(str, ' ');
 	find_quotes(temp);
 	lexer = ft_list(temp);
@@ -89,6 +85,27 @@ void	join_string(t_lexer *lexer)
 	free(lexer->next->token);
 	free(lexer->next);
 	lexer->next = temp;
+}
+
+t_lexer	*reset_head(t_lexer *lexer)
+{
+	while (lexer->prev)
+		lexer = lexer->prev;
+	return (lexer);
+}
+
+int	check_spaces(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != ' ' && str[i] != '\t')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 void	print_lexer(t_lexer **lexer)
