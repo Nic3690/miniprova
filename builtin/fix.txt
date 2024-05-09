@@ -1,24 +1,6 @@
-Gestire il fatto che wc conti anche minishell
+
 strerror stampa errori giusti
+exit_status
+SEGNALI
 
-
-Use "make -n" to see if compilation use "-Wall -Wextra -Werror". If not, select the "invalid compilation" flag.
-
-Check the global variable. This global variable cannot provide any other information or data access than the number of a received signal.
-
-AGGIUSTARE VIRGOLETTE
-
-Export environment variables, create new ones and replace old ones.
-Check the result with env.!!!!!!!
-
-Execute commands but this time use a relative path.
-Repeat multiple times in different directories with a complex relative path (lots of ..).
-
-echo $? sbagliato con ls comando che non esiste
-
-minishell> echo << ciao
-heredoc> come
-heredoc> va
-heredoc> oggi
-heredoc> ciao
-zsh: segmentation fault  ./minishell
+comando con path assoluto

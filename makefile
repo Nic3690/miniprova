@@ -6,7 +6,7 @@
 #    By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/26 15:17:34 by nfurlani          #+#    #+#              #
-#    Updated: 2024/05/05 17:42:11 by nfurlani         ###   ########.fr        #
+#    Updated: 2024/05/09 11:54:21 by nfurlani         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,12 +29,14 @@ LDFLAGS		=	-L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include
 all			:	$(NAME)
 
 $(NAME)		:	$(OBJS)
-				$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(NAME)
+				$(CC) $(CFLAGS) $(SRCS) $(LDFLAGS) -o $(NAME)
 
 clean		:
-				rm -r $(OBJS)
+				rm -f $(OBJS)
 
 fclean		:	clean
-				rm $(NAME)
+				rm -f $(NAME)
 
 re			:	fclean all
+
+.PHONY: all clean fclean re

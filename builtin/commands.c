@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 13:53:40 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/08 17:44:33 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/09 11:45:01 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	builtin_echo(t_lexer **lexer)
 	flag = 1;
 	if (ft_strcmp((*lexer)->str, "echo") == 0)
 	{
-		if (!(*lexer)->next)
+		if (!(*lexer)->next || (*lexer)->next->str == NULL)
 			return (printf ("\n"));
 		*lexer = (*lexer)->next;
 		if (*lexer && ft_strcmp((*lexer)->str, "-n") == 0)

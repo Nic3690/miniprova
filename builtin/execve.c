@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/08 17:20:29 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/09 12:02:57 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,11 @@ void	command_execve(char **temp, char **envp)
 			exit(EXIT_FAILURE);
 		}
 		execve(path, temp, envp);
-		// exit_code = 1;
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
 	else if (pid > 0)
-	{
 		waitpid(pid, &exit_code, 0);
-		// if (exit_code != 0)
-		// 	exit_code = 1;
-	}
 	else
 	{
 		perror("fork");

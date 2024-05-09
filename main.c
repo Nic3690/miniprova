@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/08 14:26:28 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/09 11:49:54 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void setup_signals()
 {
 	struct sigaction sa;
 
-    sa.sa_handler = handle_sigint;
     sigemptyset(&sa.sa_mask);
+    sa.sa_handler = handle_sigint;
     sa.sa_flags = 0;
     sigaction(SIGINT, &sa, NULL);
 
@@ -28,8 +28,8 @@ void setup_signals()
 void	handle_sigint()
 {
     write(STDOUT_FILENO, "\n", 1);
-    rl_replace_line("", 0);
     rl_on_new_line();
+    rl_replace_line("", 0);
     rl_redisplay();
 	exit_code = 1;
 }
