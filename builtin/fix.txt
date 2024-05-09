@@ -4,3 +4,6 @@ exit_status
 SEGNALI
 
 comando con path assoluto
+
+leaks heredoc
+controllo redirection con bash
