@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 13:53:40 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/09 11:45:01 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/12 15:49:54 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,13 @@ int	unset_export(t_lexer **lexer, t_export **export)
 int	unset_env(t_lexer **lexer, t_env **env)
 {
 	t_env	*prev_env;
+	t_env	*head;
 
 	prev_env = NULL;
+	head = *env;
+	if (!del_last_env(lexer, env))
+		return (0);
+	*env = head;
 	while (*env != NULL && ft_strcmp((*env)->key, (*lexer)->next->str) != 0)
 	{
 		prev_env = *env;
@@ -176,4 +181,25 @@ int	del_first_env(t_lexer **lexer, t_env **env)
 		return (1);
     }
 	return (0);
+}
+
+int	del_last_env(t_lexer **lexer, t_env **env)
+{
+	t_env	*temp;
+
+	temp = *env;
+	while (*env && (*env)->next)
+	{
+    	temp = (*env)->next;
+		if (ft_strcmp((*env)->key, (*lexer)->next->str) == 0)
+		{
+			free((*env)->key);
+			free((*env)->value);
+			free(*env);
+			(*env) = temp;
+			return(0);
+		}
+		*env = (*env)->next;
+	}
+	return (1);
 }

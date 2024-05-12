@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:10:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/08 17:49:36 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/12 12:16:45 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,23 @@ void	find_value_export(t_envp_struct *envp_struct, char *temp_key, char *temp_va
 	int			index;
     t_export	*temp_export;
 	t_env		*temp_env;
+	char		*temp_env_key;
+	char		*temp_env_value;
 
 	temp_export = *(envp_struct->export);
 	temp_env = *(envp_struct->env);
+	temp_env_key = ft_strdup(temp_key);
+	temp_env_value = ft_strdup(temp_value);
     index = search_map_export(envp_struct->export, temp_key);
     if (index != -1)
 	{
 		new_node_export(index, temp_export, temp_value);
-		new_node_env(index, temp_env, temp_value);
+		new_node_env(index, temp_env, temp_env_value);
     }
 	else
 	{
 		new_export(envp_struct->export, temp_key, temp_value);
-		new_env(envp_struct->env, temp_key, temp_value);
+		ft_lstadd_back_env(&temp_env, ft_list_env(temp_env_key, temp_env_value));
 	}
 }
 
@@ -124,28 +128,6 @@ void	new_export(t_export **export, char *temp_key, char *temp_value)
 	else
 	{
 		current = *export;
-		while (current->next != NULL && ft_strcmp(current->next->key, new->key) < 0)
-            current = current->next;
-		new->next = current->next;
-		current->next = new;
-	}
-}
-
-void	new_env(t_env **env, char *temp_key, char *temp_value)
-{
-	t_env	*new;
-	t_env	*current;
-
-	new = ft_list_env(temp_key, temp_value);
-	if (*env == NULL || ft_strcmp((*env)->key, new->key) > 0)
-	{
-		new->next = *env;
-		*env = new;
-		free(new);
-	}
-	else
-	{
-		current = *env;
 		while (current->next != NULL && ft_strcmp(current->next->key, new->key) < 0)
             current = current->next;
 		new->next = current->next;

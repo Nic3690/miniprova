@@ -3,7 +3,30 @@ strerror stampa errori giusti
 exit_status
 SEGNALI
 
+echo -n senza parametri -> segfault
+
+exit con parametro (exit 1 deve dare 1 quando dopo stampi $?)
+
+comandi senza parametri vanno in segfault se ce li metti (unset senza)
+
 comando con path assoluto
 
 leaks heredoc
 controllo redirection con bash
+
+heredoc> come
+heredoc> va
+heredoc> oggi
+heredoc> ciao
+Str: cat
+Pointer str: 0x147604110
+Token: <<
+Pointer token: 0x147604150
+Str: come
+va
+oggi 
+
+Pointer str: 0x1476041d0
+come
+va
+oggi 

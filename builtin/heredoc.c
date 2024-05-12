@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:53:05 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/09 11:40:28 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/10 16:25:28 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	manage_heredoc(t_lexer **lexer)
 {
 	t_lexer	*head;
+	char	*temp;
 	char	*str;
 
 	head = *lexer;
@@ -23,9 +24,13 @@ void	manage_heredoc(t_lexer **lexer)
 		if (ft_strcmp((*lexer)->token, "<<") == 0)
 		{
 			str = ft_strdup((*lexer)->next->str);
+			free((*lexer)->next->str);
 			(*lexer)->next->str = ft_strdup("");
 			readline_heredoc(str, lexer);
-			((*lexer)->next->str) = ft_strjoin(((*lexer)->next->str), "\n");
+			temp = ft_strdup((*lexer)->next->str);
+			free((*lexer)->next->str);
+			(*lexer)->next->str = ft_strjoin(temp, "\n");
+			free(temp);
 		}
 		*lexer = (*lexer)->next;
 	}
@@ -35,16 +40,31 @@ void	manage_heredoc(t_lexer **lexer)
 void	readline_heredoc(char *str, t_lexer **lexer)
 {
 	char	*input;
-	
+	char	*temp;
+
 	while (1)
 	{
 		input = readline("heredoc> ");
 		if (*input)
 		{
 			if (ft_strcmp(input, str) == 0)
+			{
+				free(str);
+				free(input);
 				break ;
-			((*lexer)->next->str) = ft_strjoin_heredoc((*lexer)->next->str, input);
+			}
+			temp = ft_strjoin_heredoc((*lexer)->next->str, input);
+			free((*lexer)->next->str);
+			(*lexer)->next->str = ft_strdup(temp);
+			free(input);
+			if (temp != NULL)
+            {
+                free(temp);
+                temp = NULL;
+            }
 		}
+		if (temp != NULL)
+            free(temp);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:40:32 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/05 17:41:03 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/10 16:17:50 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	ft_free_lexer(t_lexer **lexer)
 	t_lexer		*temp;
 
 	temp = NULL;
+	// printf("%s\n", (*lexer)->str);
+	// printf("%s\n", (*lexer)->token);
 	while (*lexer)
 	{
 		temp = (*lexer)->next;

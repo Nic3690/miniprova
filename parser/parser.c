@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/09 11:36:57 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/10 16:19:48 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	parser(char *str, t_envp_struct *envp_struct, char **envp)
 	manage_string(&lexer);
 	init_prev(&lexer);
 	parser_env(&lexer, envp_struct);
-	// print_lexer(&lexer);
 	remove_all_quotes(&lexer);
 	manage_heredoc(&lexer);
 	split_command(&lexer, envp_struct, envp);
@@ -116,9 +115,11 @@ void	print_lexer(t_lexer **lexer)
 	while (*lexer)
 	{
 		if (ft_strlen((*lexer)->str) >= 1)
-			printf("xxxxxxx%s\n", (*lexer)->str);
+			printf("Str: %s\n", (*lexer)->str);
 		if (ft_strlen((*lexer)->token) >= 1)
-			printf("xxxxxxx%s\n", (*lexer)->token);
+			printf("Token: %s\n", (*lexer)->token);
+		if (ft_strlen((*lexer)->str) >= 1)
+			printf("Pointer str: %p\n", (*lexer)->str);
 		*lexer = (*lexer)->next;
 	}
 	*lexer = head;
