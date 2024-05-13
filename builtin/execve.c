@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/12 16:14:36 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:30:23 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	command_execve(char **temp, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	else if (pid > 0)
-		waitpid(pid, &exit_code, 0);
+		waitpid(pid, &g_exit_code, 0);
 	else
 	{
 		perror("fork");
@@ -42,8 +42,8 @@ void	command_execve(char **temp, char **envp)
 
 int	execute_command(char *path_env, char *command, char *path, int len)
 {
-    char temp[1024];
-	
+	char	temp[1024];
+
 	// if (len != 0)
 	// {
 	ft_strncpy(temp, path_env, len);
@@ -51,19 +51,19 @@ int	execute_command(char *path_env, char *command, char *path, int len)
 	ft_strcat(temp, "/");
 	// }
 	ft_strcat(temp, command);
-    if (access(temp, X_OK) == 0)
+	if (access(temp, X_OK) == 0)
 	{
-        ft_strcpy(path, temp);
-        return (1);
-    }
-    return (0);
+		ft_strcpy(path, temp);
+		return (1);
+	}
+	return (0);
 }
 
 int	find_command(char *command, char *path)
 {
-    char	*path_env;
-    char	*end;
-    int		len;
+	char	*path_env;
+	char	*end;
+	int		len;
 
 	// if (command[0] == '/')
 	// {
@@ -71,22 +71,22 @@ int	find_command(char *command, char *path)
 	// 	return (0);
 	// }
 	path_env = getenv("PATH");
-    if (!path_env)
+	if (!path_env)
 		return (-1);
-    while (path_env)
+	while (path_env)
 	{
-        end = ft_strchr(path_env, ':');
+		end = ft_strchr(path_env, ':');
 		if (end != NULL)
-            len = end - path_env;
-        else
-            len = ft_strlen(path_env);
-        if (len > 0 && execute_command(path_env, command, path, len))
-            return (0);
-        if (!end)
-			break;
-        path_env = end + 1;
-    }
-    return (-1);
+			len = end - path_env;
+		else
+			len = ft_strlen(path_env);
+		if (len > 0 && execute_command(path_env, command, path, len))
+			return (0);
+		if (!end)
+			break ;
+		path_env = end + 1;
+	}
+	return (-1);
 }
 
 int	manage_builtin(t_lexer **lexer, t_env *env)

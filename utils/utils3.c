@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 20:54:19 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/13 15:40:52 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:21:28 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,56 +42,56 @@ void	ft_bzero(void *s, size_t n)
 
 void	remove_string_quotes(char *str)
 {
-	char *s_read;
-    char *s_write;
-    int single_quotes;
-    int double_quotes;
+	char	*s_read;
+	char	*s_write;
+	int		single_quotes;
+	int		double_quotes;
 
 	s_read = str;
 	s_write = str;
 	single_quotes = 0;
 	double_quotes = 0;
-    check_all_quotes(single_quotes, double_quotes, s_read, s_write);
+	check_all_quotes(single_quotes, double_quotes, s_read, s_write);
 }
 
-void	check_all_quotes(int single_quotes, int double_quotes, char *s_read, char *s_write)
+void	check_all(int single_q, int double_q, char *s_read, char *s_write)
 {
 	while (*s_read)
 	{
-        if (*s_read == '\"')
+		if (*s_read == '\"')
 		{
-            if (!single_quotes)
+			if (!single_q)
 			{
-                double_quotes = !double_quotes;
-                if (double_quotes || !double_quotes)
-                    s_read++;
-            }
-        }
+				double_q = !double_q;
+				if (double_q || !double_q)
+					s_read++;
+			}
+		}
 		else if (*s_read == '\'')
 		{
-            if (!double_quotes)
+			if (!double_q)
 			{
-                single_quotes = !single_quotes;
-                if (single_quotes || !single_quotes)
-                    s_read++;
-            }
-        }
-        *s_write++ = *s_read;
-        s_read++;
-    }
+				single_q = !single_q;
+				if (single_q || !single_q)
+					s_read++;
+			}
+		}
+		*s_write++ = *s_read;
+		s_read++;
+	}
 	*s_write = '\0';
 }
 
 void	remove_all_quotes(t_lexer **lexer)
 {
-    t_lexer *head;
+	t_lexer	*head;
 
 	head = *lexer;
-    while (*lexer)
+	while (*lexer)
 	{
-        if ((*lexer)->str && strlen((*lexer)->str) > 0)
-            remove_string_quotes((*lexer)->str);
-        *lexer = (*lexer)->next;
-    }
-    *lexer = head;
+		if ((*lexer)->str && strlen((*lexer)->str) > 0)
+			remove_string_quotes((*lexer)->str);
+		*lexer = (*lexer)->next;
+	}
+	*lexer = head;
 }

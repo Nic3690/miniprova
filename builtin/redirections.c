@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:46:54 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/12 16:40:43 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:27:17 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	manage_redirections(t_lexer **lexer, t_env *env, char **envp)
 		{
 			if (count_lexer(lexer) > 2)
 			{
-				printf ("%s: %s: No such file or directory\n", head->str, (*lexer)->next->str);
+				printf ("%s: %s: No such file or directory\n",
+					head->str, (*lexer)->next->str);
 				return ;
 			}
 			if (count_lexer(lexer) == 0)
@@ -40,7 +41,7 @@ void	manage_redirections(t_lexer **lexer, t_env *env, char **envp)
 	execute_redirection(lexer, env, envp, fd);
 }
 
-void	execute_redirection(t_lexer **lexer, t_env *env, char **envp, int fd)
+void	exec_redirection(t_lexer **lexer, t_env *env, char **envp, int fd)
 {
 	t_lexer	*head;
 
@@ -70,7 +71,7 @@ void	redirection_out(t_lexer **lexer, t_env *env, char **envp, int fd)
 		{
 			fd = open((*lexer)->next->str, O_CREAT | O_WRONLY, 0644);
 			if (fd < 0)
-				return (perror("minishell: redir_out: error while opening the file\n"));
+				return (perror("redir_out: error while opening the file\n"));
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 			if (manage_builtin(&start, env) != 1)
@@ -99,7 +100,7 @@ void	redirection_in(t_lexer **lexer, t_env *env, char **envp, int fd)
 		{
 			fd = open((*lexer)->next->str, O_RDONLY);
 			if (fd < 0)
-				return perror("minishell: redir_in: error while opening the file\n");
+				return (perror("redir_in: error while opening the file\n"));
 			dup2(fd, STDIN_FILENO);
 			close(fd);
 			if (manage_builtin(&start, env) != 1)
@@ -113,7 +114,7 @@ void	redirection_in(t_lexer **lexer, t_env *env, char **envp, int fd)
 	ft_free_lexer(&start);
 }
 
-void	redirection_append(t_lexer **lexer, t_env *env, char **envp, int fd)
+void	red_append(t_lexer **lexer, t_env *env, char **envp, int fd)
 {
 	t_lexer	*start;
 	int		copy;
@@ -128,7 +129,7 @@ void	redirection_append(t_lexer **lexer, t_env *env, char **envp, int fd)
 		{
 			fd = open((*lexer)->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd < 0)
-				return (perror("minishell: redir_append: error while opening the file\n"));
+				return (perror("redir_append: error while opening the file\n"));
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 			if (manage_builtin(&start, env) != 1)

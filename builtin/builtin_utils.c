@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:42:26 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/04 18:49:21 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:01:10 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 t_lexer	*new_start(t_lexer **lexer)
 {
-	t_lexer *start;
+	t_lexer	*start;
 	t_lexer	*head;
-	t_lexer *start_head;
+	t_lexer	*start_head;
 
 	head = *lexer;
 	start = malloc(sizeof(t_lexer));

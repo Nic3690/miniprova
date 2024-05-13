@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 17:48:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/13 14:36:08 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:10:51 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_env	*split_envp(char **envp)
 	int		count;
 	int		temp;
 	t_env	*env;
-	
+
 	env = NULL;
 	while (*envp)
 	{

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:04:24 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/12 10:37:46 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:16:28 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,28 +81,28 @@ int	get_word(char *s, char c)
 
 char	**ft_split(char *s, char c)
 {
-    char	**ret;
-    size_t	i;
-    size_t	len;
-    int		quote_flag;
+	char	**ret;
+	size_t	i;
+	size_t	len;
+	int		quote_flag;
 
 	quote_flag = 0;
-    i = 0;
-    ret = ft_calloc(10000, sizeof(char *));
-    while (*s)
-    {
-        if (*s == '\'' || *s == '"')
-            quote_flag = !quote_flag;
-        if (*s != c || quote_flag)
-        {
-            len = 0;
-            while (*s && (*s != c || quote_flag) && ++len)
-                ++s;
-            ret[i++] = ft_substr(s - len, 0, len);
-        }
-        else
-            ++s;
-    }
-    ret[i] = 0;
-    return (ret);
+	i = 0;
+	ret = ft_calloc(10000, sizeof(char *));
+	while (*s)
+	{
+		if (*s == '\'' || *s == '"')
+			quote_flag = !quote_flag;
+		if (*s != c || quote_flag)
+		{
+			len = 0;
+			while (*s && (*s != c || quote_flag) && ++len)
+				++s;
+			ret[i++] = ft_substr(s - len, 0, len);
+		}
+		else
+			++s;
+	}
+	ret[i] = 0;
+	return (ret);
 }

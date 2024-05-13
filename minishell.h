@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/13 16:28:43 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:56:23 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@
 # include <string.h>
 # include <ctype.h>
 # include <signal.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
-int	exit_code;
+int	g_exit_code;
 
 typedef struct s_lexer
 {
@@ -43,15 +45,15 @@ typedef struct s_env
 
 typedef struct s_fd
 {
-    pid_t           pid;
-    int             fd[2];
-}   t_fd;
+	pid_t			pid;
+	int				fd[2];
+}	t_fd;
 
 /*main.c*/
-void		setup_signals();
-void		handle_sigint();
-void		handle_child();
-void		handle_sigign();
+void		setup_signals(void);
+void		handle_sigint(int signal);
+void		handle_child(void);
+void		handle_sigign(void);
 void		reading(t_env *env, char **envp);
 
 /*free.c*/
@@ -100,21 +102,21 @@ t_lexer		*ft_lstlast(t_lexer *lst);
 char		*get_env_var(char *var_name, t_env *envt);
 char		*expand_env_vars(char *input, t_env *env);
 void		check_var_name(char	**point, char **write, t_env *env);
-void	    parser_env(t_lexer **lexer, t_env *env);
-void	    string_expander(t_lexer **lexer, t_env *env, int flag, char *str);
+void		parser_env(t_lexer **lexer, t_env *env);
+void		string_expander(t_lexer **lexer, t_env *env, int flag, char *str);
 
 /*pipe.c*/
-void	    split_command(t_lexer **lexer, t_env *env, char **envp);
-void	    set_fork(t_lexer **lexer, t_env *env, char **envp);
-void	    child(t_lexer **lexer, t_env *env, char **envp, t_fd *fd);
-void	    father(t_lexer **lexer, t_env *env, char **envp, t_fd *fd);
+void		split_command(t_lexer **lexer, t_env *env, char **envp);
+void		set_fork(t_lexer **lexer, t_env *env, char **envp);
+void		child(t_lexer **lexer, t_env *env, char **envp, t_fd *fd);
+void		father(t_lexer **lexer, t_env *env, char **envp, t_fd *fd);
 
 /*builtin_utils*/
-t_lexer     *new_start(t_lexer **lexer);
-char	    **new_temp(t_lexer *start);
-char	    **new_full_temp(t_lexer **lexer);
-int	        check_pipe(t_lexer **lexer);
-int	        check_redirection(t_lexer **lexer);
+t_lexer		*new_start(t_lexer **lexer);
+char		**new_temp(t_lexer *start);
+char		**new_full_temp(t_lexer **lexer);
+int			check_pipe(t_lexer **lexer);
+int			check_redirection(t_lexer **lexer);
 
 /*builtin_utils2*/
 t_lexer		*new_start_redirection(t_lexer **lexer);
@@ -125,10 +127,10 @@ char		*copy_var_value(char *write, char *var_value);
 
 /*redirections.c*/
 void		manage_redirections(t_lexer **lexer, t_env *env, char **envp);
-void		execute_redirection(t_lexer **lexer, t_env *env, char **envp, int fd);
+void		exec_redirection(t_lexer **lexer, t_env *env, char **envp, int fd);
 void		redirection_out(t_lexer **lexer, t_env *env, char **envp, int fd);
 void		redirection_in(t_lexer **lexer, t_env *env, char **envp, int fd);
-void		redirection_append(t_lexer **lexer, t_env *env, char **envp, int fd);
+void		red_append(t_lexer **lexer, t_env *env, char **envp, int fd);
 
 /*commands*/
 int			builtin_cd(t_lexer **lexer);
@@ -145,17 +147,17 @@ int			del_last_env(t_lexer **lexer, t_env *env);
 void		new_node_env(int index, t_env *env, char *temp_value);
 
 /*bultin_export*/
-int	        builtin_export(t_lexer **lexer, t_env *env);
-void    	builtin_temp_export(t_lexer **lexer, t_env *env);
+int			builtin_export(t_lexer **lexer, t_env *env);
+void		builtin_temp_export(t_lexer **lexer, t_env *env);
 void		find_value_env(t_env *env, char *temp_key, char *temp_value);
 void		swap_nodes(t_env **head, t_env *prev, t_env *current, t_env *next);
-void	    bubble_sort_export(t_env **head);
+void		bubble_sort_export(t_env **head);
 
 /*execve.c*/
 void		command_execve(char **temp, char **envp);
 int			execute_command(char *path_env, char *command, char *path, int len);
 int			find_command(char *command, char *path);
-int	        manage_builtin(t_lexer **lexer, t_env *env);
+int			manage_builtin(t_lexer **lexer, t_env *env);
 
 /*heredoc.c*/
 void		manage_heredoc(t_lexer **lexer);
@@ -181,7 +183,7 @@ char		**ft_split(char *s, char c);
 /*utils3.c*/
 void		*ft_calloc(size_t count, size_t size);
 void		ft_bzero(void *s, size_t n);
-void		check_all_quotes(int single_quotes, int double_quotes, char *s_read, char *s_write);
+void		check_all(int single_q, int double_q, char *s_read, char *s_write);
 void		remove_all_quotes(t_lexer **lexer);
 
 /*utils4.c*/

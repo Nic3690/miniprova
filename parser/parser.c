@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/12 17:09:21 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:15:17 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	parser(char *str, t_env *env, char **envp)
 {
 	char		**temp;
 	t_lexer		*lexer;
-	
+
 	lexer = NULL;
 	if (check_spaces(str) == 0)
 		return ;

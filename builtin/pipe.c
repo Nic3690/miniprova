@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/12 17:09:14 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:04:55 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,15 @@ void	set_fork(t_lexer **lexer, t_env *env, char **envp)
 	pipe(fd->fd);
 	if (pipe(fd->fd) == -1)
 	{
-        perror("pipe");
-        exit(EXIT_FAILURE);
-    }
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
 	fd->pid = fork();
 	if (fd->pid == -1)
 	{
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
 	if (fd->pid == 0)
 		child(lexer, env, envp, fd);
 	father(lexer, env, envp, fd);

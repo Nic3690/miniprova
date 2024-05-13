@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 19:07:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/13 16:28:22 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:02:03 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 t_lexer	*new_start_redirection(t_lexer **lexer)
 {
-	t_lexer *start;
+	t_lexer	*start;
 	t_lexer	*head;
-	t_lexer *start_head;
+	t_lexer	*start_head;
 
 	head = *lexer;
 	start = malloc(sizeof(t_lexer));
@@ -62,7 +62,7 @@ int	count_lexer(t_lexer **lexer)
 	i = 0;
 	head = *lexer;
 	*lexer = (*lexer)->next;
-	while((*lexer) && !ft_check_token((*lexer)->token))
+	while ((*lexer) && !ft_check_token((*lexer)->token))
 	{
 		*lexer = (*lexer)->next;
 		i++;
@@ -86,10 +86,10 @@ void	init_prev(t_lexer **lexer)
 
 char	*copy_var_value(char *write, char *var_value)
 {
-    if (var_value)
+	if (var_value)
 	{
-        ft_strcpy(write, var_value);
-        return (write + ft_strlen(var_value));
-    }
-    return (write);
+		ft_strcpy(write, var_value);
+		return (write + ft_strlen(var_value));
+	}
+	return (write);
 }

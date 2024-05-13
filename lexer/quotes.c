@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 15:44:21 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/13 16:14:39 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:09:12 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,29 +55,29 @@ int	count_quotes(char *str, char c)
 
 void	remove_char(char *str, char c, int count)
 {
-    char *s_read;
-    char *s_write;
-    int skip_first;
-    int skipped = 0;
+	char	*s_read;
+	char	*s_write;
+	int		skip_first;
+	int		skipped;
 
 	s_read = str;
 	s_write = str;
 	skip_first = (count % 2 != 0);
 	skipped = 0;
-    while (*s_read)
+	while (*s_read)
 	{
-        if (*s_read == c)
+		if (*s_read == c)
 		{
-            if (skip_first && (skipped == 0 || count - skipped == 1))
-                skipped++;
-            else
-                *s_write++ = *s_read;
-        }
+			if (skip_first && (skipped == 0 || count - skipped == 1))
+				skipped++;
+			else
+				*s_write++ = *s_read;
+		}
 		else
-            *s_write++ = *s_read;
-        s_read++;
-    }
-    *s_write = '\0';
+			*s_write++ = *s_read;
+		s_read++;
+	}
+	*s_write = '\0';
 }
 
 void	manage_quote(char **temp, char c)

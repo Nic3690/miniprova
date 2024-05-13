@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 13:53:40 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/13 15:56:32 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:30:06 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ int	builtin_cd(t_lexer **lexer)
 		else if (chdir((*lexer)->next->str) != 0)
 		{
 			perror((*lexer)->next->str);
-			exit_code = 1;
+			g_exit_code = 1;
 			return (1);
 		}
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 		{
 			perror((*lexer)->next->str);
-			exit_code = 1;
+			g_exit_code = 1;
 			return (1);
 		}
 	}
@@ -50,7 +50,7 @@ int	builtin_pwd(t_lexer **lexer)
 		else
 		{
 			perror((*lexer)->str);
-			exit_code = 1;
+			g_exit_code = 1;
 			return (1);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:53:05 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/13 15:13:39 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:04:28 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ void	readline_heredoc(char *str, t_lexer **lexer)
 			(*lexer)->next->str = ft_strdup(temp);
 			free(input);
 			if (temp != NULL)
-            {
-                free(temp);
-                temp = NULL;
-            }
+			{
+				free(temp);
+				temp = NULL;
+			}
 		}
 		if (temp != NULL)
-            free(temp);
+			free(temp);
 	}
 }
 
@@ -101,12 +101,12 @@ void	manage_fd_heredoc(char *file_name, t_lexer **lexer)
 
 	fd = open(file_name, O_CREAT | O_RDWR, 0664);
 	if (fd < 0)
-		return perror("minishell: redir_in: error while opening the file\n");
+		return (perror("minishell: redir_in: error while opening the file\n"));
 	write(fd, (*lexer)->next->str, ft_strlen((*lexer)->next->str));
 	close(fd);
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0)
-		return perror("minishell: redir_in: error while opening the file\n");
+		return (perror("minishell: redir_in: error while opening the file\n"));
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 }
