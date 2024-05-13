@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:53:05 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/10 16:25:28 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/12 16:40:53 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	readline_heredoc(char *str, t_lexer **lexer)
 	}
 }
 
-void	redirection_heredoc(t_lexer **lexer, t_envp_struct *envp_struct, char **envp)
+void	redirection_heredoc(t_lexer **lexer, t_env *env, char **envp)
 {
 	t_lexer	*start;
 	char	**temp;
@@ -82,7 +82,7 @@ void	redirection_heredoc(t_lexer **lexer, t_envp_struct *envp_struct, char **env
 		if (ft_strcmp((*lexer)->token, "<<") == 0)
 		{
 			manage_fd_heredoc("file.txt", lexer);
-			if (manage_builtin(&start, envp_struct) != 1)
+			if (manage_builtin(&start, env) != 1)
 				command_execve(temp, envp);
 			break ;
 		}

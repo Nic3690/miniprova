@@ -6,17 +6,17 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:09:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/12 15:58:00 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/12 17:41:23 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	builtin_env(t_lexer **lexer, t_env **env)
+int	builtin_env(t_lexer **lexer, t_env *env)
 {
 	t_env	*temp;
 
-	temp = *env;
+	temp = env;
 	
 	if ((*lexer)->next == NULL)
 	{
@@ -38,68 +38,18 @@ int	builtin_env(t_lexer **lexer, t_env **env)
 	return (1);
 }
 
-t_export   *ft_lstcopy_env(t_env *env)
+t_env   *ft_lstcopy_env(t_env *env)
 {
-    t_export	*new_list;
-    t_env		*current;
-	t_export	*new_node;
-	char		*key_copy;
-	char		*value_copy;
+    t_env	*new_list;
+    t_env	*head;
 
 	new_list = NULL;
-	current = env;
-    while (current != NULL)
+	head = env;
+    while (env != NULL)
     {
-        key_copy = ft_strdup(current->key);
-        value_copy = ft_strdup(current->value);
-        if (key_copy == NULL || value_copy == NULL)
-        {
-            free(key_copy);
-            free(value_copy);
-            return NULL;
-        }
-		new_node = ft_list_export(key_copy, value_copy);
-        if (new_node == NULL)
-		{
-            free(key_copy);
-            free(value_copy);
-            return NULL;
-        }
-        ft_lstadd_back_export(&new_list, new_node);
-        current = current->next;
+        ft_lstadd_back_env(&new_list, ft_list_env(ft_strdup(env->key), ft_strdup(env->value)));
+        env = env->next;
     }
-    return (new_list);
-}
-
-t_env   *ft_lstcopy_env(t_export *env)
-{
-    t_export	*new_list;
-    t_env		*current;
-	t_export	*new_node;
-	char		*key_copy;
-	char		*value_copy;
-
-	new_list = NULL;
-	current = env;
-    while (current != NULL)
-    {
-        key_copy = ft_strdup(current->key);
-        value_copy = ft_strdup(current->value);
-        if (key_copy == NULL || value_copy == NULL)
-        {
-            free(key_copy);
-            free(value_copy);
-            return NULL;
-        }
-		new_node = ft_list_export(key_copy, value_copy);
-        if (new_node == NULL)
-		{
-            free(key_copy);
-            free(value_copy);
-            return NULL;
-        }
-        ft_lstadd_back_export(&new_list, new_node);
-        current = current->next;
-    }
+	env = head;
     return (new_list);
 }

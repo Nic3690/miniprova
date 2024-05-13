@@ -6,14 +6,14 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/10 16:19:48 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/12 17:09:21 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 
-void	parser(char *str, t_envp_struct *envp_struct, char **envp)
+void	parser(char *str, t_env *env, char **envp)
 {
 	char		**temp;
 	t_lexer		*lexer;
@@ -26,10 +26,10 @@ void	parser(char *str, t_envp_struct *envp_struct, char **envp)
 	lexer = ft_list(temp);
 	manage_string(&lexer);
 	init_prev(&lexer);
-	parser_env(&lexer, envp_struct);
+	parser_env(&lexer, env);
 	remove_all_quotes(&lexer);
 	manage_heredoc(&lexer);
-	split_command(&lexer, envp_struct, envp);
+	split_command(&lexer, env, envp);
 	lexer = reset_head(lexer);
 	ft_free(temp);
 	ft_free_lexer(&lexer);

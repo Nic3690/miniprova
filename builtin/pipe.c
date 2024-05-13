@@ -6,13 +6,13 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/09 11:29:35 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/12 17:09:14 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	split_command(t_lexer **lexer, t_envp_struct *envp_struct, char **envp)
+void	split_command(t_lexer **lexer, t_env *env, char **envp)
 {
 	char	**full_temp;
 	t_lexer	**head;
@@ -21,26 +21,26 @@ void	split_command(t_lexer **lexer, t_envp_struct *envp_struct, char **envp)
 	full_temp = new_full_temp(lexer);
 	if (!check_pipe(lexer) && !check_redirection(lexer))
 	{
-		if (manage_builtin(lexer, envp_struct) != 1)
+		if (manage_builtin(lexer, env) != 1)
 			command_execve(full_temp, envp);
 		lexer = head;
 		return (ft_free(full_temp));
 	}
 	else if (!check_pipe(lexer) && check_redirection(lexer))
 	{
-		manage_redirections(lexer, envp_struct, envp);
+		manage_redirections(lexer, env, envp);
 		lexer = head;
 		return (ft_free(full_temp));
 	}
 	else
 	{
-		set_fork(lexer, envp_struct, envp);
+		set_fork(lexer, env, envp);
 		lexer = head;
 		return (ft_free(full_temp));
 	}
 }
 
-void	set_fork(t_lexer **lexer, t_envp_struct *envp_struct, char **envp)
+void	set_fork(t_lexer **lexer, t_env *env, char **envp)
 {
 	t_fd	*fd;
 
@@ -59,12 +59,12 @@ void	set_fork(t_lexer **lexer, t_envp_struct *envp_struct, char **envp)
         exit(EXIT_FAILURE);
     }
 	if (fd->pid == 0)
-		child(lexer, envp_struct, envp, fd);
-	father(lexer, envp_struct, envp, fd);
+		child(lexer, env, envp, fd);
+	father(lexer, env, envp, fd);
 	free(fd);
 }
 
-void	child(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd)
+void	child(t_lexer **lexer, t_env *env, char **envp, t_fd *fd)
 {
 	t_lexer	*start;
 	char	**temp;
@@ -75,10 +75,10 @@ void	child(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd)
 	dup2(fd->fd[1], STDOUT_FILENO);
 	close(fd->fd[1]);
 	if (check_redirection(lexer))
-		manage_redirections(lexer, envp_struct, envp);
+		manage_redirections(lexer, env, envp);
 	else
 	{
-		if (manage_builtin(&start, envp_struct) != 1)
+		if (manage_builtin(&start, env) != 1)
 			command_execve(temp, envp);
 	}
 	free(start);
@@ -86,7 +86,7 @@ void	child(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd)
 	exit(EXIT_SUCCESS);
 }
 
-void	father(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd)
+void	father(t_lexer **lexer, t_env *env, char **envp, t_fd *fd)
 {
 	char	**temp_full;
 
@@ -98,10 +98,10 @@ void	father(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, t_fd *fd)
 	dup2(fd->fd[0], STDIN_FILENO);
 	close(fd->fd[0]);
 	if (check_pipe(lexer))
-		set_fork(lexer, envp_struct, envp);
+		set_fork(lexer, env, envp);
 	else if (check_redirection(lexer))
-		manage_redirections(lexer, envp_struct, envp);
+		manage_redirections(lexer, env, envp);
 	else
-		if (manage_builtin(lexer, envp_struct) != 1)
+		if (manage_builtin(lexer, env) != 1)
 			command_execve(temp_full, envp);
 }

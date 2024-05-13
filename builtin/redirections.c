@@ -6,13 +6,13 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:46:54 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/09 11:28:32 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/12 16:40:43 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	manage_redirections(t_lexer **lexer, t_envp_struct *envp_struct, char **envp)
+void	manage_redirections(t_lexer **lexer, t_env *env, char **envp)
 {
 	int		fd;
 	t_lexer	*head;
@@ -37,25 +37,25 @@ void	manage_redirections(t_lexer **lexer, t_envp_struct *envp_struct, char **env
 		*lexer = (*lexer)->next;
 	}
 	*lexer = head;
-	execute_redirection(lexer, envp_struct, envp, fd);
+	execute_redirection(lexer, env, envp, fd);
 }
 
-void	execute_redirection(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd)
+void	execute_redirection(t_lexer **lexer, t_env *env, char **envp, int fd)
 {
 	t_lexer	*head;
 
 	head = *lexer;
-	redirection_out(lexer, envp_struct, envp, fd);
+	redirection_out(lexer, env, envp, fd);
 	*lexer = head;
-	redirection_in(lexer, envp_struct, envp, fd);
+	redirection_in(lexer, env, envp, fd);
 	*lexer = head;
-	redirection_append(lexer, envp_struct, envp, fd);
+	redirection_append(lexer, env, envp, fd);
 	*lexer = head;
-	redirection_heredoc(lexer, envp_struct, envp);
+	redirection_heredoc(lexer, env, envp);
 	*lexer = head;
 }
 
-void	redirection_out(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd)
+void	redirection_out(t_lexer **lexer, t_env *env, char **envp, int fd)
 {
 	t_lexer	*start;
 	int		copy;
@@ -73,7 +73,7 @@ void	redirection_out(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, i
 				return (perror("minishell: redir_out: error while opening the file\n"));
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
-			if (manage_builtin(&start, envp_struct) != 1)
+			if (manage_builtin(&start, env) != 1)
 				command_execve(temp, envp);
 			dup2(copy, STDOUT_FILENO);
 			close(copy);
@@ -84,7 +84,7 @@ void	redirection_out(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, i
 	ft_free_lexer(&start);
 }
 
-void	redirection_in(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd)
+void	redirection_in(t_lexer **lexer, t_env *env, char **envp, int fd)
 {
 	t_lexer	*start;
 	char	**temp;
@@ -102,7 +102,7 @@ void	redirection_in(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, in
 				return perror("minishell: redir_in: error while opening the file\n");
 			dup2(fd, STDIN_FILENO);
 			close(fd);
-			if (manage_builtin(&start, envp_struct) != 1)
+			if (manage_builtin(&start, env) != 1)
 				command_execve(temp, envp);
 			dup2(copy, STDIN_FILENO);
 			close(copy);
@@ -113,7 +113,7 @@ void	redirection_in(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, in
 	ft_free_lexer(&start);
 }
 
-void	redirection_append(t_lexer **lexer, t_envp_struct *envp_struct, char **envp, int fd)
+void	redirection_append(t_lexer **lexer, t_env *env, char **envp, int fd)
 {
 	t_lexer	*start;
 	int		copy;
@@ -131,7 +131,7 @@ void	redirection_append(t_lexer **lexer, t_envp_struct *envp_struct, char **envp
 				return (perror("minishell: redir_append: error while opening the file\n"));
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
-			if (manage_builtin(&start, envp_struct) != 1)
+			if (manage_builtin(&start, env) != 1)
 				command_execve(temp, envp);
 			dup2(copy, STDOUT_FILENO);
 			close(copy);

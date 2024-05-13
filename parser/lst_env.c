@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 17:48:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/03/15 13:38:48 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 14:36:08 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,25 @@ t_env	*ft_lstlast_env(t_env *lst)
 		lst = lst->next;
 	}
 	return (lst);
+}
+
+int	search_map_env(t_env *env, char *str)
+{
+	int			index;
+	t_env		*head;
+
+	index = 0;
+	head = env;
+	while (env)
+	{
+		if (ft_strcmp(env->key, str) == 0)
+		{
+			env = head;
+			return (index);
+		}
+		index++;
+		env = env->next;
+	}
+	env = head;
+	return (-1);
 }

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/09 11:49:54 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/12 17:24:07 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	handle_sigign()
 	exit_code = 131;
 }
 
-void	reading(t_envp_struct *envp_struct, char **envp)
+void	reading(t_env *env, char **envp)
 {
 	char		*input;
 	char		*str;
@@ -69,7 +69,7 @@ void	reading(t_envp_struct *envp_struct, char **envp)
 		{
 			add_history(input);
 			str = ft_strdup(input);
-			parser(str, envp_struct, envp);
+			parser(str, env, envp);
 			free(str);
 			free(input);
 		}
@@ -79,19 +79,18 @@ void	reading(t_envp_struct *envp_struct, char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_envp_struct *envp_struct;
+	t_env *env;
 
 	exit_code = 0;
-	envp_struct = malloc(sizeof(t_envp_struct));
-	envp_struct->env = malloc(sizeof(t_env *));
-	envp_struct->export = malloc(sizeof(t_export *));
 	(void)argv;
-	*(envp_struct->env) = split_envp(envp);
+	env = split_envp(envp);
 	using_history();
 	if (argc != 1)
+	{
+		ft_free_env(env);
 		return (0);
-	*(envp_struct->export) = ft_lstcopy_env(*(envp_struct->env));
-	bubble_sort_export(envp_struct);
-	reading(envp_struct, envp);
+	}
+	reading(env, envp);
+	ft_free_env(env);
 	return (0);
 }

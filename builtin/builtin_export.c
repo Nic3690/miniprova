@@ -6,38 +6,55 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:10:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/12 12:16:45 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/12 18:14:53 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	builtin_export(t_lexer **lexer, t_envp_struct *envp_struct)
+void	print_env(t_env *env)
 {
-	t_export	*head;
+	t_env	*head;
 
-	head = (*envp_struct->export);
+	head = env;
+	while (env)
+	{
+		printf("%s ----- %s\n", env->key, env->value);
+		env = env->next;
+	}
+	env = head;
+}
+
+int	builtin_export(t_lexer **lexer, t_env *env)
+{
+	t_env	*head;
+	t_env	*copy;
+
+	head = env;
+	copy = ft_lstcopy_env(env);
+	bubble_sort_export(&copy);
 	if ((*lexer)->next == NULL)
 	{
 		if (ft_strcmp((*lexer)->str, "export") == 0)
 		{
-			while ((*envp_struct->export))
+			while (copy)
 			{
-				printf ("declare -x %s=%s\n", (*envp_struct->export)->key, (*envp_struct->export)->value);
-				(*envp_struct->export) = (*envp_struct->export)->next;
+				printf ("declare -x %s=%s\n", copy->key, copy->value);
+				copy = copy->next;
 			}
-			(*envp_struct->export) = head;
+			env = head;
 		}
 	}
 	else if ((*lexer)->next)
 	{
 		if (ft_strcmp((*lexer)->str, "export") == 0)
-			builtin_temp_export(lexer, envp_struct);
+			builtin_temp_export(lexer, env);
 	}
+	ft_free_env(copy);
 	return (1);
 }
 
-void	builtin_temp_export(t_lexer **lexer, t_envp_struct *envp_struct)
+void	builtin_temp_export(t_lexer **lexer, t_env *env)
 {
 	int			i;
 	char		*temp_value;
@@ -49,114 +66,75 @@ void	builtin_temp_export(t_lexer **lexer, t_envp_struct *envp_struct)
 		i++;
 	temp_key = ft_substr((*lexer)->str, 0, i);
 	temp_value = ft_substr((*lexer)->str, i + 1, ft_strlen((*lexer)->str));
-	find_value_export(envp_struct, temp_key, temp_value);
+	find_value_env(env, temp_key, temp_value);
 }
 
-void	find_value_export(t_envp_struct *envp_struct, char *temp_key, char *temp_value)
+void	find_value_env(t_env *env, char *temp_key, char *temp_value)
 {
 	int			index;
-    t_export	*temp_export;
 	t_env		*temp_env;
-	char		*temp_env_key;
-	char		*temp_env_value;
 
-	temp_export = *(envp_struct->export);
-	temp_env = *(envp_struct->env);
-	temp_env_key = ft_strdup(temp_key);
-	temp_env_value = ft_strdup(temp_value);
-    index = search_map_export(envp_struct->export, temp_key);
+	temp_env = env;
+    index = search_map_env(env, temp_key);
     if (index != -1)
 	{
-		new_node_export(index, temp_export, temp_value);
-		new_node_env(index, temp_env, temp_env_value);
+		new_node_env(index, env, temp_value);
     }
 	else
 	{
-		new_export(envp_struct->export, temp_key, temp_value);
-		ft_lstadd_back_env(&temp_env, ft_list_env(temp_env_key, temp_env_value));
+		ft_lstadd_back_env(&temp_env, ft_list_env(temp_key, temp_value));
 	}
 }
 
-void	new_node_export(int index, t_export *temp_export, char *temp_value)
+void	new_node_env(int index, t_env *env, char *temp_value)
 {
-	int	i;
+	int		i;
+	t_env	*head;
 
 	i = 0;
-	while (i < index && temp_export != NULL)
+	head = env;
+	while (i < index && env != NULL)
 	{
-		temp_export = temp_export->next;
+		env = env->next;
 		i++;
 	}
-	if (temp_export != NULL)
+	if (env != NULL)
 	{
-		free(temp_export->value);
-		temp_export->value = ft_strdup(temp_value);
+		free(env->value);
+		env->value = ft_strdup(temp_value);
 		free(temp_value);
 	}
+	env = head;
 }
 
-void	new_node_env(int index, t_env *temp_env, char *temp_value)
-{
-	int	i;
+void bubble_sort_export(t_env **head) {
+    int swapped = 1;
+    t_env *prev = NULL;
+    t_env *current;
+    t_env *temp;
 
-	i = 0;
-	while (i < index && temp_env != NULL)
-	{
-		temp_env = temp_env->next;
-		i++;
-	}
-	if (temp_env != NULL)
-	{
-		free(temp_env->value);
-		temp_env->value = ft_strdup(temp_value);
-		free(temp_value);
-	}
-}
-
-void	new_export(t_export **export, char *temp_key, char *temp_value)
-{
-	t_export	*new;
-	t_export	*current;
-
-	new = ft_list_export(temp_key, temp_value);
-	if (*export == NULL || ft_strcmp((*export)->key, new->key) > 0)
-	{
-		new->next = *export;
-		*export = new;
-		free(new);
-	}
-	else
-	{
-		current = *export;
-		while (current->next != NULL && ft_strcmp(current->next->key, new->key) < 0)
-            current = current->next;
-		new->next = current->next;
-		current->next = new;
-	}
-}
-
-void	bubble_sort_export(t_envp_struct *envp_struct)
-{
-    int 		swapped;
-    t_export 	**current;
-	t_export	*temp;
-
-    swapped = 1;
-    while (swapped)
-	{
+    while (swapped) {
         swapped = 0;
-        current = envp_struct->export;
-        while ((*current)->next != NULL)
-		{
-            if (ft_strcmp((*current)->key, (*current)->next->key) > 0)
-			{
-                temp = (*current)->next;
-                (*current)->next = (*current)->next->next;
-                temp->next = *current;
-                *current = temp;
+        prev = NULL;
+        current = *head; // Utilizza un puntatore doppio per mantenere il controllo sulla testa
+
+        while (current != NULL && current->next != NULL) {
+            if (ft_strcmp(current->key, current->next->key) > 0) {
+                temp = current->next;
+                if (prev != NULL) {
+                    prev->next = temp;
+                } else {
+                    *head = temp; // Aggiorna il puntatore alla testa se lo scambio coinvolge il primo nodo
+                }
+                current->next = temp->next;
+                temp->next = current;
+                prev = temp;
                 swapped = 1;
+            } else {
+                prev = current;
+                current = current->next;
             }
-            current = &(*current)->next;
         }
     }
 }
+
