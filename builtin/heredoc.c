@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:53:05 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/12 16:40:53 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 15:13:39 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,30 @@ void	manage_fd_heredoc(char *file_name, t_lexer **lexer)
 		return perror("minishell: redir_in: error while opening the file\n");
 	dup2(fd, STDIN_FILENO);
 	close(fd);
+}
+
+char	*ft_strjoin_heredoc(char *s1, char *s2)
+{
+	char	*str;
+	int		i;
+	int		n;
+
+	i = 0;
+	n = 0;
+	if (!s1 || !s2)
+		return (0);
+	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 2) * sizeof(char));
+	if (!str)
+		return (0);
+	while (s1[i] != '\0')
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	if (ft_strcmp(s1, ""))
+		str[i++] = '\n';
+	while (s2[n] != '\0')
+		str[i++] = s2[n++];
+	str[i] = '\0';
+	return (str);
 }

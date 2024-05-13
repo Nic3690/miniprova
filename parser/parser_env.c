@@ -6,13 +6,12 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 12:16:00 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/12 16:13:29 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 16:27:44 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// Funzione per ottenere il valore di una variabile d'ambiente
 char	*get_env_var(char *var_name, t_env *env)
 {
 	t_env		*current;
@@ -29,18 +28,6 @@ char	*get_env_var(char *var_name, t_env *env)
     return (getenv(var_name));
 }
 
-// Funzione per copiare il valore di una variabile nella stringa risultato
-char	*copy_var_value(char *write, char *var_value)
-{
-    if (var_value)
-	{
-        ft_strcpy(write, var_value);
-        return (write + ft_strlen(var_value));
-    }
-    return (write);
-}
-
-// Funzione per espandere le variabili d'ambiente in una stringa
 char	*expand_env_vars(char *input, t_env *env)
 {
     int		len;
@@ -85,39 +72,44 @@ void	check_var_name(char	**point, char **write, t_env *env)
 	(*point)--;
 }
 
-void parser_env(t_lexer **lexer, t_env *env)
+void    parser_env(t_lexer **lexer, t_env *env)
 {
     t_lexer *head_lexer;
-    char    *expanded_str;
     char    *str;
     int     flag;
-    int     i;
 
     head_lexer = *lexer;
     flag = 1;
-    i = 0;
     while (*lexer)
     {
         str = (*lexer)->str;
         flag = 1;
-        i = 0;
-        while (str[i] != '\0')
-        {
-            if (str[i] == '\'')
-                flag = !flag;
-            else if (str[i] == '$' && flag)
-            {
-                expanded_str = expand_env_vars(str, env);
-                if (expanded_str)
-                {
-                    free((*lexer)->str);
-                    (*lexer)->str = expanded_str;
-                    break ;
-                }
-            }
-            i++;
-        }
+        string_expander(lexer, env, flag, str);
         *lexer = (*lexer)->next;
     }
-    *lexer = head_lexer;  // Reset the lexer pointer back to the head after processing
+    *lexer = head_lexer;
+}
+
+void    string_expander(t_lexer **lexer, t_env *env, int flag, char *str)
+{
+    int     i;
+    char    *expanded_str;
+
+    i = 0;
+    while (str[i] != '\0')
+    {
+        if (str[i] == '\'')
+            flag = !flag;
+        else if (str[i] == '$' && flag)
+        {
+            expanded_str = expand_env_vars(str, env);
+            if (expanded_str)
+            {
+                free((*lexer)->str);
+                (*lexer)->str = expanded_str;
+                break ;
+            }
+        }
+        i++;
+    }
 }

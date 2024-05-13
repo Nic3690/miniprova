@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/13 14:36:32 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 16:28:43 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,12 @@ t_lexer		*ft_lstnew(char *str, char *token);
 void		ft_lstadd_back(t_lexer **lst, t_lexer *new);
 t_lexer		*ft_lstlast(t_lexer *lst);
 
-
 /*parser_env*/
 char		*get_env_var(char *var_name, t_env *envt);
-char		*copy_var_value(char *write, char *var_value);
 char		*expand_env_vars(char *input, t_env *env);
 void		check_var_name(char	**point, char **write, t_env *env);
 void	    parser_env(t_lexer **lexer, t_env *env);
+void	    string_expander(t_lexer **lexer, t_env *env, int flag, char *str);
 
 /*pipe.c*/
 void	    split_command(t_lexer **lexer, t_env *env, char **envp);
@@ -121,6 +120,8 @@ int	        check_redirection(t_lexer **lexer);
 t_lexer		*new_start_redirection(t_lexer **lexer);
 char		**new_temp_redirection(t_lexer *start);
 int			count_lexer(t_lexer **lexer);
+void		init_prev(t_lexer **lexer);
+char		*copy_var_value(char *write, char *var_value);
 
 /*redirections.c*/
 void		manage_redirections(t_lexer **lexer, t_env *env, char **envp);
@@ -134,20 +135,20 @@ int			builtin_cd(t_lexer **lexer);
 int			builtin_pwd(t_lexer **lexer);
 int			builtin_echo(t_lexer **lexer);
 int			builtin_unset(t_lexer **lexer, t_env *env);
-int			del_last_env(t_lexer **lexer, t_env *env);
 int			unset_env(t_lexer **lexer, t_env *env);
-int			del_first_env(t_lexer **lexer, t_env *env);
 
 /*builtin_env*/
 int			builtin_env(t_lexer **lexer, t_env *env);
 t_env		*ft_lstcopy_env(t_env *lst);
+int			del_first_env(t_lexer **lexer, t_env *env);
+int			del_last_env(t_lexer **lexer, t_env *env);
+void		new_node_env(int index, t_env *env, char *temp_value);
 
 /*bultin_export*/
 int	        builtin_export(t_lexer **lexer, t_env *env);
 void    	builtin_temp_export(t_lexer **lexer, t_env *env);
 void		find_value_env(t_env *env, char *temp_key, char *temp_value);
-// void		new_node_env(int index, t_env *temp_env, char *temp_value);
-void		new_node_env(int index, t_env *env, char *temp_value);
+void		swap_nodes(t_env **head, t_env *prev, t_env *current, t_env *next);
 void	    bubble_sort_export(t_env **head);
 
 /*execve.c*/
@@ -161,6 +162,7 @@ void		manage_heredoc(t_lexer **lexer);
 void		readline_heredoc(char *str, t_lexer **lexer);
 void		redirection_heredoc(t_lexer **lexer, t_env *env, char **envp);
 void		manage_fd_heredoc(char *file_name, t_lexer **lexer);
+char		*ft_strjoin_heredoc(char *s1, char *s2);
 
 /*utils.c*/
 char		*ft_strdup(char *str);
@@ -179,14 +181,14 @@ char		**ft_split(char *s, char c);
 /*utils3.c*/
 void		*ft_calloc(size_t count, size_t size);
 void		ft_bzero(void *s, size_t n);
-char		*ft_strjoin_heredoc(char *s1, char *s2);
-void		remove_string_quotes(char *str);
-char		*ft_strcpy(char *dest, char *src);
+void		check_all_quotes(int single_quotes, int double_quotes, char *s_read, char *s_write);
 void		remove_all_quotes(t_lexer **lexer);
 
 /*utils4.c*/
+int			ft_len(int n);
+char		*ft_minint(int n);
 char		*ft_itoa(int n);
 int			ft_isalnum(int c);
-void		init_prev(t_lexer **lexer);
+char		*ft_strcpy(char *dest, char *src);
 
 #endif

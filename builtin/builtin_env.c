@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:09:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/12 17:41:23 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 16:09:09 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	builtin_env(t_lexer **lexer, t_env *env)
 				printf ("%s=%s\n", temp->key, temp->value);
 				temp = temp->next;
 			}
-			// free(temp);
 		}
 	}
 	else if ((*lexer)->next)
@@ -52,4 +51,63 @@ t_env   *ft_lstcopy_env(t_env *env)
     }
 	env = head;
     return (new_list);
+}
+
+int	del_first_env(t_lexer **lexer, t_env *env)
+{
+	t_env	*temp;
+
+	temp = env;
+	if (temp != NULL && ft_strcmp(temp->key, (*lexer)->next->str) == 0)
+	{
+    	temp = env->next;
+        free(env->key);
+        free(env->value);
+        free(env);
+		env = temp;
+		return (1);
+    }
+	return (0);
+}
+
+int	del_last_env(t_lexer **lexer, t_env *env)
+{
+	t_env	*temp;
+
+	temp = env;
+	while (env && env->next)
+	{
+    	temp = env->next;
+		if (ft_strcmp(env->key, (*lexer)->next->str) == 0)
+		{
+			free(env->key);
+			free(env->value);
+			free(env);
+			env = temp;
+			return(0);
+		}
+		env = env->next;
+	}
+	return (1);
+}
+
+void	new_node_env(int index, t_env *env, char *temp_value)
+{
+	int		i;
+	t_env	*head;
+
+	i = 0;
+	head = env;
+	while (i < index && env != NULL)
+	{
+		env = env->next;
+		i++;
+	}
+	if (env != NULL)
+	{
+		free(env->value);
+		env->value = ft_strdup(temp_value);
+		free(temp_value);
+	}
+	env = head;
 }

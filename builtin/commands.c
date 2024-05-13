@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 13:53:40 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/12 16:54:14 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 15:56:32 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,42 +122,4 @@ int	unset_env(t_lexer **lexer, t_env *env)
 	free(env->value);
 	free(env);
 	return (0);
-}
-
-int	del_first_env(t_lexer **lexer, t_env *env)
-{
-	t_env	*temp;
-
-	temp = env;
-	if (temp != NULL && ft_strcmp(temp->key, (*lexer)->next->str) == 0)
-	{
-    	temp = env->next;
-        free(env->key);
-        free(env->value);
-        free(env);
-		env = temp;
-		return (1);
-    }
-	return (0);
-}
-
-int	del_last_env(t_lexer **lexer, t_env *env)
-{
-	t_env	*temp;
-
-	temp = env;
-	while (env && env->next)
-	{
-    	temp = env->next;
-		if (ft_strcmp(env->key, (*lexer)->next->str) == 0)
-		{
-			free(env->key);
-			free(env->value);
-			free(env);
-			env = temp;
-			return(0);
-		}
-		env = env->next;
-	}
-	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 15:44:21 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/05 11:40:51 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/13 16:14:39 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	find_quotes(char **temp)
 			j++;
 		else if (count_one == 1 || count_two == 1)
 			j++;
-		/*se la stringa è solo " entra in questo if else*/
 		else
 		{
 			remove_char(temp[j], '"', count_one);
@@ -37,7 +36,6 @@ void	find_quotes(char **temp)
 	}
 	single_quote(temp);
 }
-/*trova le virgolette da eliminare nei punti giusti*/
 
 int	count_quotes(char *str, char c)
 {
@@ -54,31 +52,33 @@ int	count_quotes(char *str, char c)
 	}
 	return (count);
 }
-/*conta quanti char c ci sono nella stringa*/
 
-void remove_char(char *str, char c, int count) {
-    char *s_read = str;
-    char *s_write = str;
-    int skip_first = (count % 2 != 0);  // True if odd number of quotes
-    int skipped = 0;  // To keep track of how many quotes we've skipped
+void	remove_char(char *str, char c, int count)
+{
+    char *s_read;
+    char *s_write;
+    int skip_first;
+    int skipped = 0;
 
-    while (*s_read) {
-        if (*s_read == c) {
-            if (skip_first && (skipped == 0 || count - skipped == 1)) {
-                // Skip the first and the last quote if odd number of quotes
-                skipped++;  // Increment the skipped count
-            } else {
-                // Otherwise, write the quote to the output
+	s_read = str;
+	s_write = str;
+	skip_first = (count % 2 != 0);
+	skipped = 0;
+    while (*s_read)
+	{
+        if (*s_read == c)
+		{
+            if (skip_first && (skipped == 0 || count - skipped == 1))
+                skipped++;
+            else
                 *s_write++ = *s_read;
-            }
-        } else {
-            *s_write++ = *s_read;  // Always write non-quote characters
         }
+		else
+            *s_write++ = *s_read;
         s_read++;
     }
-    *s_write = '\0';  // Null-terminate the modified string
+    *s_write = '\0';
 }
-
 
 void	manage_quote(char **temp, char c)
 {
@@ -103,7 +103,6 @@ void	manage_quote(char **temp, char c)
 		}
 	}
 }
-/*gestione del dquote*/
 
 void	single_quote(char **temp)
 {
@@ -125,4 +124,3 @@ void	single_quote(char **temp)
 	else if (count_two % 2 != 0)
 		manage_quote(temp, '\'');
 }
-/*funzione per gestire nel qual caso ci fosse una sola virgoletta*/
