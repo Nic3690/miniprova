@@ -6,11 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:10:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/13 17:00:16 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/14 11:50:02 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 // void	print_env(t_env *env)
 // {
@@ -100,7 +100,9 @@ void	bubble_sort_export(t_env **head)
 	t_env	*temp;
 
 	prev = NULL;
-	swapped = 1
+	swapped = 1;
+	current = *head;
+	temp = NULL;
 	while (swapped)
 	{
 		swapped = 0;
@@ -109,17 +111,17 @@ void	bubble_sort_export(t_env **head)
 		while (current != NULL && current->next != NULL)
 		{
 			if (ft_strcmp(current->key, current->next->key) > 0)
-				{
-					temp = current->next;
-					swap_nodes(head, prev, current, temp);
-					prev = temp;
-					swapped = 1;
-				}
-				else
-				{
-					prev = current;
-					current = current->next;
-				}
+			{
+				temp = current->next;
+				swap_nodes(head, prev, current, temp);
+				prev = temp;
+				swapped = 1;
+			}
+			else
+			{
+				prev = current;
+				current = current->next;
+			}
 		}
 	}
 }

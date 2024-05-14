@@ -6,30 +6,32 @@
 #    By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/26 15:17:34 by nfurlani          #+#    #+#              #
-#    Updated: 2024/05/13 14:46:51 by nfurlani         ###   ########.fr        #
+#    Updated: 2024/05/14 12:24:20 by nfurlani         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	minishell
 
-CC			=	gcc
+CC			=	gcc -g
 
 CFLAGS		=	-Werror -Wall -Wextra
 
-SRCS		=	main.c \
+READLINE	=	-L/usr/include -lreadline -L$(HOME)/.brew/opt/readline/lib -I$(HOME)/.brew/opt/readline/include
+
+SRCS		=	main.c signal.c \
 				lexer/quotes.c lexer/split_token.c \
 				parser/parser.c parser/lst_lexer.c parser/parser_env.c parser/lst_env.c \
 				builtin/free.c builtin/pipe.c builtin/builtin_utils.c builtin/builtin_utils2.c builtin/builtin_env.c builtin/builtin_export.c builtin/heredoc.c builtin/commands.c builtin/execve.c builtin/redirections.c \
 				utils/utils.c utils/utils2.c utils/utils3.c utils/utils4.c \
 
-OBJS		=	$(SRCS:.c=.o)
+HEADER		=	includes/
 
-LDFLAGS		=	-L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include -lreadline
+OBJS		=	$(SRCS:.c=.o)
 
 all			:	$(NAME)
 
-$(NAME)		:	$(OBJS)
-				$(CC) $(CFLAGS) $(SRCS) $(LDFLAGS) -o $(NAME)
+$(NAME)		:	main.o $(OBJS:main.o=)
+				$(CC) $(CFLAGS) -I $(HEADER) $(OBJS) -o $(NAME) $(READLINE)
 
 clean		:
 				rm -f $(OBJS)
@@ -39,4 +41,4 @@ fclean		:	clean
 
 re			:	fclean all
 
-.PHONY: all clean fclean re
+.PHONY		:	all clean fclean re

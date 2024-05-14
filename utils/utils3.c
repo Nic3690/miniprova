@@ -6,11 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 20:54:19 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/13 17:21:28 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/14 11:50:02 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 void	*ft_calloc(size_t count, size_t size)
 {
@@ -51,7 +51,7 @@ void	remove_string_quotes(char *str)
 	s_write = str;
 	single_quotes = 0;
 	double_quotes = 0;
-	check_all_quotes(single_quotes, double_quotes, s_read, s_write);
+	check_all(single_quotes, double_quotes, s_read, s_write);
 }
 
 void	check_all(int single_q, int double_q, char *s_read, char *s_write)

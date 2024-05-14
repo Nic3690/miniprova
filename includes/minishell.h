@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/13 17:56:23 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/14 12:20:49 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,11 @@
 # include <string.h>
 # include <ctype.h>
 # include <signal.h>
-# include <sys/types.h>
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
-int	g_exit_code;
+extern int	g_exit_code;
 
 typedef struct s_lexer
 {
@@ -50,11 +49,13 @@ typedef struct s_fd
 }	t_fd;
 
 /*main.c*/
+void		reading(t_env *env, char **envp);
+
+/*signal.c*/
 void		setup_signals(void);
 void		handle_sigint(int signal);
-void		handle_child(void);
+void		handle_child(int signal);
 void		handle_sigign(void);
-void		reading(t_env *env, char **envp);
 
 /*free.c*/
 int			ft_exit(t_lexer *lexer, t_env *env);

@@ -6,11 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:46:54 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/13 17:27:17 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/14 11:50:02 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 void	manage_redirections(t_lexer **lexer, t_env *env, char **envp)
 {
@@ -38,7 +38,7 @@ void	manage_redirections(t_lexer **lexer, t_env *env, char **envp)
 		*lexer = (*lexer)->next;
 	}
 	*lexer = head;
-	execute_redirection(lexer, env, envp, fd);
+	exec_redirection(lexer, env, envp, fd);
 }
 
 void	exec_redirection(t_lexer **lexer, t_env *env, char **envp, int fd)
@@ -50,7 +50,7 @@ void	exec_redirection(t_lexer **lexer, t_env *env, char **envp, int fd)
 	*lexer = head;
 	redirection_in(lexer, env, envp, fd);
 	*lexer = head;
-	redirection_append(lexer, env, envp, fd);
+	red_append(lexer, env, envp, fd);
 	*lexer = head;
 	redirection_heredoc(lexer, env, envp);
 	*lexer = head;
