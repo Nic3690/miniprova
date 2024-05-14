@@ -1,0 +1,13 @@
+       0       0       0
+xt
+file4.txt
+includes
+lexer
+main.c
+main.o
+makefile
+minishell
+parser
+signal.c
+signal.o
+utils

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 10:54:18 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 11:50:02 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:58:37 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*ft_strdup(char *str)
 	char	*s2;
 	char	*head;
 
+	if (!str)
+		return (NULL);
 	s1 = (char *)str;
 	len = 0;
 	while (s1[len] != '\0')
@@ -42,6 +44,8 @@ int	ft_strcmp(char *s1, char *s2)
 	size_t	i;
 
 	i = 0;
+	if (!s1 || !s2)
+		return (1);
 	while (s1[i] != '\0' && s2[i] != '\0')
 	{
 		if (s1[i] != s2[i])

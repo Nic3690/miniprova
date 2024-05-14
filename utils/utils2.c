@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:04:24 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 11:50:02 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:09:59 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	if (!s)
 		return (NULL);
 	if (start >= (unsigned int)ft_strlen(s))
-		return (ft_strdup(""));
+		return (NULL);
 	i = 0;
 	while (s[start++] != '\0')
 		len2++;

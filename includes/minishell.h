@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 12:20:49 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/14 20:10:35 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ void		ft_free(char **temp);
 /*parser*/
 void		parser(char *str, t_env *env, char **envp);
 void		manage_string(t_lexer **lexer);
-void		join_string(t_lexer *lexer);
+char *create_temp_string(t_lexer *lexer);
+void concatenate_strings(t_lexer *lexer, char *string_one, char *string_two);
+void swap_nodes_lexer(t_lexer **head, t_lexer *prev, t_lexer *current, t_lexer *next);
+void join_string(t_lexer *lexer);
 t_lexer		*reset_head(t_lexer *lexer);
 int			check_spaces(char *str);
 void		print_lexer(t_lexer **lexer);
@@ -158,6 +161,7 @@ void		bubble_sort_export(t_env **head);
 void		command_execve(char **temp, char **envp);
 int			execute_command(char *path_env, char *command, char *path, int len);
 int			find_command(char *command, char *path);
+void		check_echo(t_lexer *lexer);
 int			manage_builtin(t_lexer **lexer, t_env *env);
 
 /*heredoc.c*/

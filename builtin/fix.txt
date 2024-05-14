@@ -1,4 +1,6 @@
 
+ls | wc >> file3.txt
+
 strerror stampa errori giusti
 exit_status
 SEGNALI

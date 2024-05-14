@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:53:05 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 11:50:02 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:38:27 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ void	manage_heredoc(t_lexer **lexer)
 	head = *lexer;
 	while ((*lexer) && (*lexer)->next)
 	{
-		if (ft_strcmp((*lexer)->token, "<<") == 0)
+		if ((*lexer)->token && ft_strcmp((*lexer)->token, "<<") == 0)
 		{
 			str = ft_strdup((*lexer)->next->str);
 			free((*lexer)->next->str);
-			(*lexer)->next->str = ft_strdup("");
+			(*lexer)->next->str = NULL;
 			readline_heredoc(str, lexer);
 			temp = ft_strdup((*lexer)->next->str);
 			free((*lexer)->next->str);
@@ -79,7 +79,7 @@ void	redirection_heredoc(t_lexer **lexer, t_env *env, char **envp)
 	temp = new_temp_redirection(start);
 	while (*lexer)
 	{
-		if (ft_strcmp((*lexer)->token, "<<") == 0)
+		if ((*lexer)->token && ft_strcmp((*lexer)->token, "<<") == 0)
 		{
 			manage_fd_heredoc("file.txt", lexer);
 			if (manage_builtin(&start, env) != 1)
@@ -129,7 +129,7 @@ char	*ft_strjoin_heredoc(char *s1, char *s2)
 		str[i] = s1[i];
 		i++;
 	}
-	if (ft_strcmp(s1, ""))
+	if (s1 == NULL)
 		str[i++] = '\n';
 	while (s2[n] != '\0')
 		str[i++] = s2[n++];

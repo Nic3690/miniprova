@@ -6,7 +6,7 @@
 #    By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/26 15:17:34 by nfurlani          #+#    #+#              #
-#    Updated: 2024/05/14 12:24:20 by nfurlani         ###   ########.fr        #
+#    Updated: 2024/05/14 18:05:26 by nfurlani         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ CC			=	gcc -g
 
 CFLAGS		=	-Werror -Wall -Wextra
 
-READLINE	=	-L/usr/include -lreadline -L$(HOME)/.brew/opt/readline/lib -I$(HOME)/.brew/opt/readline/include
+# READLINE	=	-L/usr/include -lreadline -L$(HOME)/.brew/opt/readline/lib -I$(HOME)/.brew/opt/readline/include
+READLINE	=	-L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include -lreadline
 
 SRCS		=	main.c signal.c \
 				lexer/quotes.c lexer/split_token.c \

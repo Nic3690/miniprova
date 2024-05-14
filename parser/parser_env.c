@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 12:16:00 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 11:50:02 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/14 18:42:41 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	string_expander(t_lexer **lexer, t_env *env, int flag, char *str)
 	char	*expanded_str;
 
 	i = 0;
+	if (!str)
+		return ;
 	while (str[i] != '\0')
 	{
 		if (str[i] == '\'')

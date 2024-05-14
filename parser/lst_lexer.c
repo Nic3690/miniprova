@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:19:57 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 11:50:02 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/14 20:10:51 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ t_lexer	*ft_list(char **argv)
 		if (ft_check_token(argv[j]))
 		{
 			token = ft_strdup(argv[j]);
-			str = ft_strdup("");
+			str = NULL;
 		}
 		else
 		{
 			str = ft_strdup(argv[j]);
-			token = ft_strdup("");
+			token = NULL;
 		}
 		ft_lstadd_back(&lexer, ft_lstnew(str, token));
 	}
@@ -43,6 +43,8 @@ int	ft_check_token(char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i] != '\0')
 	{
 		if ((str[i] == '|') || (str[i] == '>') || (str[i] == '<')

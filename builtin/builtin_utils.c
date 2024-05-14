@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:42:26 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 11:50:02 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/14 19:05:30 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ t_lexer	*new_start(t_lexer **lexer)
 	head = *lexer;
 	start = malloc(sizeof(t_lexer));
 	start_head = start;
-	while (!ft_strchr((*lexer)->token, '|') && *lexer && (*lexer)->next)
+	while (ft_strcmp((*lexer)->token, "|") != 0 && *lexer && (*lexer)->next)
 	{
 		start->str = ft_strdup((*lexer)->str);
-		start->token = ft_strdup("");
+		start->token = NULL;
 		start->next = malloc(sizeof(t_lexer));
 		start = start->next;
 		*lexer = (*lexer)->next;
@@ -87,7 +87,7 @@ int	check_pipe(t_lexer **lexer)
 	head = *lexer;
 	while (*lexer)
 	{
-		if (ft_strchr((*lexer)->token, '|'))
+		if (ft_strcmp((*lexer)->token, "|") == 0)
 		{
 			*lexer = head;
 			return (1);
@@ -105,10 +105,10 @@ int	check_redirection(t_lexer **lexer)
 	head = *lexer;
 	while (*lexer)
 	{
-		if (ft_strcmp((*lexer)->token, ">") == 0
+		if ((*lexer)->token && (ft_strcmp((*lexer)->token, ">") == 0
 			|| ft_strcmp((*lexer)->token, "<") == 0
 			|| ft_strcmp((*lexer)->token, ">>") == 0
-			|| ft_strcmp((*lexer)->token, "<<") == 0)
+			|| ft_strcmp((*lexer)->token, "<<") == 0))
 		{
 			*lexer = head;
 			return (1);

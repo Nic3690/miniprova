@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 11:50:02 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/14 20:27:09 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,13 @@ void	child(t_lexer **lexer, t_env *env, char **envp, t_fd *fd)
 	close(fd->fd[0]);
 	dup2(fd->fd[1], STDOUT_FILENO);
 	close(fd->fd[1]);
-	if (check_redirection(lexer))
-		manage_redirections(lexer, env, envp);
-	else
-	{
+	// if (check_redirection(lexer))
+	// 	manage_redirections(lexer, env, envp);
+	// else
+	// {
 		if (manage_builtin(&start, env) != 1)
 			command_execve(temp, envp);
-	}
+	// }
 	free(start);
 	ft_free(temp);
 	exit(EXIT_SUCCESS);
@@ -89,8 +89,10 @@ void	child(t_lexer **lexer, t_env *env, char **envp, t_fd *fd)
 void	father(t_lexer **lexer, t_env *env, char **envp, t_fd *fd)
 {
 	char	**temp_full;
+	int		copy;
 
-	while (*lexer && !(ft_strchr((*lexer)->token, '|')))
+	copy = dup(STDIN_FILENO);
+	while (*lexer && ft_strcmp((*lexer)->token, "|") != 0)
 		*lexer = (*lexer)->next;
 	*lexer = (*lexer)->next;
 	temp_full = new_full_temp(lexer);
@@ -104,4 +106,6 @@ void	father(t_lexer **lexer, t_env *env, char **envp, t_fd *fd)
 	else
 		if (manage_builtin(lexer, env) != 1)
 			command_execve(temp_full, envp);
+	dup2(copy, STDIN_FILENO);
+	close(copy);
 }
