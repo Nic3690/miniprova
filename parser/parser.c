@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 19:57:05 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:22:18 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	parser(char *str, t_env *env, char **envp)
 	temp = ft_split(str, ' ');
 	find_quotes(temp);
 	lexer = ft_list(temp);
-	print_lexer(&lexer);
 	manage_string(&lexer);
 	init_prev(&lexer);
 	parser_env(&lexer, env);
@@ -35,15 +34,17 @@ void	parser(char *str, t_env *env, char **envp)
 	ft_free_lexer(&lexer);
 }
 
-void manage_string(t_lexer **lexer) {
-    t_lexer *head;
+void	manage_string(t_lexer **lexer)
+{
+    t_lexer	*head;
 
     head = *lexer;
-    while (*lexer && (*lexer)->next) {
+    while (*lexer && (*lexer)->next)
+	{
         if (((*lexer)->str && count_quotes((*lexer)->str, '\'') == 1)
-            || ((*lexer)->str && ft_strchr((*lexer)->str, '"'))
-            || ((*lexer)->token && count_quotes((*lexer)->token, '\'') == 1)
-            || ((*lexer)->token && ft_strchr((*lexer)->token, '"'))) {
+			|| ((*lexer)->str && ft_strchr((*lexer)->str, '"'))
+			|| ((*lexer)->token && count_quotes((*lexer)->token, '\'') == 1)
+			|| ((*lexer)->token && ft_strchr((*lexer)->token, '"'))) {
             join_string(*lexer);
             if (((*lexer)->str && count_quotes((*lexer)->str, '"') == 2 && (*lexer)->next != NULL)
                 || ((*lexer)->str && count_quotes((*lexer)->str, '\'') == 2 && (*lexer)->next != NULL)) {
@@ -103,18 +104,18 @@ int	check_spaces(char *str)
 	return (0);
 }
 
-void	print_lexer(t_lexer **lexer)
-{
-	t_lexer	*head;
+// void	print_lexer(t_lexer **lexer)
+// {
+// 	t_lexer	*head;
 
-	head = *lexer;
-	while (*lexer)
-	{
-		if ((*lexer)->str)
-			printf("Str: %s\n", (*lexer)->str);
-		if ((*lexer)->token)
-			printf("Token: %s\n", (*lexer)->token);
-		*lexer = (*lexer)->next;
-	}
-	*lexer = head;
-}
+// 	head = *lexer;
+// 	while (*lexer)
+// 	{
+// 		if ((*lexer)->str)
+// 			printf("Str: %s\n", (*lexer)->str);
+// 		if ((*lexer)->token)
+// 			printf("Token: %s\n", (*lexer)->token);
+// 		*lexer = (*lexer)->next;
+// 	}
+// 	*lexer = head;
+// }

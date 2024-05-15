@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 20:10:35 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:19:00 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ void		ft_free(char **temp);
 /*parser*/
 void		parser(char *str, t_env *env, char **envp);
 void		manage_string(t_lexer **lexer);
-char *create_temp_string(t_lexer *lexer);
-void concatenate_strings(t_lexer *lexer, char *string_one, char *string_two);
-void swap_nodes_lexer(t_lexer **head, t_lexer *prev, t_lexer *current, t_lexer *next);
+char		*create_temp_string(t_lexer *lexer);
+void		concatenate_strings(t_lexer *lexer, char *string_one, char *string_two);
+void		swap_nodes_lexer(t_lexer **head, t_lexer *prev, t_lexer *current, t_lexer *next);
 void join_string(t_lexer *lexer);
 t_lexer		*reset_head(t_lexer *lexer);
 int			check_spaces(char *str);
@@ -197,5 +197,8 @@ char		*ft_minint(int n);
 char		*ft_itoa(int n);
 int			ft_isalnum(int c);
 char		*ft_strcpy(char *dest, char *src);
+
+/*utils5.c*/
+int			pipe_counter(t_lexer **lexer);
 
 #endif

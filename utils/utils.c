@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 10:54:18 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 18:58:37 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/15 14:15:01 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strdup(char *str)
 
 	if (!str)
 		return (NULL);
-	s1 = (char *)str;
+	s1 = str;
 	len = 0;
 	while (s1[len] != '\0')
 		len++;

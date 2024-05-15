@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 20:16:25 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/15 14:28:42 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ int	execute_command(char *path_env, char *command, char *path, int len)
 {
 	char	temp[1024];
 
-	// if (len != 0)
-	// {
-	ft_strncpy(temp, path_env, len);
-	temp[len] = '\0';
-	ft_strcat(temp, "/");
-	// }
+	if (len != 0)
+	{
+		ft_strncpy(temp, path_env, len);
+		temp[len] = '\0';
+		ft_strcat(temp, "/");
+	}
 	ft_strcat(temp, command);
 	if (access(temp, X_OK) == 0)
 	{
@@ -65,11 +65,11 @@ int	find_command(char *command, char *path)
 	char	*end;
 	int		len;
 
-	// if (command[0] == '/')
-	// {
-	// 	execute_command("", command, path, 0);
-	// 	return (0);
-	// }
+	if (command[0] == '/')
+	{
+		execute_command("", command, path, 0);
+		return (0);
+	}
 	path_env = getenv("PATH");
 	if (!path_env)
 		return (-1);

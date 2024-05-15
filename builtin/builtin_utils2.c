@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 19:07:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 18:09:59 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/15 17:19:49 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,15 @@ t_lexer	*new_start_redirection(t_lexer **lexer)
 {
 	t_lexer	*start;
 	t_lexer	*head;
-	t_lexer	*start_head;
 
 	head = *lexer;
-	start = malloc(sizeof(t_lexer));
-	start_head = start;
+	start = NULL;
 	while (!ft_check_token((*lexer)->token) && *lexer && (*lexer)->next)
 	{
-		start->str = ft_strdup((*lexer)->str);
-		start->token = NULL;
-		start->next = malloc(sizeof(t_lexer));
-		start = start->next;
+		ft_lstadd_back(&start, ft_lstnew(ft_strdup((*lexer)->str), NULL));
 		*lexer = (*lexer)->next;
 	}
 	*lexer = head;
-	start = start_head;
 	return (start);
 }
 

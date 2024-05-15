@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:40:32 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 19:17:10 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:53:16 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	ft_free(char **temp)
 	int	i;
 
 	i = 0;
+	if (!temp)
+		return ;
 	while (temp[i])
 	{
 		if (temp[i])
