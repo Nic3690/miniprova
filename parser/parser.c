@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/15 16:22:18 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/15 21:35:00 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,16 @@ void	parser(char *str, t_env *env, char **envp)
 	temp = ft_split(str, ' ');
 	find_quotes(temp);
 	lexer = ft_list(temp);
-	manage_string(&lexer);
-	init_prev(&lexer);
-	parser_env(&lexer, env);
-	remove_all_quotes(&lexer);
-	manage_heredoc(&lexer);
-	split_command(&lexer, env, envp);
-	lexer = reset_head(lexer);
+	if (check_token_error(&lexer) == 0)
+	{
+		manage_string(&lexer);
+		init_prev(&lexer);
+		parser_env(&lexer, env);
+		remove_all_quotes(&lexer);
+		manage_heredoc(&lexer);
+		split_command(&lexer, env, envp);
+		lexer = reset_head(lexer);
+	}
 	ft_free(temp);
 	ft_free_lexer(&lexer);
 }

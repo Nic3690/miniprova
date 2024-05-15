@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:42:26 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/15 17:30:48 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/15 22:07:56 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ char	**new_full_temp(t_lexer **lexer)
 	{
 		if ((*lexer)->str != NULL)
 			*temp = ft_strdup((*lexer)->str);
+		if ((*lexer)->token != NULL)
+			*temp = ft_strdup((*lexer)->token);
 		*lexer = (*lexer)->next;
 		temp++;
 	}

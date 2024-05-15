@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:46:54 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/15 17:10:59 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/15 22:25:34 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	redirection_out(t_lexer **lexer, t_env *env, char **envp, int fd)
 	temp = new_temp_redirection(start);
 	while (*lexer)
 	{
+		copy = dup(STDOUT_FILENO);
 		if ((*lexer)->token && ft_strcmp((*lexer)->token, ">") == 0)
 		{
 			fd = open((*lexer)->next->str, O_CREAT | O_WRONLY, 0644);
@@ -96,6 +97,7 @@ void	redirection_in(t_lexer **lexer, t_env *env, char **envp, int fd)
 	temp = new_temp_redirection(start);
 	while (*lexer)
 	{
+		copy = dup(STDOUT_FILENO);
 		if ((*lexer)->token && ft_strcmp((*lexer)->token, "<") == 0)
 		{
 			fd = open((*lexer)->next->str, O_RDONLY);
@@ -125,6 +127,7 @@ void	red_append(t_lexer **lexer, t_env *env, char **envp, int fd)
 	temp = new_temp_redirection(start);
 	while (*lexer)
 	{
+		copy = dup(STDOUT_FILENO);
 		if ((*lexer)->token && ft_strcmp((*lexer)->token, ">>") == 0)
 		{
 			fd = open((*lexer)->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);

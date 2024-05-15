@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils5.c                                           :+:      :+:    :+:   */
+/*   check_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/15 14:40:08 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/15 21:12:07 by nfurlani         ###   ########.fr       */
+/*   Created: 2024/05/15 21:10:09 by nfurlani          #+#    #+#             */
+/*   Updated: 2024/05/15 21:40:42 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	pipe_counter(t_lexer **lexer)
+int	check_token_error(t_lexer **lexer)
 {
-	int		i;
-	t_lexer	*head;
-
-	i = 1;
-	head = *lexer;
-	while (*lexer)
-	{
-		if (ft_strcmp((*lexer)->token, "|") == 0)
-			i++;
-		*lexer = (*lexer)->next;
-	}
-	*lexer = head;
-	return (i);
+	if (ft_strcmp((*lexer)->token, "|") == 0)
+		return (printf("syntax error near unexpected token '|'\n"));
+	if ((*lexer)->token && !(*lexer)->next)
+		return (printf("syntax error near unexpected token 'newline'\n"));
+	if ((*lexer)->next && (*lexer)->token && (*lexer)->next->token)
+		return (printf("syntax error near unexpected token '%s'\n", (*lexer)->token));
+	return (0);
 }

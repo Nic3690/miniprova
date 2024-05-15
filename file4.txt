@@ -1,6 +1,0 @@
-q213
-[?2004h[0;35mminishell> [0m
-[?2004l[?2004h[0;35mminishell> [0m
-[?2004l[?2004h[0;35mminishell> [0m
-[?2004l[?2004h[0;35mminishell> [0m
-[?2004l[?2004h[0;35mminishell> [0m[?2004l

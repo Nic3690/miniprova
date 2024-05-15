@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/15 17:40:09 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/15 22:08:49 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,18 @@ void	split_command(t_lexer **lexer, t_env *env, char **envp)
 		if (manage_builtin(lexer, env) != 1)
 			command_execve(full_temp, envp);
 		lexer = head;
-		return (ft_free(full_temp));
 	}
 	else if (!check_pipe(lexer) && check_redirection(lexer))
 	{
 		manage_redirections(lexer, env, envp);
 		lexer = head;
-		return (ft_free(full_temp));
 	}
 	else
 	{
 		set_fork(lexer, env, envp);
 		lexer = head;
-		return (ft_free(full_temp));
 	}
+	return (ft_free(full_temp));
 }
 
 void	set_fork(t_lexer **lexer, t_env *env, char **envp)

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/15 16:19:00 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/15 21:33:56 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,5 +200,8 @@ char		*ft_strcpy(char *dest, char *src);
 
 /*utils5.c*/
 int			pipe_counter(t_lexer **lexer);
+
+/*check_error.c*/
+int			check_token_error(t_lexer **lexer);
 
 #endif

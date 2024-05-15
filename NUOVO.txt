@@ -1,51 +1,12 @@
-➜  miniprova git:(master) ✗ ./minishell 
-minishell> ls > file3.txt
-minishell> echo 123 > file
-free(): invalid pointer
-[1]    84371 IOT instruction (core dumped)  ./minishell
-➜  miniprova git:(master) ✗ ./minishell
-minishell> echo 123 > file.txt
-minishell> echo 123 > file2
-free(): invalid pointer
-[1]    84574 IOT instruction (core dumped)  ./minishell
-➜  miniprova git:(master) ✗ ./minishell
-minishell> echo 123 > file.txt
-minishell> cat file.txt
-cat: file.txt: No such file or directory
-minishell> echo 123 > file1.txt
-double free or corruption (out)
-[1]    84674 IOT instruction (core dumped)  ./minishell
-➜  miniprova git:(master) ✗ ./minishell
-minishell> echo 132 > file1.txt
-minishell> cat file1.txt
-132
-minishell> cat < file1.txt
-132
-double free or corruption (out)
-[1]    84808 IOT instruction (core dumped)  ./minishell
-➜  miniprova git:(master) ✗ ./minishell
 minishell> > file2.txt echo 123
 (null): file2.txt: No such file or directory
-minishell> echo q213 > file2.txt
-minishell> echo q213 > file2.txt > file1.txt > file4.txt
-➜  miniprova git:(master) ✗ ./minishell
-minishell> | echo 123
-123
-minishell> > < file
-zsh: parse error near '\n'
-minishell> < > ile
-zsh: parse error near '\n'
-minishell> ^C
-minishell> ^C
-minishell> < | 
-[1]    85384 segmentation fault (core dumped)  ./minishell
-➜  miniprova git:(master) ✗ ./minishell
-minishell> < | echo
 
 minishell> echo 132 > <
 zsh: parse error near '\n'
+
 minishell> echo 132 > <<
 zsh: parse error near '\n'
+
 minishell> echo 132 > | 
 [1]    85714 segmentation fault (core dumped)  ./minishell
 
