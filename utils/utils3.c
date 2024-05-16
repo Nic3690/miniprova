@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 20:54:19 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 20:09:09 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 15:02:00 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,8 @@ void	remove_string_quotes(char *str)
 	s_write = str;
 	single_quotes = 0;
 	double_quotes = 0;
-	check_all(single_quotes, double_quotes, s_read, s_write);
+	check_all(&single_quotes, &double_quotes, s_read, s_write);
 }
-
 
 void	remove_all_quotes(t_lexer **lexer)
 {
@@ -62,36 +61,33 @@ void	remove_all_quotes(t_lexer **lexer)
 	head = *lexer;
 	while (*lexer)
 	{
-		if ((*lexer)->str && strlen((*lexer)->str) > 0)
+		if ((*lexer)->str && ft_strlen((*lexer)->str) > 0)
 			remove_string_quotes((*lexer)->str);
 		*lexer = (*lexer)->next;
 	}
 	*lexer = head;
 }
 
-void	check_all(int single_q, int double_q, char *s_read, char *s_write)
+void	check_all(int *single_q, int *double_q, char *s_read, char *s_write)
 {
 	while (*s_read)
 	{
 		if (*s_read == '\"')
 		{
-			if (!single_q)
-			{
-				double_q = !double_q;
-				if (double_q || !double_q)
-					s_read++;
-			}
+			if (!(*single_q))
+				(*double_q) = !(*double_q);
+			else
+				*s_write++ = *s_read;
 		}
 		else if (*s_read == '\'')
 		{
-			if (!double_q)
-			{
-				single_q = !single_q;
-				if (single_q || !single_q)
-					s_read++;
-			}
+			if (!(*double_q))
+				(*single_q) = !(*single_q);
+			else
+				*s_write++ = *s_read;
 		}
-		*s_write++ = *s_read;
+		else if (*s_read != '\'' && *s_read != '\"')
+            *s_write++ = *s_read;
 		s_read++;
 	}
 	*s_write = '\0';

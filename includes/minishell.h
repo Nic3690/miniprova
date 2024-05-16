@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 14:14:17 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:35:37 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ char		**ft_split(char *s, char c);
 /*utils3.c*/
 void		*ft_calloc(size_t count, size_t size);
 void		ft_bzero(void *s, size_t n);
-void		check_all(int single_q, int double_q, char *s_read, char *s_write);
+void		check_all(int *single_q, int *double_q, char *s_read, char *s_write);
 void		remove_all_quotes(t_lexer **lexer);
 
 /*utils4.c*/
