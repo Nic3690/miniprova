@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/15 21:35:00 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 11:40:07 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,18 +107,18 @@ int	check_spaces(char *str)
 	return (0);
 }
 
-// void	print_lexer(t_lexer **lexer)
-// {
-// 	t_lexer	*head;
+void	print_lexer(t_lexer **lexer)
+{
+	t_lexer	*head;
 
-// 	head = *lexer;
-// 	while (*lexer)
-// 	{
-// 		if ((*lexer)->str)
-// 			printf("Str: %s\n", (*lexer)->str);
-// 		if ((*lexer)->token)
-// 			printf("Token: %s\n", (*lexer)->token);
-// 		*lexer = (*lexer)->next;
-// 	}
-// 	*lexer = head;
-// }
+	head = *lexer;
+	while (*lexer)
+	{
+		if ((*lexer)->str)
+			printf("Str: %s\n", (*lexer)->str);
+		if ((*lexer)->token)
+			printf("Token: %s\n", (*lexer)->token);
+		*lexer = (*lexer)->next;
+	}
+	*lexer = head;
+}

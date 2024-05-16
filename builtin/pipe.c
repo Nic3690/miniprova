@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/15 22:08:49 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 12:54:06 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	split_command(t_lexer **lexer, t_env *env, char **envp)
 void	set_fork(t_lexer **lexer, t_env *env, char **envp)
 {
 	t_fd	*fd;
-	int		status;
 
 	fd = malloc(sizeof(t_fd));
 	fd->pid = -1;
@@ -68,6 +67,7 @@ void	child(t_lexer **lexer, t_env *env, char **envp, t_fd *fd)
 	t_lexer	*start;
 	char	**temp;
 
+	fd->status = fd->pid;
 	start = new_start(lexer);
 	temp = new_temp(start);
 	close(fd->fd[0]);
@@ -84,7 +84,6 @@ void	father(t_lexer **lexer, t_env *env, char **envp, t_fd *fd)
 {
 	char	**temp_full;
 	int		copy;
-	int		status;
 
 	copy = dup(STDIN_FILENO);
 	while (*lexer && ft_strcmp((*lexer)->token, "|") != 0)
@@ -97,7 +96,11 @@ void	father(t_lexer **lexer, t_env *env, char **envp, t_fd *fd)
 	if (check_pipe(lexer))
 	{
 		set_fork(lexer, env, envp);
-		waitpid(-1, &status, 0);
+		if ((*lexer)->next == NULL)
+		{
+			while (waitpid(-1, &(fd->status), 0) != -1)
+				;
+		}
 	}
 	else if (check_redirection(lexer))
 		manage_redirections(lexer, env, envp);
@@ -108,4 +111,5 @@ void	father(t_lexer **lexer, t_env *env, char **envp, t_fd *fd)
 	}
 	dup2(copy, STDIN_FILENO);
 	close(copy);
+	ft_free(temp_full);
 }

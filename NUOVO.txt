@@ -1,5 +1,5 @@
-minishell> > file2.txt echo 123
-(null): file2.txt: No such file or directory
+> file2.txt > file3.txt echo 123 345 | echo > ls | wc
+
 
 minishell> echo 132 > <
 zsh: parse error near '\n'

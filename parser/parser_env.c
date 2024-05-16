@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 12:16:00 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 18:42:41 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:14:54 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,30 +30,28 @@ char	*get_env_var(char *var_name, t_env *env)
 
 char	*expand_env_vars(char *input, t_env *env)
 {
-	int		len;
 	char	*result;
-	char	*write;
 	char	*point;
-
-	len = ft_strlen(input);
-	result = malloc((len * 2 + 1) * sizeof(char));
+	char	*temp;
+	
+	result = ft_calloc(1024, sizeof(char));
 	if (!result)
 		return (NULL);
-	write = result;
 	point = input;
+	temp = result;
 	while (*point)
 	{
 		if (*point == '$')
-			check_var_name(&point, &write, env);
+			temp = check_var_name(&point, temp, env);
 		else
-			*write++ = *point;
+			*temp++ = *point;
 		point++;
 	}
-	*write = '\0';
+	*temp = '\0';
 	return (result);
 }
 
-void	check_var_name(char	**point, char **write, t_env *env)
+char	*check_var_name(char **point, char *temp, t_env *env)
 {
 	char	*var_start;
 	char	var_name[100];
@@ -68,9 +66,15 @@ void	check_var_name(char	**point, char **write, t_env *env)
 	ft_strncpy(var_name, var_start, var_len);
 	var_name[var_len] = '\0';
 	var_value = get_env_var(var_name, env);
-	*write = copy_var_value(*write, var_value);
+	if (var_value)
+	{
+		while (*var_value)
+			*temp++ = *var_value++;
+	}
 	(*point)--;
+	return (temp);
 }
+
 
 void	parser_env(t_lexer **lexer, t_env *env)
 {
@@ -105,6 +109,7 @@ void	string_expander(t_lexer **lexer, t_env *env, int flag, char *str)
 		else if (str[i] == '$' && flag)
 		{
 			expanded_str = expand_env_vars(str, env);
+			// printf ("%s\n", expanded_str);
 			if (expanded_str)
 			{
 				free((*lexer)->str);

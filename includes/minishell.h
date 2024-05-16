@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/15 21:33:56 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:14:17 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_fd
 {
 	pid_t			pid;
 	int				fd[2];
+	int				status;
 }	t_fd;
 
 /*main.c*/
@@ -105,7 +106,7 @@ t_lexer		*ft_lstlast(t_lexer *lst);
 /*parser_env*/
 char		*get_env_var(char *var_name, t_env *envt);
 char		*expand_env_vars(char *input, t_env *env);
-void		check_var_name(char	**point, char **write, t_env *env);
+char		*check_var_name(char **point, char *temp, t_env *env);
 void		parser_env(t_lexer **lexer, t_env *env);
 void		string_expander(t_lexer **lexer, t_env *env, int flag, char *str);
 
