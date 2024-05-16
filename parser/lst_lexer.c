@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:19:57 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 20:10:51 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:42:09 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_lexer	*ft_list(char **argv)
 	lexer = NULL;
 	while (argv[++j])
 	{
-		if (ft_check_token(argv[j]))
+		if (ft_check_token(argv[j]) && !ft_check_all_quotes(argv[j]))
 		{
 			token = ft_strdup(argv[j]);
 			str = NULL;

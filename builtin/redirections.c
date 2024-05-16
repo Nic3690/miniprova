@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:46:54 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 11:48:32 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:54:58 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,44 +44,55 @@ void	manage_redirections(t_lexer **lexer, t_env *env, char **envp)
 void	exec_redirection(t_lexer **lexer, t_env *env, char **envp, int fd)
 {
 	t_lexer	*head;
+	int		copy;
 
 	head = *lexer;
-	redirection_out(lexer, env, envp, fd);
-	*lexer = head;
-	redirection_in(lexer, env, envp, fd);
-	*lexer = head;
-	red_append(lexer, env, envp, fd);
-	*lexer = head;
-	redirection_heredoc(lexer, env, envp);
-	*lexer = head;
+	if (check_char(lexer, ">"))
+	{
+		copy = dup(STDOUT_FILENO);
+		redirection_out(lexer, env, envp, fd);
+		*lexer = head;
+		dup2(copy, STDOUT_FILENO);
+		close(copy);
+	}
+	if (check_char(lexer, "<"))
+	{
+		redirection_in(lexer, env, envp, fd);
+		*lexer = head;
+	}
+	if (check_char(lexer, ">>"))
+	{
+		red_append(lexer, env, envp, fd);
+		*lexer = head;
+	}
+	if (check_char(lexer, "<<"))
+	{
+		redirection_heredoc(lexer, env, envp);
+		*lexer = head;
+	}
 }
 
 void	redirection_out(t_lexer **lexer, t_env *env, char **envp, int fd)
 {
 	t_lexer	*start;
-	int		copy;
 	char	**temp;
 
-	copy = dup(STDOUT_FILENO);
 	start = new_start_redirection(lexer);
 	temp = new_temp_redirection(start);
 	while (*lexer)
 	{
-		copy = dup(STDOUT_FILENO);
 		if ((*lexer)->token && ft_strcmp((*lexer)->token, ">") == 0)
 		{
-			fd = open((*lexer)->next->str, O_CREAT | O_WRONLY, 0644);
+			fd = open((*lexer)->next->str, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 			if (fd < 0)
 				return (perror("redir_out: error while opening the file\n"));
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
-			if (manage_builtin(&start, env) != 1)
-				command_execve(temp, envp);
-			dup2(copy, STDOUT_FILENO);
-			close(copy);
 		}
 		*lexer = (*lexer)->next;
 	}
+	if (manage_builtin(&start, env) != 1)
+		command_execve(temp, envp);
 	ft_free(temp);
 	ft_free_lexer(&start);
 }
@@ -135,13 +146,13 @@ void	red_append(t_lexer **lexer, t_env *env, char **envp, int fd)
 				return (perror("redir_append: error while opening the file\n"));
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
-			if (manage_builtin(&start, env) != 1)
-				command_execve(temp, envp);
-			dup2(copy, STDOUT_FILENO);
-			close(copy);
 		}
 		*lexer = (*lexer)->next;
 	}
+	if (manage_builtin(&start, env) != 1)
+		command_execve(temp, envp);
+	dup2(copy, STDOUT_FILENO);
+	close(copy);
 	ft_free(temp);
 	ft_free_lexer(&start);
 }

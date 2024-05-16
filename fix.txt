@@ -17,3 +17,6 @@ leaks heredoc
 controllo redirection con bash
 
 BUBBLE SORT DA TESTARE
+
+eminishell> echo 123 > file1.txt | cat
+123 file1.txt

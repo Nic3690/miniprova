@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 12:29:12 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 21:52:44 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void	reading(t_env *env, char **envp)
 			free(str);
 			free(input);
 		}
-		close(copy);
 	}
+	close(copy);
 }
 
 int	main(int argc, char **argv, char **envp)

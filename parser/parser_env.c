@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 12:16:00 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 14:14:54 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 16:03:33 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ char	*check_var_name(char **point, char *temp, t_env *env)
 	return (temp);
 }
 
-
 void	parser_env(t_lexer **lexer, t_env *env)
 {
 	t_lexer	*head_lexer;
@@ -109,7 +108,6 @@ void	string_expander(t_lexer **lexer, t_env *env, int flag, char *str)
 		else if (str[i] == '$' && flag)
 		{
 			expanded_str = expand_env_vars(str, env);
-			// printf ("%s\n", expanded_str);
 			if (expanded_str)
 			{
 				free((*lexer)->str);

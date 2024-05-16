@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 14:35:37 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:37:23 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,8 @@ int			ft_isalnum(int c);
 char		*ft_strcpy(char *dest, char *src);
 
 /*utils5.c*/
-int			pipe_counter(t_lexer **lexer);
+int			check_char(t_lexer **lexer, char *str);
+int			ft_check_all_quotes(char *str);
 
 /*check_error.c*/
 int			check_token_error(t_lexer **lexer);

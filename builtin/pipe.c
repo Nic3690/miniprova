@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 12:54:06 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 21:18:45 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	split_command(t_lexer **lexer, t_env *env, char **envp)
 			command_execve(full_temp, envp);
 		lexer = head;
 	}
-	else if (!check_pipe(lexer) && check_redirection(lexer))
+	else if (check_redirection(lexer) && !check_pipe(lexer))
 	{
 		manage_redirections(lexer, env, envp);
 		lexer = head;
@@ -44,7 +44,6 @@ void	set_fork(t_lexer **lexer, t_env *env, char **envp)
 
 	fd = malloc(sizeof(t_fd));
 	fd->pid = -1;
-	pipe(fd->fd);
 	if (pipe(fd->fd) == -1)
 	{
 		perror("pipe");
@@ -73,8 +72,12 @@ void	child(t_lexer **lexer, t_env *env, char **envp, t_fd *fd)
 	close(fd->fd[0]);
 	dup2(fd->fd[1], STDOUT_FILENO);
 	close(fd->fd[1]);
-	if (manage_builtin(&start, env) != 1)
-		command_execve(temp, envp);
+	manage_redirections(&start, env, envp);
+	if (!check_redirection(&start))
+	{
+		if (manage_builtin(&start, env) != 1)
+			command_execve(temp, envp);
+	}
 	free(start);
 	ft_free(temp);
 	exit(EXIT_SUCCESS);
@@ -96,18 +99,16 @@ void	father(t_lexer **lexer, t_env *env, char **envp, t_fd *fd)
 	if (check_pipe(lexer))
 	{
 		set_fork(lexer, env, envp);
-		if ((*lexer)->next == NULL)
-		{
-			while (waitpid(-1, &(fd->status), 0) != -1)
-				;
-		}
-	}
-	else if (check_redirection(lexer))
 		manage_redirections(lexer, env, envp);
+		waitpid(-1, &fd->status, 0);
+	}
 	else
 	{
-		if (manage_builtin(lexer, env) != 1)
-			command_execve(temp_full, envp);
+		if (!check_redirection(lexer))
+		{
+			if (manage_builtin(lexer, env) != 1)
+				command_execve(temp_full, envp);
+		}
 	}
 	dup2(copy, STDIN_FILENO);
 	close(copy);

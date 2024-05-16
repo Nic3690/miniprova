@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/15 14:28:42 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/16 19:16:54 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	command_execve(char **temp, char **envp)
 	pid = fork();
 	signal(SIGINT, handle_child);
 	signal(SIGQUIT, handle_child);
+	// for (int i = 0; temp[i]; i++)
+	// 	printf("------- %s\n", temp[i]);
 	if (pid == 0)
 	{
 		if (find_command(*temp, path) != 0)
