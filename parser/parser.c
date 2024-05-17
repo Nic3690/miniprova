@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 18:46:35 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/17 17:32:06 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	parser(char *str, t_env *env, char **envp)
 		remove_all_quotes(&lexer);
 		manage_heredoc(&lexer);
 		split_command(&lexer, env, envp);
+		// print_lexer(&lexer);
 		lexer = reset_head(lexer);
 	}
 	ft_free(temp);

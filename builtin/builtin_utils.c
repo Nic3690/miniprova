@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:42:26 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 19:47:10 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/17 17:26:13 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_lexer	*new_start(t_lexer **lexer)
 
 	head = *lexer;
 	start = NULL;
-	while (ft_strcmp((*lexer)->token, "|") != 0 && *lexer && (*lexer)->next)
+	while (*lexer && ft_strcmp((*lexer)->token, "|") != 0 && *lexer)
 	{
 		if ((*lexer)->str)
 			ft_lstadd_back(&start, ft_lstnew(ft_strdup((*lexer)->str), NULL));
@@ -36,10 +36,20 @@ char	**new_temp(t_lexer *start)
 	t_lexer	*head;
 	char	**temp;
 	int		i;
+	int		count;
 
+	count = 0;
 	head = start;
 	i = 0;
-	temp = malloc(sizeof(char *) * 1024 + 1);
+	while (start)
+	{
+		count++;
+		start = start->next;
+	}
+	temp = malloc(sizeof(char *) * (count + 1));
+	if (!temp)
+		return (0);
+	start = head;
 	while (start)
 	{
 		if (start->str != NULL)

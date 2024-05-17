@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 18:37:23 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/17 21:32:15 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_fd
 {
 	pid_t			pid;
 	int				fd[2];
-	int				status;
+	int				temp;
 }	t_fd;
 
 /*main.c*/
@@ -112,9 +112,9 @@ void		string_expander(t_lexer **lexer, t_env *env, int flag, char *str);
 
 /*pipe.c*/
 void		split_command(t_lexer **lexer, t_env *env, char **envp);
-void		set_fork(t_lexer **lexer, t_env *env, char **envp);
-void		child(t_lexer **lexer, t_env *env, char **envp, t_fd *fd);
-void		father(t_lexer **lexer, t_env *env, char **envp, t_fd *fd);
+void 		set_fork(t_lexer **start, t_fd *fd, t_env *env, char **envp);
+void		child(t_lexer **start, t_fd *fd, t_env *env, char **envp);
+void		last_command(t_lexer **start, t_fd *fd, t_env *env, char **envp);
 
 /*builtin_utils*/
 t_lexer		*new_start(t_lexer **lexer);
@@ -131,11 +131,11 @@ void		init_prev(t_lexer **lexer);
 char		*copy_var_value(char *write, char *var_value);
 
 /*redirections.c*/
-void		manage_redirections(t_lexer **lexer, t_env *env, char **envp);
-void		exec_redirection(t_lexer **lexer, t_env *env, char **envp, int fd);
-void		redirection_out(t_lexer **lexer, t_env *env, char **envp, int fd);
-void		redirection_in(t_lexer **lexer, t_env *env, char **envp, int fd);
-void		red_append(t_lexer **lexer, t_env *env, char **envp, int fd);
+void		manage_redirections(t_lexer **start, t_fd *fd, int process);
+int			redirection_out(t_lexer **start, t_fd *fd);
+int			redirection_in(t_lexer **start);
+int			red_append(t_lexer **start, t_fd *fd);
+void		free_fd(t_fd *fd, int fd_in);
 
 /*commands*/
 int			builtin_cd(t_lexer **lexer);
@@ -159,7 +159,7 @@ void		swap_nodes(t_env **head, t_env *prev, t_env *current, t_env *next);
 void		bubble_sort_export(t_env **head);
 
 /*execve.c*/
-void		command_execve(char **temp, char **envp);
+int			command_execve(char **temp, char **envp);
 int			execute_command(char *path_env, char *command, char *path, int len);
 int			find_command(char *command, char *path);
 void		check_echo(t_lexer *lexer);
@@ -168,8 +168,7 @@ int			manage_builtin(t_lexer **lexer, t_env *env);
 /*heredoc.c*/
 void		manage_heredoc(t_lexer **lexer);
 void		readline_heredoc(char *str, t_lexer **lexer);
-void		redirection_heredoc(t_lexer **lexer, t_env *env, char **envp);
-void		manage_fd_heredoc(char *file_name, t_lexer **lexer);
+int			redirection_heredoc(t_lexer **start);
 char		*ft_strjoin_heredoc(char *s1, char *s2);
 
 /*utils.c*/
@@ -200,10 +199,7 @@ int			ft_isalnum(int c);
 char		*ft_strcpy(char *dest, char *src);
 
 /*utils5.c*/
-int			check_char(t_lexer **lexer, char *str);
 int			ft_check_all_quotes(char *str);
-
-/*check_error.c*/
 int			check_token_error(t_lexer **lexer);
 
 #endif

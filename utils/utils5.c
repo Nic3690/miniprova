@@ -6,46 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:40:08 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 18:38:21 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/17 17:19:49 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// int	pipe_counter(t_lexer **lexer)
-// {
-// 	int		i;
-// 	t_lexer	*head;
-
-// 	i = 1;
-// 	head = *lexer;
-// 	while (*lexer)
-// 	{
-// 		if (ft_strcmp((*lexer)->token, "|") == 0)
-// 			i++;
-// 		*lexer = (*lexer)->next;
-// 	}
-// 	*lexer = head;
-// 	return (i);
-// }
-
-int	check_char(t_lexer **lexer, char *str)
-{
-	t_lexer	*head;
-
-	head = *lexer;
-	while (*lexer)
-	{
-		if ((*lexer)->token && ft_strcmp((*lexer)->token, str) == 0)
-		{
-			*lexer = head;
-			return (1);
-		}
-		(*lexer) = (*lexer)->next;
-	}
-	*lexer = head;
-	return (0);
-}
 
 int	ft_check_all_quotes(char *str)
 {
@@ -58,5 +23,28 @@ int	ft_check_all_quotes(char *str)
 			return (1);
 		i++;
 	}
+	return (0);
+}
+
+int	check_token_error(t_lexer **lexer)
+{
+	t_lexer	*head;
+
+	head = *lexer;
+	if (ft_strcmp((*lexer)->token, "|") == 0)
+		return (printf("syntax error near unexpected token '|'\n"));
+	if ((*lexer)->token && !(*lexer)->next)
+		return (printf("syntax error near unexpected token 'newline'\n"));
+	while (*lexer)
+	{
+		if ((*lexer)->next && (*lexer)->token && (*lexer)->next->token)
+		{
+			printf("syntax error near unexpected token '%s'\n", (*lexer)->token);
+			*lexer = head;
+			return (1);
+		}
+		*lexer = (*lexer)->next;
+	}
+	*lexer = head;
 	return (0);
 }

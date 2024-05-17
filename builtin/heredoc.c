@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:53:05 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 18:38:27 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/17 17:23:15 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,47 +68,22 @@ void	readline_heredoc(char *str, t_lexer **lexer)
 	}
 }
 
-void	redirection_heredoc(t_lexer **lexer, t_env *env, char **envp)
-{
-	t_lexer	*start;
-	char	**temp;
-	int		copy;
-
-	copy = dup(STDIN_FILENO);
-	start = new_start_redirection(lexer);
-	temp = new_temp_redirection(start);
-	while (*lexer)
-	{
-		if ((*lexer)->token && ft_strcmp((*lexer)->token, "<<") == 0)
-		{
-			manage_fd_heredoc("file.txt", lexer);
-			if (manage_builtin(&start, env) != 1)
-				command_execve(temp, envp);
-			break ;
-		}
-		*lexer = (*lexer)->next;
-	}
-	unlink("file.txt");
-	dup2(copy, STDIN_FILENO);
-	close(copy);
-	ft_free(temp);
-	ft_free_lexer(&start);
-}
-
-void	manage_fd_heredoc(char *file_name, t_lexer **lexer)
+int	redirection_heredoc(t_lexer **start)
 {
 	int		fd;
 
-	fd = open(file_name, O_CREAT | O_RDWR, 0664);
+	fd = open("prova.txt", O_CREAT | O_RDWR, 0664);
 	if (fd < 0)
-		return (perror("minishell: redir_in: error while opening the file\n"));
-	write(fd, (*lexer)->next->str, ft_strlen((*lexer)->next->str));
+		perror("minishell: redir_in: error while opening the file\n");
+	write(fd, (*start)->next->str, ft_strlen((*start)->next->str));
 	close(fd);
-	fd = open(file_name, O_RDONLY);
+	fd = open("prova.txt", O_RDONLY);
 	if (fd < 0)
-		return (perror("minishell: redir_in: error while opening the file\n"));
+		perror("minishell: redir_in: error while opening the file\n");
 	dup2(fd, STDIN_FILENO);
 	close(fd);
+	unlink("prova.txt");
+	return (fd);
 }
 
 char	*ft_strjoin_heredoc(char *s1, char *s2)

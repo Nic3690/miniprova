@@ -6,40 +6,27 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 19:16:54 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/17 22:18:09 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	command_execve(char **temp, char **envp)
+int	command_execve(char **temp, char **envp)
 {
-	pid_t	pid;
 	char	path[1024];
 
-	pid = fork();
-	signal(SIGINT, handle_child);
-	signal(SIGQUIT, handle_child);
-	// for (int i = 0; temp[i]; i++)
-	// 	printf("------- %s\n", temp[i]);
-	if (pid == 0)
+	if (find_command(*temp, path) != 0)
 	{
-		if (find_command(*temp, path) != 0)
-		{
-			printf ("Command not found: %s\n", *temp);
-			exit(EXIT_FAILURE);
-		}
-		execve(path, temp, envp);
+		printf ("Command not found: %s\n", *temp);
+		exit(EXIT_FAILURE);
+	}
+	if (execve(path, temp, envp) == -1)
+	{
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
-	else if (pid > 0)
-		waitpid(pid, &g_exit_code, 0);
-	else
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
+	exit(EXIT_SUCCESS);
 }
 
 int	execute_command(char *path_env, char *command, char *path, int len)

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 19:07:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 15:17:07 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/17 22:13:32 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_lexer	*new_start_redirection(t_lexer **lexer)
 
 	head = *lexer;
 	start = NULL;
-	while (!ft_check_token((*lexer)->token) && *lexer && (*lexer)->next)
+	while (*lexer && !ft_check_token((*lexer)->token))
 	{
 		ft_lstadd_back(&start, ft_lstnew(ft_strdup((*lexer)->str), NULL));
 		*lexer = (*lexer)->next;

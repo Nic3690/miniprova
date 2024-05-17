@@ -6,153 +6,100 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:46:54 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 20:54:58 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/17 21:29:48 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	manage_redirections(t_lexer **lexer, t_env *env, char **envp)
+void print_fd_status(int fd)
 {
-	int		fd;
-	t_lexer	*head;
+    int flags = fcntl(fd, F_GETFL);
+    if (flags == -1) {
+        perror("fcntl");
+        return;
+    }
 
-	fd = 0;
-	head = *lexer;
-	while (*lexer)
-	{
-		if (ft_check_token((*lexer)->token) && ft_strcmp((*lexer)->token, "|"))
-		{
-			if (count_lexer(lexer) > 2)
-			{
-				printf ("%s: %s: No such file or directory\n",
-					head->str, (*lexer)->next->str);
-				return ;
-			}
-			if (count_lexer(lexer) == 0)
-			{
-				printf ("zsh: parse error near '\\n'\n");
-				return ;
-			}
-		}
-		*lexer = (*lexer)->next;
-	}
-	*lexer = head;
-	exec_redirection(lexer, env, envp, fd);
+    printf("File descriptor %d status:\n", fd);
+    printf("O_RDONLY: %s\n", (flags & O_RDONLY) ? "Yes" : "No");
+    printf("O_WRONLY: %s\n", (flags & O_WRONLY) ? "Yes" : "No");
+    printf("O_RDWR: %s\n", (flags & O_RDWR) ? "Yes" : "No");
+    printf("FD_CLOEXEC: %s\n", (flags & FD_CLOEXEC) ? "Yes" : "No");
+    // Add more flags as needed
+
+    printf("\n");
 }
 
-void	exec_redirection(t_lexer **lexer, t_env *env, char **envp, int fd)
+void	manage_redirections(t_lexer **start, t_fd *fd, int process)
 {
 	t_lexer	*head;
-	int		copy;
+	int		fd_in;
+	int		fd_out;
 
-	head = *lexer;
-	if (check_char(lexer, ">"))
+	head = *start;
+	fd_out = 0;
+	fd_in = 0;
+	while (*start)
 	{
-		copy = dup(STDOUT_FILENO);
-		redirection_out(lexer, env, envp, fd);
-		*lexer = head;
-		dup2(copy, STDOUT_FILENO);
-		close(copy);
+		if ((*start)->token && ft_strcmp((*start)->token, ">") == 0)
+			fd_out = redirection_out(start, fd);
+		else if ((*start)->token && ft_strcmp((*start)->token, "<") == 0)
+			fd_in = redirection_in(start);
+		else if ((*start)->token && ft_strcmp((*start)->token, ">>") == 0)
+			fd_out = red_append(start, fd);
+		else if ((*start)->token && ft_strcmp((*start)->token, "<<") == 0)
+			fd_in = redirection_heredoc(start);
+		*start = (*start)->next;
 	}
-	if (check_char(lexer, "<"))
-	{
-		redirection_in(lexer, env, envp, fd);
-		*lexer = head;
-	}
-	if (check_char(lexer, ">>"))
-	{
-		red_append(lexer, env, envp, fd);
-		*lexer = head;
-	}
-	if (check_char(lexer, "<<"))
-	{
-		redirection_heredoc(lexer, env, envp);
-		*lexer = head;
-	}
+	*start = head;
+	if (fd_out == 0 && process != 0)
+		free_fd(fd, fd_in);
 }
 
-void	redirection_out(t_lexer **lexer, t_env *env, char **envp, int fd)
+int	redirection_out(t_lexer **start, t_fd *fd)
 {
-	t_lexer	*start;
-	char	**temp;
+	int		fd_out;
 
-	start = new_start_redirection(lexer);
-	temp = new_temp_redirection(start);
-	while (*lexer)
-	{
-		if ((*lexer)->token && ft_strcmp((*lexer)->token, ">") == 0)
-		{
-			fd = open((*lexer)->next->str, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-			if (fd < 0)
-				return (perror("redir_out: error while opening the file\n"));
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-		*lexer = (*lexer)->next;
-	}
-	if (manage_builtin(&start, env) != 1)
-		command_execve(temp, envp);
-	ft_free(temp);
-	ft_free_lexer(&start);
+	fd_out = open((*start)->next->str, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	if (fd_out < 0)
+		perror("redir_out: error while opening the file\n");
+	dup2(fd_out, STDOUT_FILENO);
+	close(fd_out);
+	dup2(fd->temp, STDIN_FILENO);
+	close(fd->temp);
+	return (1);
 }
 
-void	redirection_in(t_lexer **lexer, t_env *env, char **envp, int fd)
+int	redirection_in(t_lexer **start)
 {
-	t_lexer	*start;
-	char	**temp;
-	int		copy;
+	int		fd_in;
 
-	copy = dup(STDIN_FILENO);
-	start = new_start_redirection(lexer);
-	temp = new_temp_redirection(start);
-	while (*lexer)
-	{
-		copy = dup(STDOUT_FILENO);
-		if ((*lexer)->token && ft_strcmp((*lexer)->token, "<") == 0)
-		{
-			fd = open((*lexer)->next->str, O_RDONLY);
-			if (fd < 0)
-				return (perror("redir_in: error while opening the file\n"));
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-			if (manage_builtin(&start, env) != 1)
-				command_execve(temp, envp);
-			dup2(copy, STDIN_FILENO);
-			close(copy);
-		}
-		*lexer = (*lexer)->next;
-	}
-	ft_free(temp);
-	ft_free_lexer(&start);
+	fd_in = open((*start)->next->str, O_RDONLY);
+	if (fd_in < 0)
+		perror("redir_in: error while opening the file\n");
+	dup2(fd_in, STDIN_FILENO);
+	close(fd_in);
+	return (fd_in);
 }
 
-void	red_append(t_lexer **lexer, t_env *env, char **envp, int fd)
+int	red_append(t_lexer **start, t_fd *fd)
 {
-	t_lexer	*start;
-	int		copy;
-	char	**temp;
+	int		fd_out;
 
-	copy = dup(STDOUT_FILENO);
-	start = new_start_redirection(lexer);
-	temp = new_temp_redirection(start);
-	while (*lexer)
-	{
-		copy = dup(STDOUT_FILENO);
-		if ((*lexer)->token && ft_strcmp((*lexer)->token, ">>") == 0)
-		{
-			fd = open((*lexer)->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (fd < 0)
-				return (perror("redir_append: error while opening the file\n"));
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-		*lexer = (*lexer)->next;
-	}
-	if (manage_builtin(&start, env) != 1)
-		command_execve(temp, envp);
-	dup2(copy, STDOUT_FILENO);
-	close(copy);
-	ft_free(temp);
-	ft_free_lexer(&start);
+	fd_out = open((*start)->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd_out < 0)
+		perror("redir_append: error while opening the file\n");
+	dup2(fd_out, STDOUT_FILENO);
+	close(fd_out);
+	dup2(fd->temp, STDIN_FILENO);
+	close(fd->temp);
+	return (1);
+}
+
+void	free_fd(t_fd *fd, int fd_in)
+{
+	dup2(fd->fd[1], STDOUT_FILENO);
+	close(fd->fd[0]);
+	dup2(fd->temp, fd_in);
+	close(fd->temp);
 }

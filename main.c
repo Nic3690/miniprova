@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 21:52:44 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/17 20:39:04 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,17 @@ void	reading(t_env *env, char **envp)
 		dup2(copy, STDIN_FILENO);
 		input = readline(prompt);
 		if (input == NULL)
-		{
-			free(input);
 			break ;
-		}
 		if (*input)
 		{
-			add_history(input);
 			str = ft_strdup(input);
+			add_history(input);
 			parser(str, env, envp);
 			free(str);
-			free(input);
 		}
+		free(input);
+		close(copy);
 	}
-	close(copy);
 }
 
 int	main(int argc, char **argv, char **envp)
