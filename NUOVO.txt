@@ -1,13 +1,3 @@
 > file2.txt > file3.txt echo 123 345 | echo > ls | wc
 
-
-minishell> echo 132 > <
-zsh: parse error near '\n'
-
-minishell> echo 132 > <<
-zsh: parse error near '\n'
-
-minishell> echo 132 > | 
-[1]    85714 segmentation fault (core dumped)  ./minishell
-
 GESTISCI CAT | CAT | LS

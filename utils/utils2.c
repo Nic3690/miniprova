@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:04:24 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 18:46:08 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/17 22:58:27 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	ft_strlen(char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		return (1);
 	while (str[i])
 		i++;
 	return (i);

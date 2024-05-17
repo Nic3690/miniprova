@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:53:05 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/17 17:23:15 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/17 23:10:23 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	manage_heredoc(t_lexer **lexer)
 			readline_heredoc(str, lexer);
 			temp = ft_strdup((*lexer)->next->str);
 			free((*lexer)->next->str);
-			(*lexer)->next->str = ft_strjoin(temp, "\n");
+			(*lexer)->next->str = ft_strjoin_heredoc(temp, "");
 			free(temp);
 		}
 		*lexer = (*lexer)->next;
@@ -72,6 +72,7 @@ int	redirection_heredoc(t_lexer **start)
 {
 	int		fd;
 
+	// print_lexer(start);
 	fd = open("prova.txt", O_CREAT | O_RDWR, 0664);
 	if (fd < 0)
 		perror("minishell: redir_in: error while opening the file\n");
@@ -94,20 +95,20 @@ char	*ft_strjoin_heredoc(char *s1, char *s2)
 
 	i = 0;
 	n = 0;
-	if (!s1 || !s2)
+	if (!s2)
 		return (0);
 	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 2) * sizeof(char));
 	if (!str)
 		return (0);
-	while (s1[i] != '\0')
+	while (s1 && s1[i] != '\0')
 	{
 		str[i] = s1[i];
 		i++;
 	}
-	if (s1 == NULL)
-		str[i++] = '\n';
 	while (s2[n] != '\0')
 		str[i++] = s2[n++];
+	if (*s2)
+		str[i++] = '\n';
 	str[i] = '\0';
 	return (str);
 }
