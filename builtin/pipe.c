@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/17 23:35:14 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 12:15:39 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	split_command(t_lexer **lexer, t_env *env, char **envp)
 		ft_free_lexer(&start);
 	}
 	close(fd->temp);
-	close(fd->fd[1]);
 	free(fd);
 	*lexer = head;
 }
@@ -62,7 +61,16 @@ void set_fork(t_lexer **start, t_fd *fd, t_env *env, char **envp)
         exit(EXIT_FAILURE);
     }
     if (fd->pid == 0)
+	{
+		close(fd->fd[0]);
+		if (dup2(fd->fd[1], STDOUT_FILENO) == -1)
+        {
+            perror("dup2");
+            exit(EXIT_FAILURE);
+        }
+		close(fd->fd[1]);
         child(start, fd, env, envp);
+	}
     else
 	{
 		close(fd->temp);
@@ -82,10 +90,11 @@ void	child(t_lexer **start, t_fd *fd, t_env *env, char **envp)
 		manage_redirections(start, fd, 1);
 	else
 	{
-		dup2(fd->fd[1], STDOUT_FILENO);
-		close(fd->fd[0]);
 		dup2(fd->temp, STDIN_FILENO);
 		close(fd->temp);
+		dup2(fd->fd[1], STDOUT_FILENO);
+		close(fd->fd[1]);
+		close(fd->fd[0]);
 	}
 	if (manage_builtin(start, env) != 1)
 		command_execve(temp, envp);
@@ -126,7 +135,10 @@ void	last_command(t_lexer **start, t_fd *fd, t_env *env, char **envp)
 	}
 	else
 	{
-		while (waitpid(-1, &g_exit_code, 0) != -1)
+		close(fd->fd[0]);
+        close(fd->fd[1]);
+        close(fd->temp);
+		while (waitpid(-1, &g_exit_code, WUNTRACED) != -1)
 			;
 		if (ft_strcmp((*start)->str, "exit") == 0)
 			exit(g_exit_code);

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/17 22:35:59 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 12:14:58 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,68 +23,18 @@ void	parser(char *str, t_env *env, char **envp)
 	temp = ft_split(str, ' ');
 	find_quotes(temp);
 	lexer = ft_list(temp);
+	// print_lexer(&lexer);
 	if (check_token_error(&lexer) == 0)
 	{
-		manage_string(&lexer);
 		init_prev(&lexer);
 		parser_env(&lexer, env);
 		remove_all_quotes(&lexer);
 		manage_heredoc(&lexer);
-		// print_lexer(&lexer);
 		split_command(&lexer, env, envp);
 		lexer = reset_head(lexer);
 	}
 	ft_free(temp);
 	ft_free_lexer(&lexer);
-}
-
-void	manage_string(t_lexer **lexer)
-{
-    t_lexer	*head;
-
-    head = *lexer;
-    while (*lexer && (*lexer)->next)
-	{
-        if (((*lexer)->str && count_quotes((*lexer)->str, '\'') == 1)
-			|| ((*lexer)->str && ft_strchr((*lexer)->str, '"'))
-			|| ((*lexer)->token && count_quotes((*lexer)->token, '\'') == 1)
-			|| ((*lexer)->token && ft_strchr((*lexer)->token, '"'))) {
-            join_string(*lexer);
-            if (((*lexer)->str && count_quotes((*lexer)->str, '"') == 2 && (*lexer)->next != NULL)
-                || ((*lexer)->str && count_quotes((*lexer)->str, '\'') == 2 && (*lexer)->next != NULL)) {
-                *lexer = (*lexer)->next;
-            }
-        } else {
-            *lexer = (*lexer)->next;
-        }
-    }
-    *lexer = head;
-}
-
-void	join_string(t_lexer *lexer)
-{
-	t_lexer	*temp;
-	char	*temp_str;
-	char	*string_one;
-	char	*string_two;
-
-	temp_str = ft_strdup(lexer->str);
-	if (ft_strlen(lexer->str) > 0)
-		string_one = temp_str;
-	else
-		string_one = lexer->token;
-	if (ft_strlen(lexer->next->str) > 0)
-		string_two = lexer->next->str;
-	else
-		string_two = lexer->next->token;
-	free(lexer->str);
-	lexer->str = ft_strjoin(string_one, string_two);
-	free(temp_str);
-	temp = lexer->next->next;
-	free(lexer->next->str);
-	free(lexer->next->token);
-	free(lexer->next);
-	lexer->next = temp;
 }
 
 t_lexer	*reset_head(t_lexer *lexer)

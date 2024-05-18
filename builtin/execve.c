@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/17 23:33:36 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 12:17:09 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,11 @@ void	check_echo(t_lexer *lexer)
 	{
 		if (lexer->str)
 			printf ("%s ", lexer->str);
-		if (lexer->token)
-			printf ("%s ", lexer->token);
 	}
 	else
 	{
 		if (lexer->str)
 			printf ("%s", lexer->str);
-		if (lexer->token)
-			printf ("%s", lexer->token);
 	}
 }
 

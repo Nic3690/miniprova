@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 13:53:40 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 20:13:32 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 12:18:05 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,12 @@ int	builtin_echo(t_lexer **lexer)
 			flag = 0;
 			*lexer = (*lexer)->next;
 		}
-		while (*lexer && (*lexer)->next)
+		while (*lexer && (*lexer)->next && !(*lexer)->token)
 		{
 			check_echo(*lexer);
 			*lexer = (*lexer)->next;
 		}
-		if (*lexer)
+		if (*lexer && !(*lexer)->token)
 			check_echo(*lexer);
 		if (flag)
 			printf ("\n");

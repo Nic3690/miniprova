@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:04:24 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/17 22:58:27 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 12:15:16 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,16 +86,23 @@ char	**ft_split(char *s, char c)
 	char	**ret;
 	size_t	i;
 	size_t	len;
+	int		quotes;
 	
 	i = 0;
+	quotes = 0;
 	ret = ft_calloc(10000, sizeof(char *));
 	while (*s)
 	{
-		if (*s != c)
+		if (*s != c || quotes)
 		{
+
 			len = 0;
-			while (*s && (*s != c) && ++len)
+			while (*s && (*s != c || quotes) && ++len)
+			{
+				if (*s == '\"')
+					quotes = !quotes;
 				++s;
+			}
 			ret[i++] = ft_substr(s - len, 0, len);
 		}
 		else

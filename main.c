@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/17 20:39:04 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 11:13:53 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@ void	reading(t_env *env, char **envp)
 	int			copy;
 	const char	*prompt;
 
-	setup_signals();
 	prompt = "\e[0;35mminishell> \e[0m";
 	copy = dup(STDIN_FILENO);
 	while (1)
 	{
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
 		dup2(copy, STDIN_FILENO);
 		input = readline(prompt);
 		if (input == NULL)
