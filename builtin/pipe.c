@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 13:15:34 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 14:28:39 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void	last_command(t_lexer **start, t_fd *fd, t_env *env, char **envp)
 		if (manage_builtin(start, env) != 1)
 			command_execve(temp, envp);
 		else
-			exit(EXIT_SUCCESS);
+			exit(g_exit_code);
 	}
 	else
 	{

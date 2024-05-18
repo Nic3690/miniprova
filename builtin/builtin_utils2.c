@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 19:07:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 14:12:25 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 14:26:06 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void	init_prev(t_lexer **lexer)
 		(*lexer)->next->prev = *lexer;
 		*lexer = (*lexer)->next;
 	}
-	print_lexer(lexer);
 	*lexer = head;
 }
 
