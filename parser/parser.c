@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 12:14:58 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 14:13:33 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,52 @@ void	parser(char *str, t_env *env, char **envp)
 	temp = ft_split(str, ' ');
 	find_quotes(temp);
 	lexer = ft_list(temp);
-	// print_lexer(&lexer);
+	init_prev(&lexer);
+	move_redirection(&lexer);
 	if (check_token_error(&lexer) == 0)
 	{
-		init_prev(&lexer);
 		parser_env(&lexer, env);
 		remove_all_quotes(&lexer);
 		manage_heredoc(&lexer);
-		split_command(&lexer, env, envp);
+		if (ft_strcmp(lexer->str, "export") == 0 || ft_strcmp(lexer->str, "unset") == 0)
+			manage_builtin(&lexer, env);
+		else
+			split_command(&lexer, env, envp);
 		lexer = reset_head(lexer);
 	}
 	ft_free(temp);
 	ft_free_lexer(&lexer);
+}
+
+void	move_redirection(t_lexer **lexer)
+{
+	t_lexer	*current;
+	t_lexer	*redirection;
+	t_lexer	*next_node;
+	t_lexer	*to_save;
+
+    if (!(*lexer)->next)
+        return ;
+    current = *lexer;
+	if (((*lexer)->next && (*lexer)->next->token) || !(*lexer)->next->next)
+		return ;
+    if (ft_check_token(current->token))
+	{
+        while (current->next != NULL)
+            current = current->next;
+        redirection = *lexer;
+		to_save = current->next;
+        next_node = redirection->next;
+        *lexer = next_node->next;
+        if (current->prev != NULL)
+            current->next = redirection;
+        redirection->prev = current;
+        if (to_save == NULL)
+            redirection->next->next = NULL;
+        else
+            redirection->next->next = to_save;
+    }
+	init_prev(lexer);
 }
 
 t_lexer	*reset_head(t_lexer *lexer)
@@ -49,6 +83,8 @@ int	check_spaces(char *str)
 	int	i;
 
 	i = 0;
+	if (!*str)
+		return (1);
 	while (str[i])
 	{
 		if (str[i] != ' ' && str[i] != '\t')

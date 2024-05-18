@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/17 21:32:15 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 13:24:47 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,7 @@ void		ft_free(char **temp);
 
 /*parser*/
 void		parser(char *str, t_env *env, char **envp);
-void		manage_string(t_lexer **lexer);
-char		*create_temp_string(t_lexer *lexer);
-void		concatenate_strings(t_lexer *lexer, char *string_one, char *string_two);
-void		swap_nodes_lexer(t_lexer **head, t_lexer *prev, t_lexer *current, t_lexer *next);
-void join_string(t_lexer *lexer);
+void		move_redirection(t_lexer **lexer);
 t_lexer		*reset_head(t_lexer *lexer);
 int			check_spaces(char *str);
 void		print_lexer(t_lexer **lexer);

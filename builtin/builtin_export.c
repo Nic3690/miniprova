@@ -6,24 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:10:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/14 11:50:02 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 12:43:53 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// void	print_env(t_env *env)
-// {
-// 	t_env	*head;
-
-// 	head = env;
-// 	while (env)
-// 	{
-// 		printf("%s ----- %s\n", env->key, env->value);
-// 		env = env->next;
-// 	}
-// 	env = head;
-// }
 
 int	builtin_export(t_lexer **lexer, t_env *env)
 {

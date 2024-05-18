@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:40:08 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/17 17:19:49 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 14:15:29 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	check_token_error(t_lexer **lexer)
 	if (ft_strcmp((*lexer)->token, "|") == 0)
 		return (printf("syntax error near unexpected token '|'\n"));
 	if ((*lexer)->token && !(*lexer)->next)
+		return (printf("syntax error near unexpected token 'newline'\n"));
+	if ((*lexer)->str && (*lexer)->next && (*lexer)->next->token && !(*lexer)->next->next)
 		return (printf("syntax error near unexpected token 'newline'\n"));
 	while (*lexer)
 	{

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 12:15:39 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 13:15:34 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void	last_command(t_lexer **start, t_fd *fd, t_env *env, char **envp)
 		while (waitpid(-1, &g_exit_code, WUNTRACED) != -1)
 			;
 		if (ft_strcmp((*start)->str, "exit") == 0)
-			exit(g_exit_code);
+			ft_exit(*start, env);
 		close(fd->temp);
 		fd->temp = dup(0);
 	}

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:40:32 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 13:58:04 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 12:29:58 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@ int	ft_exit(t_lexer *lexer, t_env *env)
 {
 	if (ft_strcmp(lexer->str, "exit") == 0)
 	{
+		if (lexer->next)
+		{
+			ft_free_env(env);
+			ft_free_lexer(&lexer);
+			exit(200);
+		}
 		ft_free_env(env);
 		ft_free_lexer(&lexer);
 		exit(0);
