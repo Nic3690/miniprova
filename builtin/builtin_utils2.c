@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 19:07:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 14:26:06 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 14:54:02 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,4 @@ void	init_prev(t_lexer **lexer)
 		*lexer = (*lexer)->next;
 	}
 	*lexer = head;
-}
-
-char	*copy_var_value(char *write, char *var_value)
-{
-	if (var_value)
-	{
-		ft_strcpy(write, var_value);
-		return (write + ft_strlen(var_value));
-	}
-	return (write);
 }

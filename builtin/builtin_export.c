@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:10:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 12:43:53 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 15:18:58 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,48 +67,4 @@ void	find_value_env(t_env *env, char *temp_key, char *temp_value)
 		new_node_env(index, env, temp_value);
 	else
 		ft_lstadd_back_env(&temp_env, ft_list_env(temp_key, temp_value));
-}
-
-void	swap_nodes(t_env **head, t_env *prev, t_env *current, t_env *next)
-{
-	if (prev != NULL)
-		prev->next = next;
-	else
-		*head = next;
-	current->next = next->next;
-	next->next = current;
-}
-
-void	bubble_sort_export(t_env **head)
-{
-	int		swapped;
-	t_env	*prev;
-	t_env	*current;
-	t_env	*temp;
-
-	prev = NULL;
-	swapped = 1;
-	current = *head;
-	temp = NULL;
-	while (swapped)
-	{
-		swapped = 0;
-		prev = NULL;
-		current = *head;
-		while (current != NULL && current->next != NULL)
-		{
-			if (ft_strcmp(current->key, current->next->key) > 0)
-			{
-				temp = current->next;
-				swap_nodes(head, prev, current, temp);
-				prev = temp;
-				swapped = 1;
-			}
-			else
-			{
-				prev = current;
-				current = current->next;
-			}
-		}
-	}
 }

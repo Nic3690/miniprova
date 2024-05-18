@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:53:05 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/17 23:10:23 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 15:35:54 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ void	readline_heredoc(char *str, t_lexer **lexer)
 				temp = NULL;
 			}
 		}
-		if (temp != NULL)
-			free(temp);
 	}
 }
 
@@ -72,7 +70,6 @@ int	redirection_heredoc(t_lexer **start)
 {
 	int		fd;
 
-	// print_lexer(start);
 	fd = open("prova.txt", O_CREAT | O_RDWR, 0664);
 	if (fd < 0)
 		perror("minishell: redir_in: error while opening the file\n");

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:42:26 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/17 17:26:13 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 14:53:13 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,36 +29,6 @@ t_lexer	*new_start(t_lexer **lexer)
 	}
 	*lexer = head;
 	return (start);
-}
-
-char	**new_temp(t_lexer *start)
-{
-	t_lexer	*head;
-	char	**temp;
-	int		i;
-	int		count;
-
-	count = 0;
-	head = start;
-	i = 0;
-	while (start)
-	{
-		count++;
-		start = start->next;
-	}
-	temp = malloc(sizeof(char *) * (count + 1));
-	if (!temp)
-		return (0);
-	start = head;
-	while (start)
-	{
-		if (start->str != NULL)
-			temp[i++] = ft_strdup(start->str);
-		start = start->next;
-	}
-	temp[i] = NULL;
-	start = head;
-	return (temp);
 }
 
 char	**new_full_temp(t_lexer **lexer)

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:07:16 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 14:38:37 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 15:56:34 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	parser(char *str, t_env *env, char **envp)
 	lexer = NULL;
 	if (check_spaces(str) == 0)
 		return ;
-	temp = ft_split(str, ' ');
+	temp = ft_split(str);
 	find_quotes(temp);
 	lexer = ft_list(temp);
 	init_prev(&lexer);
@@ -41,6 +41,15 @@ void	parser(char *str, t_env *env, char **envp)
 	ft_free_lexer(&lexer);
 }
 
+int	check_nodes(t_lexer **lexer)
+{
+	if (!(*lexer)->next)
+        return (1);
+	if (((*lexer)->next && (*lexer)->next->token) || !(*lexer)->next->next)
+		return (1);
+	return (0);
+}
+
 void	move_redirection(t_lexer **lexer)
 {
 	t_lexer	*current;
@@ -48,11 +57,9 @@ void	move_redirection(t_lexer **lexer)
 	t_lexer	*next_node;
 	t_lexer	*to_save;
 
-    if (!(*lexer)->next)
-        return ;
-    current = *lexer;
-	if (((*lexer)->next && (*lexer)->next->token) || !(*lexer)->next->next)
+	if (check_nodes(lexer) == 1)
 		return ;
+    current = *lexer;
     if (ft_check_token(current->token))
 	{
         while (current->next != NULL)
@@ -71,7 +78,7 @@ void	move_redirection(t_lexer **lexer)
     }
 	init_prev(lexer);
 }
-
+	
 t_lexer	*reset_head(t_lexer *lexer)
 {
 	while (lexer->prev)

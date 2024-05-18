@@ -6,23 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:04:24 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 14:35:17 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 15:42:41 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	ft_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (1);
-	while (str[i])
-		i++;
-	return (i);
-}
 
 char	*ft_superlen(int len, int len2)
 {
@@ -81,25 +69,30 @@ int	get_word(char *s, char c)
 	return (ret);
 }
 
-char	**ft_split(char *s, char c)
+char	**ft_split(char *s)
 {
-	char	**ret;
-	size_t	i;
-	size_t	len;
 	int		quotes_one;
 	int		quotes_two;
+	size_t	i;
 	
 	i = 0;
 	quotes_one = 0;
 	quotes_two = 0;
+	return (ft_split_quotes(s, quotes_one, quotes_two, i));
+}
+
+char	**ft_split_quotes(char *s, int quotes_one, int quotes_two, size_t i)
+{
+	char	**ret;
+	size_t	len;
+	
 	ret = ft_calloc(10000, sizeof(char *));
 	while (*s)
 	{
-		if (*s != c || quotes_one || quotes_two)
+		if (*s != ' ' || quotes_one || quotes_two)
 		{
-
 			len = 0;
-			while (*s && (*s != c || quotes_one || quotes_two) && ++len)
+			while (*s && (*s != ' ' || quotes_one || quotes_two) && ++len)
 			{
 				if (*s == '\"')
 					quotes_two = !quotes_two;

@@ -6,27 +6,32 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 14:28:39 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 16:14:41 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	split_command(t_lexer **lexer, t_env *env, char **envp)
+t_fd	*init_fd(void)
 {
     t_fd	*fd;
-	t_lexer	*start;
-	t_lexer	*head;
 
 	fd = malloc(sizeof(t_fd));
 	if (!fd)
-	{
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-	head = *lexer;
+		exit(EXIT_FAILURE);
 	fd->temp = dup(0);
 	fd->pid = 0;
+	return (fd);
+}
+
+void	split_command(t_lexer **lexer, t_env *env, char **envp)
+{
+	t_lexer	*start;
+	t_lexer	*head;
+	t_fd	*fd;
+
+	head = *lexer;
+	fd = init_fd();
 	while (*lexer)
 	{
 		start = new_start(lexer);
@@ -48,10 +53,7 @@ void	split_command(t_lexer **lexer, t_env *env, char **envp)
 void set_fork(t_lexer **start, t_fd *fd, t_env *env, char **envp)
 {
     if (pipe(fd->fd) == -1)
-	{
-        perror("pipe");
         exit(EXIT_FAILURE);
-    }
     fd->pid = fork();
 	signal(SIGINT, handle_child);
 	signal(SIGQUIT, handle_child);
@@ -63,11 +65,7 @@ void set_fork(t_lexer **start, t_fd *fd, t_env *env, char **envp)
     if (fd->pid == 0)
 	{
 		close(fd->fd[0]);
-		if (dup2(fd->fd[1], STDOUT_FILENO) == -1)
-        {
-            perror("dup2");
-            exit(EXIT_FAILURE);
-        }
+		dup2(fd->fd[1], STDOUT_FILENO);
 		close(fd->fd[1]);
         child(start, fd, env, envp);
 	}
@@ -100,51 +98,6 @@ void	child(t_lexer **start, t_fd *fd, t_env *env, char **envp)
 		command_execve(temp, envp);
 	else
 		exit(EXIT_SUCCESS);
-	ft_free(temp);
-	ft_free_lexer(&command);
-}
-
-void	last_command(t_lexer **start, t_fd *fd, t_env *env, char **envp)
-{
-	char	**temp;
-	t_lexer *command;
-
-	command = new_start_redirection(start);
-	temp = new_temp_redirection(command);
-	fd->pid = fork();
-	signal(SIGINT, handle_child);
-	signal(SIGQUIT, handle_child);
-	if (fd->pid == -1)
-	{
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
-	if (fd->pid == 0)
-	{
-		if (check_redirection(start))
-			manage_redirections(start, fd, 0);
-		else
-		{
-			dup2(fd->temp, STDIN_FILENO);
-			close(fd->temp);
-		}
-		if (manage_builtin(start, env) != 1)
-			command_execve(temp, envp);
-		else
-			exit(g_exit_code);
-	}
-	else
-	{
-		close(fd->fd[0]);
-        close(fd->fd[1]);
-        close(fd->temp);
-		while (waitpid(-1, &g_exit_code, WUNTRACED) != -1)
-			;
-		if (ft_strcmp((*start)->str, "exit") == 0)
-			ft_exit(*start, env);
-		close(fd->temp);
-		fd->temp = dup(0);
-	}
 	ft_free(temp);
 	ft_free_lexer(&command);
 }

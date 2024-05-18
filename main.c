@@ -6,13 +6,35 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 11:13:53 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 15:34:29 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
 
 int	g_exit_code;
+
+void	handle_sigint(int signal)
+{
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	g_exit_code = signal;
+}
+
+void	handle_child(int signal)
+{
+	write (STDOUT_FILENO, "\n", 1);
+	g_exit_code = signal;
+	signal = 130;
+}
+
+void	handle_sigign(void)
+{
+	write (STDOUT_FILENO, "\n", 1);
+	g_exit_code = 131;
+}
 
 void	reading(t_env *env, char **envp)
 {

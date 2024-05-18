@@ -6,29 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:46:54 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 12:11:45 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 14:54:46 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void print_fd_status(int fd)
-{
-    int flags = fcntl(fd, F_GETFL);
-    if (flags == -1) {
-        perror("fcntl");
-        return;
-    }
-
-    printf("File descriptor %d status:\n", fd);
-    printf("O_RDONLY: %s\n", (flags & O_RDONLY) ? "Yes" : "No");
-    printf("O_WRONLY: %s\n", (flags & O_WRONLY) ? "Yes" : "No");
-    printf("O_RDWR: %s\n", (flags & O_RDWR) ? "Yes" : "No");
-    printf("FD_CLOEXEC: %s\n", (flags & FD_CLOEXEC) ? "Yes" : "No");
-    // Add more flags as needed
-
-    printf("\n");
-}
 
 void	manage_redirections(t_lexer **start, t_fd *fd, int process)
 {
@@ -36,7 +18,6 @@ void	manage_redirections(t_lexer **start, t_fd *fd, int process)
 	int		fd_in;
 	int		fd_out;
 
-	// print_lexer(start);
 	head = *start;
 	fd_out = 0;
 	fd_in = 0;

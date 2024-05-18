@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 12:55:48 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/18 15:26:46 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,12 @@
 int	command_execve(char **temp, char **envp)
 {
 	char	path[1024];
+	char	*path_env;
 
-	if (find_command(*temp, path) != 0)
+	path_env = getenv("PATH");
+	if (!path_env)
+		return (-1);
+	if (find_command(*temp, path, path_env) != 0)
 	{
 		printf ("Command not found: %s\n", *temp);
 		exit(EXIT_FAILURE);
@@ -48,9 +52,8 @@ int	execute_command(char *path_env, char *command, char *path, int len)
 	return (0);
 }
 
-int	find_command(char *command, char *path)
+int	find_command(char *command, char *path, char *path_env)
 {
-	char	*path_env;
 	char	*end;
 	int		len;
 
@@ -59,9 +62,6 @@ int	find_command(char *command, char *path)
 		execute_command("", command, path, 0);
 		return (0);
 	}
-	path_env = getenv("PATH");
-	if (!path_env)
-		return (-1);
 	while (path_env)
 	{
 		end = ft_strchr(path_env, ':');
