@@ -6,7 +6,7 @@
 #    By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/26 15:17:34 by nfurlani          #+#    #+#              #
-#    Updated: 2024/05/18 16:15:48 by nfurlani         ###   ########.fr        #
+#    Updated: 2024/05/19 17:23:23 by nfurlani         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,10 +14,9 @@ NAME		=	minishell
 
 CC			=	gcc -g -o
 
-CFLAGS		=	-Werror -Wall -Wextra -fsanitize=address
+CFLAGS		=	-Werror -Wall -Wextra
 
-# READLINE	=	-L/usr/include -lreadline -L$(HOME)/.brew/opt/readline/lib -I$(HOME)/.brew/opt/readline/include
-READLINE	=	-L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include -lreadline
+READLINE	=	-L/usr/include -lreadline
 
 SRCS		=	main.c \
 				parser/parser.c parser/lst_lexer.c parser/parser_env.c parser/lst_env.c parser/quotes.c \
@@ -29,9 +28,6 @@ HEADER		=	includes/
 OBJS		=	$(SRCS:.c=.o)
 
 all			:	$(NAME)
-
-export CPPFLAGS := -I/opt/homebrew/opt/readline/include
-export LDFLAGS := -L/opt/homebrew/opt/readline/lib
 
 $(NAME)		:	$(OBJS)
 				$(CC) $(CFLAGS) -I $(HEADER) $(OBJS) -o $(NAME) $(READLINE)

@@ -6,23 +6,11 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 20:54:19 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 15:42:48 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:48:36 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	ft_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (1);
-	while (str[i])
-		i++;
-	return (i);
-}
 
 void	*ft_calloc(size_t count, size_t size)
 {
@@ -80,26 +68,26 @@ void	remove_all_quotes(t_lexer **lexer)
 	*lexer = head;
 }
 
-void	check_all(int *single_q, int *double_q, char *s_read, char *s_write)
+void	check_all(int *one, int *two, char *s_read, char *s_write)
 {
 	while (*s_read)
 	{
 		if (*s_read == '\"')
 		{
-			if (!(*single_q))
-				(*double_q) = !(*double_q);
+			if (!(*one))
+				(*two) = !(*two);
 			else
 				*s_write++ = *s_read;
 		}
 		else if (*s_read == '\'')
 		{
-			if (!(*double_q))
-				(*single_q) = !(*single_q);
+			if (!(*two))
+				(*one) = !(*one);
 			else
 				*s_write++ = *s_read;
 		}
 		else if (*s_read != '\'' && *s_read != '\"')
-            *s_write++ = *s_read;
+			*s_write++ = *s_read;
 		s_read++;
 	}
 	*s_write = '\0';

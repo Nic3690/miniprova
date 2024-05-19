@@ -6,11 +6,23 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:40:08 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 14:59:17 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:50:40 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	ft_strlen(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (1);
+	while (str[i])
+		i++;
+	return (i);
+}
 
 int	ft_check_all_quotes(char *str)
 {
@@ -35,13 +47,15 @@ int	check_token_error(t_lexer **lexer)
 		return (printf("syntax error near unexpected token '|'\n"));
 	if ((*lexer)->token && !(*lexer)->next)
 		return (printf("syntax error near unexpected token 'newline'\n"));
-	if ((*lexer)->str && (*lexer)->next && (*lexer)->next->token && !(*lexer)->next->next)
+	if ((*lexer)->str && (*lexer)->next
+		&& (*lexer)->next->token && !(*lexer)->next->next)
 		return (printf("syntax error near unexpected token 'newline'\n"));
 	while (*lexer)
 	{
 		if ((*lexer)->next && (*lexer)->token && (*lexer)->next->token)
 		{
-			printf("syntax error near unexpected token '%s'\n", (*lexer)->token);
+			printf("syntax error near unexpected token '%s'\n",
+				(*lexer)->token);
 			*lexer = head;
 			return (1);
 		}

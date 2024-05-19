@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 12:16:00 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 16:03:33 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:41:33 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*expand_env_vars(char *input, t_env *env)
 	char	*result;
 	char	*point;
 	char	*temp;
-	
+
 	result = ft_calloc(1024, sizeof(char));
 	if (!result)
 		return (NULL);

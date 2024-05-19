@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:39:02 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 15:26:46 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 17:20:18 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,19 @@ int	find_command(char *command, char *path, char *path_env)
 	return (-1);
 }
 
-void	check_echo(t_lexer *lexer)
+void	print_echo(t_lexer **lexer)
 {
-	if (lexer->next)
+	t_lexer	*head;
+
+	head = *lexer;
+	while (*lexer && (*lexer)->next && !(*lexer)->token)
 	{
-		if (lexer->str)
-			printf ("%s ", lexer->str);
+		check_echo(*lexer);
+		*lexer = (*lexer)->next;
 	}
-	else
-	{
-		if (lexer->str)
-			printf ("%s", lexer->str);
-	}
+	if (*lexer && !(*lexer)->token)
+		check_echo(*lexer);
+	*lexer = head;
 }
 
 int	manage_builtin(t_lexer **lexer, t_env *env)

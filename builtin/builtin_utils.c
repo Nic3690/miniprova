@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:42:26 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 14:53:13 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:51:34 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_lexer	*new_start(t_lexer **lexer)
 
 	head = *lexer;
 	start = NULL;
-	while (*lexer && ft_strcmp((*lexer)->token, "|") != 0 && *lexer)
+	while (*lexer && ft_strcmp((*lexer)->token, "|") != 0)
 	{
 		if ((*lexer)->str)
 			ft_lstadd_back(&start, ft_lstnew(ft_strdup((*lexer)->str), NULL));
@@ -96,4 +96,18 @@ int	check_redirection(t_lexer **lexer)
 	}
 	*lexer = head;
 	return (0);
+}
+
+void	check_echo(t_lexer *lexer)
+{
+	if (lexer->next)
+	{
+		if (lexer->str)
+			printf ("%s ", lexer->str);
+	}
+	else
+	{
+		if (lexer->str)
+			printf ("%s", lexer->str);
+	}
 }

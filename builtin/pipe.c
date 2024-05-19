@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:11:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 16:14:41 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 17:21:10 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_fd	*init_fd(void)
 {
-    t_fd	*fd;
+	t_fd	*fd;
 
 	fd = malloc(sizeof(t_fd));
 	if (!fd)
@@ -50,31 +50,31 @@ void	split_command(t_lexer **lexer, t_env *env, char **envp)
 	*lexer = head;
 }
 
-void set_fork(t_lexer **start, t_fd *fd, t_env *env, char **envp)
+void	set_fork(t_lexer **start, t_fd *fd, t_env *env, char **envp)
 {
-    if (pipe(fd->fd) == -1)
-        exit(EXIT_FAILURE);
-    fd->pid = fork();
+	if (pipe(fd->fd) == -1)
+		exit(EXIT_FAILURE);
+	fd->pid = fork();
 	signal(SIGINT, handle_child);
 	signal(SIGQUIT, handle_child);
-    if (fd->pid == -1)
+	if (fd->pid == -1)
 	{
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
-    if (fd->pid == 0)
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (fd->pid == 0)
 	{
 		close(fd->fd[0]);
 		dup2(fd->fd[1], STDOUT_FILENO);
 		close(fd->fd[1]);
-        child(start, fd, env, envp);
+		child(start, fd, env, envp);
 	}
-    else
+	else
 	{
 		close(fd->temp);
 		close(fd->fd[1]);
 		fd->temp = fd->fd[0];
-    }
+	}
 }
 
 void	child(t_lexer **start, t_fd *fd, t_env *env, char **envp)

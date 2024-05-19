@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:27:09 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 16:13:51 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:49:37 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int			check_nodes(t_lexer **lexer);
 void		move_redirection(t_lexer **lexer);
 t_lexer		*reset_head(t_lexer *lexer);
 int			check_spaces(char *str);
-void		print_lexer(t_lexer **lexer);
 
 /*quotes.c*/
 void		find_quotes(char **temp);
@@ -100,7 +99,7 @@ void		string_expander(t_lexer **lexer, t_env *env, int flag, char *str);
 /*pipe.c*/
 t_fd		*init_fd(void);
 void		split_command(t_lexer **lexer, t_env *env, char **envp);
-void 		set_fork(t_lexer **start, t_fd *fd, t_env *env, char **envp);
+void		set_fork(t_lexer **start, t_fd *fd, t_env *env, char **envp);
 void		child(t_lexer **start, t_fd *fd, t_env *env, char **envp);
 
 /*last_pipe.c*/
@@ -113,6 +112,7 @@ t_lexer		*new_start(t_lexer **lexer);
 char		**new_full_temp(t_lexer **lexer);
 int			check_pipe(t_lexer **lexer);
 int			check_redirection(t_lexer **lexer);
+void		check_echo(t_lexer *lexer);
 
 /*builtin_utils2*/
 t_lexer		*new_start_redirection(t_lexer **lexer);
@@ -147,7 +147,7 @@ void		builtin_temp_export(t_lexer **lexer, t_env *env);
 void		find_value_env(t_env *env, char *temp_key, char *temp_value);
 
 /*builtin_bubble_sort*/
-void		swap_nodes(t_env **head, t_env **prev, t_env **current, t_env **temp);
+void		swap(t_env **head, t_env **prev, t_env **current, t_env **temp);
 void		reassign(t_env **prev, t_env **current, int *swapped, t_env *head);
 void		bubble_sort_export(t_env **head);
 
@@ -155,7 +155,7 @@ void		bubble_sort_export(t_env **head);
 int			command_execve(char **temp, char **envp);
 int			execute_command(char *path_env, char *command, char *path, int len);
 int			find_command(char *command, char *path, char *path_env);
-void		check_echo(t_lexer *lexer);
+void		print_echo(t_lexer **lexer);
 int			manage_builtin(t_lexer **lexer, t_env *env);
 
 /*heredoc.c*/
@@ -176,13 +176,13 @@ char		*ft_superlen(int len, int len2);
 char		*ft_substr(char *s, unsigned int start, size_t len);
 int			get_word(char *s, char c);
 char		**ft_split(char *s);
-char		**ft_split_quotes(char *s, int quotes_one, int quotes_two, size_t i);
+char		**ft_split_quotes(char *s, int one, int two, size_t i);
 
 /*utils3.c*/
-int			ft_strlen(char *str);
 void		*ft_calloc(size_t count, size_t size);
 void		ft_bzero(void *s, size_t n);
-void		check_all(int *single_q, int *double_q, char *s_read, char *s_write);
+void		remove_string_quotes(char *str);
+void		check_all(int *one, int *two, char *s_read, char *s_write);
 void		remove_all_quotes(t_lexer **lexer);
 
 /*utils4.c*/
@@ -193,6 +193,7 @@ int			ft_isalnum(int c);
 char		*ft_strcpy(char *dest, char *src);
 
 /*utils5.c*/
+int			ft_strlen(char *str);
 int			ft_check_all_quotes(char *str);
 int			check_token_error(t_lexer **lexer);
 char		*ft_strncpy(char *dest, char *src, unsigned int n);

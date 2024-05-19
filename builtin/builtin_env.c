@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:09:47 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/16 19:55:07 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:43:35 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	builtin_env(t_lexer **lexer, t_env *env)
 	t_env	*temp;
 
 	temp = env;
-
 	if ((*lexer)->next == NULL)
 	{
 		if (ft_strcmp((*lexer)->str, "env") == 0)

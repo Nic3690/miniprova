@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:04:24 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 15:42:41 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:46:32 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,33 +71,33 @@ int	get_word(char *s, char c)
 
 char	**ft_split(char *s)
 {
-	int		quotes_one;
-	int		quotes_two;
+	int		one;
+	int		two;
 	size_t	i;
-	
+
 	i = 0;
-	quotes_one = 0;
-	quotes_two = 0;
-	return (ft_split_quotes(s, quotes_one, quotes_two, i));
+	one = 0;
+	two = 0;
+	return (ft_split_quotes(s, one, two, i));
 }
 
-char	**ft_split_quotes(char *s, int quotes_one, int quotes_two, size_t i)
+char	**ft_split_quotes(char *s, int one, int two, size_t i)
 {
 	char	**ret;
 	size_t	len;
-	
+
 	ret = ft_calloc(10000, sizeof(char *));
 	while (*s)
 	{
-		if (*s != ' ' || quotes_one || quotes_two)
+		if (*s != ' ' || one || two)
 		{
 			len = 0;
-			while (*s && (*s != ' ' || quotes_one || quotes_two) && ++len)
+			while (*s && (*s != ' ' || one || two) && ++len)
 			{
 				if (*s == '\"')
-					quotes_two = !quotes_two;
+					two = !two;
 				if (*s == '\'')
-					quotes_one = !quotes_one;
+					one = !one;
 				++s;
 			}
 			ret[i++] = ft_substr(s - len, 0, len);

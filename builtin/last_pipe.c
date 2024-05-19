@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:14:18 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 16:14:55 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 17:20:48 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	last_command(t_lexer **start, t_fd *fd, t_env *env, char **envp)
 {
 	char	**temp;
-	t_lexer *command;
+	t_lexer	*command;
 
 	command = new_start_redirection(start);
 	temp = new_temp_redirection(command);
@@ -24,9 +24,9 @@ void	last_command(t_lexer **start, t_fd *fd, t_env *env, char **envp)
 	signal(SIGQUIT, handle_child);
 	if (fd->pid == -1)
 	{
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
 	if (fd->pid == 0)
 	{
 		child_last_process(fd, start);

@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:58:28 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 15:34:29 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 17:36:06 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,29 +39,23 @@ void	handle_sigign(void)
 void	reading(t_env *env, char **envp)
 {
 	char		*input;
-	char		*str;
-	int			copy;
 	const char	*prompt;
 
-	prompt = "\e[0;35mminishell> \e[0m";
-	copy = dup(STDIN_FILENO);
+	prompt = "\e[0;35m\e[0m";
+	input = NULL;
 	while (1)
 	{
 		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, SIG_IGN);
-		dup2(copy, STDIN_FILENO);
 		input = readline(prompt);
 		if (input == NULL)
 			break ;
-		if (*input)
+		else
 		{
-			str = ft_strdup(input);
+			parser(input, env, envp);
 			add_history(input);
-			parser(str, env, envp);
-			free(str);
 		}
 		free(input);
-		close(copy);
 	}
 }
 
@@ -72,7 +66,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	g_exit_code = 0;
 	env = split_envp(envp);
-	using_history();
 	if (argc != 1)
 	{
 		ft_free_env(env);

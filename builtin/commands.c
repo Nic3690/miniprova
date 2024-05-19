@@ -6,7 +6,7 @@
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 13:53:40 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 12:41:20 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:34:34 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,11 @@ int	builtin_pwd(t_lexer **lexer)
 
 int	builtin_echo(t_lexer **lexer)
 {
-	int	flag;
+	int		flag;
+	t_lexer	*head;
 
 	flag = 1;
+	head = *lexer;
 	if (ft_strcmp((*lexer)->str, "echo") == 0)
 	{
 		if (!(*lexer)->next)
@@ -72,16 +74,11 @@ int	builtin_echo(t_lexer **lexer)
 			flag = 0;
 			*lexer = (*lexer)->next;
 		}
-		while (*lexer && (*lexer)->next && !(*lexer)->token)
-		{
-			check_echo(*lexer);
-			*lexer = (*lexer)->next;
-		}
-		if (*lexer && !(*lexer)->token)
-			check_echo(*lexer);
+		print_echo(lexer);
 		if (flag)
 			printf ("\n");
 	}
+	*lexer = head;
 	return (1);
 }
 

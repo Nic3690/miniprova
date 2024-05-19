@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bultin_bubble_sort.c                               :+:      :+:    :+:   */
+/*   builtin_bubble_sort.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfurlani <nfurlani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 15:18:49 by nfurlani          #+#    #+#             */
-/*   Updated: 2024/05/18 15:19:26 by nfurlani         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:45:23 by nfurlani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	swap_nodes(t_env **head, t_env **prev, t_env **current, t_env **temp)
+void	swap(t_env **head, t_env **prev, t_env **current, t_env **temp)
 {
 	*temp = (*current)->next;
 	if (*prev != NULL)
@@ -50,7 +50,7 @@ void	bubble_sort_export(t_env **head)
 		{
 			if (ft_strcmp(current->key, current->next->key) > 0)
 			{
-				swap_nodes(head, &prev, &current, &temp);
+				swap(head, &prev, &current, &temp);
 				swapped = 1;
 			}
 			else
